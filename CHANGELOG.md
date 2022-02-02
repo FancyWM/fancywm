@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.5.0
+- Added floating window rules based on window class
+- Added "More options" to window actions
+- Added shortcuts to "More options" for quick addition of floating rules #38
+- Fix maximized applications pushed back on secondary display #29
+- Fix crashes for windows which do not support WM_GETMINMAXINFO #25
+
 ## v2.4.1
 - Fix crashes for some apps with custom-drawn frame
 
