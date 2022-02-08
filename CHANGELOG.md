@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.6.0
+- Added experimental support for direct keybindings (which do not use the Activation hotkey) #19
+- Fixed stuck overlay when tiling is disabled #33
+- Fixed Focus Assist sometimes enabled automatically #46
+- Removed colourful Emoji support (this reduced idle memory usage by ~25 MiB) #41
+- Made window animations smoother
+
 ## v2.5.0
 - Added floating window rules based on window class
 - Added "More options" to window actions
