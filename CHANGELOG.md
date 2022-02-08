@@ -1,6 +1,7 @@
 # Changelog
 
 ## v2.6.0
+- Added an option to run FancyWM as Administrator on startup
 - Added experimental support for direct keybindings (which do not use the Activation hotkey) #19
 - Fixed stuck overlay when tiling is disabled #33
 - Fixed Focus Assist sometimes enabled automatically #46
