@@ -1,5 +1,35 @@
 # Changelog
 
+## v2.7.0
+- (Experimental) New panel gestures: Drag the panel buttons from the window actions bar over another window to group in a new panel
+- Automatically collapse panels when only a single window is left
+- Allow left/right modifier keys to be used interchangeably
+- Switch to previous desktop shortcut (default: Q)
+- Move to previous desktop shortcut (default: Shift + Q)
+
+## v2.6.7
+- Allow the license to be used offline
+
+## v2.6.6
+- Bug fixes
+
+## v2.6.5
+- Bug fixes
+
+## v2.6.4
+- Fix window focus when using Switch Desktop
+- Bug fixes
+
+## v2.6.3
+- Fix memory leak after a monitor is disconnected
+
+## v2.6.2
+- Fix floating rules for UWP apps
+
+## v2.6.1
+- Fix window movement not detected when using Windows 10 monitor hotkeys
+- Fix crashes with experimental direct hotkeys feature
+
 ## v2.6.0
 - Added an option to run FancyWM as Administrator on startup #10
 - Added experimental support for direct keybindings (which do not use the Activation hotkey) #19
