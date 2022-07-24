@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.8.0
+- **New shortcuts for moving between displays**
+- Switch to previous display shortcut (default: E)
+- Move to previous display shortcut (default: Shift + E)
+- Fixed some scaling and multi-monitor issues
+- Fixed regular expressions when used in the process name in the Rules tab
+
 ## v2.7.0
 - (Experimental) New panel gestures: Drag the panel buttons from the window actions bar over another window to group in a new panel
 - Automatically collapse panels when only a single window is left
