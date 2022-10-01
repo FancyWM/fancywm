@@ -1,5 +1,27 @@
 # Changelog
 
+## v2.10.0
+- **Move windows by holding the Alt key**
+- Fix GIMP compatibility #133
+- Fix Snipping Tool window mode not working #42
+- Performance improvements
+
+## v2.9.1
+- Keybindings page fixes
+
+## v2.9.0
+- UI refresh (new icons, tweaks)
+- Close button in panels
+- Preserve focused windows when switching to non-tiled windows
+- Bug fixes
+
+## v2.8.2
+- Show desktop shortcut (default: D)
+- Bug fixes
+
+## v2.8.1
+- Bug fixes
+
 ## v2.8.0
 - **New shortcuts for moving between displays**
 - Switch to previous display shortcut (default: E)
