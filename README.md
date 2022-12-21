@@ -34,7 +34,7 @@ FancyWM only manages restored (not minimized, not maximized) top-level applicati
 
 ## Issues
 Please, take the time to report any problems you experience by:
-- Opening an issue on https://github.com/veselink1/fancywm-issues/issues (feature requests also welcome)
+- Opening an issue on https://github.com/veselink1/fancywm/issues (feature requests also welcome)
 In case of crashes, please also remember to save and attach the log file produced by the application.
 
 ## WinMan & WinMan.Windows

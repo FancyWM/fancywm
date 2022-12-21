@@ -4,14 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.modernwpf.com/2019"
-        xmlns:local="clr-namespace:FancyWM.Windows" 
+        xmlns:local="clr-namespace:FancyWM.Windows"
         xmlns:res="clr-namespace:FancyWM.Resources"
-        xmlns:viewmodels="clr-namespace:FancyWM.ViewModels" 
+        xmlns:viewmodels="clr-namespace:FancyWM.ViewModels"
         d:DataContext="{d:DesignInstance Type=local:ErrorMessageBox}"
         mc:Ignorable="d"
-        Title="{x:Static res:Strings.ErrorMessageBox_Caption}" 
+        Title="{x:Static res:Strings.ErrorMessageBox_Caption}"
         Width="480"
-        Height="320" 
+        Height="320"
         WindowStartupLocation="CenterScreen"
         SizeToContent="Height"
         ResizeMode="NoResize"
@@ -37,7 +37,7 @@
                 <TextBlock TextWrapping="Wrap">
                     <Run Text="{x:Static res:Strings.ErrorMessageBox_Description_CheckForSolution}" />
                     <!-- Seems like anything from ModernWpf accessing the Accent Color from another thread crashes. We simulate a link here, intead of using Hyperlink, to work around this. -->
-                    <Run Cursor="Hand" Foreground="#0078D7" TextDecorations="Underline"  MouseDown="OnRequestNavigate">github.com/fancywm/fancywm-issues/issues</Run>.
+                    <Run Cursor="Hand" Foreground="#0078D7" TextDecorations="Underline"  MouseDown="OnRequestNavigate">github.com/fancywm/fancywm/issues</Run>.
                     <LineBreak />
                     <LineBreak />
                     <Run Text="{x:Static res:Strings.ErrorMessageBox_Description_SubmittingALog}" />

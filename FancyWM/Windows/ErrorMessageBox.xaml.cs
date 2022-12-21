@@ -120,7 +120,7 @@ namespace FancyWM.Windows
 
         private void OnRequestNavigate(object sender, MouseButtonEventArgs e)
         {
-            _ = Launcher.LaunchUriAsync(new Uri("https://github.com/veselink1/fancywm-issues/issues"));
+            _ = Launcher.LaunchUriAsync(new Uri("https://github.com/veselink1/fancywm/issues"));
         }
     }
 }
