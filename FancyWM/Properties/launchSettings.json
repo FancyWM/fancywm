@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "FancyWM": {
+      "commandName": "Project"
+    },
+    "FancyWM Layout": {
+      "commandName": "Project",
+      "commandLineArgs": "--layout MyLayout.json"
+    }
+  }
+}

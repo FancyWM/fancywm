@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="FancyWM.Controls.KeyboardButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FancyWM.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="48" d:DesignWidth="48">
+    <Border Background="DimGray" Padding="8" CornerRadius="8">
+        <TextBlock Foreground="White" FontFamily="Courier New" Text="{Binding Text}" />
+    </Border>
+</UserControl>

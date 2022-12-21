@@ -1,0 +1,71 @@
+﻿<Window x:Class="FancyWM.Toasts.ToastWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FancyWM.Toasts"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:resources="clr-namespace:FancyWM.Resources"
+        d:DataContext="{d:DesignInstance Type=local:ToastWindow}"
+        mc:Ignorable="d"
+        Title="ToastWindow"
+        Height="450"
+        Width="800"
+        AllowsTransparency="True"
+        Background="{x:Null}"
+        Topmost="True"
+        UseLayoutRounding="True"
+        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+        ui:ThemeManager.IsThemeAware="True"
+        WindowStyle="None">
+    <Window.Resources>
+        <ResourceDictionary Source="../Themes/Fluent/Generic.xaml" />
+    </Window.Resources>
+    <ItemsControl ItemsSource="{Binding Path=ToastItems}" Padding="16">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Border CornerRadius="{DynamicResource OverlayCornerRadius}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}" Opacity="0" RenderTransformOrigin="0.5,0.5">
+                    <Border.RenderTransform>
+                        <ScaleTransform x:Name="ToastScaleTransform" ScaleX="0.75" ScaleY="0.75" />
+                    </Border.RenderTransform>
+                    <Border.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation 
+                                        Storyboard.TargetProperty="Opacity"
+                                        Duration="0:0:0.1"
+                                        To="1" />
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="ToastScaleTransform"
+                                        Storyboard.TargetProperty="(ScaleTransform.ScaleX)"
+                                        Duration="0:0:0.1"
+                                        To="1" />
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="ToastScaleTransform"
+                                        Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+                                        Duration="0:0:0.1"
+                                        To="1" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Border.Triggers>
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="16" Direction="-90" ShadowDepth="2" Opacity="0.2" Color="Black" />
+                    </Border.Effect>
+                    <Border BorderThickness="1" BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}" CornerRadius="{DynamicResource ControlCornerRadius}" ClipToBounds="True" Padding="10,5,10,5" TextBlock.Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                        <Border.Background>
+                            <SolidColorBrush Color="{DynamicResource MicaPrimaryColor}" Opacity="{DynamicResource MicaOpacity}" />
+                        </Border.Background>
+                        <ContentPresenter Content="{Binding Content}" />
+                    </Border>
+                </Border>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Grid IsItemsHost="True" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>
+</Window>

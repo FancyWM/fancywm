@@ -1,0 +1,133 @@
+﻿<UserControl x:Class="FancyWM.Controls.TilingPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FancyWM.Controls"
+             xmlns:ui="http://schemas.modernwpf.com/2019" 
+             xmlns:res="clr-namespace:FancyWM.Resources"
+             xmlns:viewmodels="clr-namespace:FancyWM.ViewModels" xmlns:sys="clr-namespace:System;assembly=netstandard"
+             d:DataContext="{d:DesignInstance Type=viewmodels:TilingPanelViewModel}"
+             mc:Ignorable="d"
+             d:DesignHeight="20" 
+             d:DesignWidth="800">
+    <Border CornerRadius="{DynamicResource ControlCornerRadius}" MouseDown="OnPanelMouseDown">
+        <Border.Background>
+            <SolidColorBrush Color="{DynamicResource TabBarColor}" />
+        </Border.Background>
+        <Border.OpacityMask>
+            <VisualBrush>
+                <VisualBrush.Visual>
+                    <Border 
+                        Background="Black"
+                        SnapsToDevicePixels="True"
+                        CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType=Border}}"
+                        Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Border}}"
+                        Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Border}}"
+                    />
+                </VisualBrush.Visual>
+            </VisualBrush>
+        </Border.OpacityMask>
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="2" Direction="-90" ShadowDepth="2" Opacity="0.2" Color="Black" />
+        </Border.Effect>
+        <Border Padding="0.5" CornerRadius="{DynamicResource ControlCornerRadius}" BorderThickness="0.5" BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}">
+            <Border.Background>
+                <SolidColorBrush Color="{DynamicResource MicaPrimaryColor}" Opacity="{DynamicResource MicaOpacity}" />
+            </Border.Background>
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Border.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                              Storyboard.TargetProperty="Opacity"
+                              From="0.0" To="1.0" Duration="0:0:0.200" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+            <DockPanel LastChildFill="True">
+                <DockPanel.Resources>
+                    <ui:SimpleStackPanel x:Key="Panellocal" Spacing="1" Orientation="Horizontal" TextBlock.Foreground="{DynamicResource SystemControlPageBackgroundAltHighBrush}">
+                        <ui:SimpleStackPanel.Resources>
+                            <ResourceDictionary>
+                                <Style x:Key="ActionButtonStyle" BasedOn="{StaticResource AccentButtonStyle}" TargetType="Button">
+                                    <Setter Property="Padding" Value="5,1" />
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                                    <Setter Property="VerticalContentAlignment" Value="Top" />
+                                </Style>
+                            </ResourceDictionary>
+                        </ui:SimpleStackPanel.Resources>
+                        <Border CornerRadius="{DynamicResource ControlCornerRadius}"  Cursor="/Resources/hand_grab.cur" MouseEnter="OnHandleMouseEnter" MouseLeave="OnHandleMouseLeave" Padding="5,0,7,0" Background="{DynamicResource SystemControlHighlightAccentRevealBackgroundBrush}">
+                            <StackPanel Orientation="Horizontal">
+                                <local:TilingNodeCaptionBlock
+                                        ExtraTextVisibility="Collapsed"
+                                        VerticalAlignment="Center"
+                                        TextBlock.Foreground="{DynamicResource SystemControlForegroundAltHighBrush}"
+                                        TextBlock.FontWeight="SemiBold"
+                                        DataContext="{Binding}" />
+                                <ui:FontIcon Margin="5,0,0,0" FontSize="10" FontFamily="Segoe MDL2 Assets" Glyph="&#xE970;"/>
+                            </StackPanel>
+                        </Border>
+                        <Button MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Style="{StaticResource ActionButtonStyle}" ToolTip="{x:Static res:Strings.Keybinding_CreateHorizontalPanel_Caption}" Command="{Binding HorizontalSplitCommand}">
+                            <Viewbox Width="{DynamicResource OverlayFontSize}" Height="{DynamicResource OverlayFontSize}" Stretch="Uniform">
+                                <local:SvgIcon Icon="hsplit" Color="{DynamicResource SystemControlForegroundAltHighBrush}" />
+                            </Viewbox>
+                        </Button>
+                        <Button MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Style="{StaticResource ActionButtonStyle}" ToolTip="{x:Static res:Strings.Keybinding_CreateVerticalPanel_Caption}" Command="{Binding VerticalSplitCommand}">
+                            <Viewbox Width="{DynamicResource OverlayFontSize}" Height="{DynamicResource OverlayFontSize}" Stretch="Uniform">
+                                <local:SvgIcon Icon="vsplit" Color="{DynamicResource SystemControlForegroundAltHighBrush}" />
+                            </Viewbox>
+                        </Button>
+                        <Button MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Style="{StaticResource ActionButtonStyle}" ToolTip="{x:Static res:Strings.Keybinding_PullWindowUp_Caption}" Command="{Binding PullUpCommand}">
+                            <Viewbox Width="{DynamicResource OverlayFontSize}" Height="{DynamicResource OverlayFontSize}" Stretch="Uniform">
+                                <local:SvgIcon Icon="pull-up" Color="{DynamicResource SystemControlForegroundAltHighBrush}" />
+                            </Viewbox>
+                        </Button>
+                    </ui:SimpleStackPanel>
+                    <Border x:Key="PanelCaption" CornerRadius="{DynamicResource ControlCornerRadius}" Padding="5,0,7,0" Background="{DynamicResource SystemControlHighlightAccentRevealBackgroundBrush}">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ChildHasDirectFocus}" Value="True">
+                                        <DataTrigger.Setters>
+                                            <Setter Property="Opacity" Value="1" />
+                                        </DataTrigger.Setters>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ChildHasDirectFocus}" Value="False">
+                                        <DataTrigger.Setters>
+                                            <Setter Property="Opacity" Value="0.75" />
+                                        </DataTrigger.Setters>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <local:TilingNodeCaptionBlock
+                            ExtraTextVisibility="Collapsed"
+                            VerticalAlignment="Center"
+                            TextBlock.Foreground="{DynamicResource SystemControlForegroundAltHighBrush}"
+                            TextBlock.FontWeight="SemiBold"
+                            DataContext="{Binding}" />
+                    </Border>
+                </DockPanel.Resources>
+                <Border DockPanel.Dock="Left" IsHitTestVisible="True" Background="Transparent">
+                    <ContentPresenter x:Name="HeaderContent">
+                        <ContentPresenter.Style>
+                            <Style TargetType="ContentPresenter">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Value="True">
+                                        <Setter Property="Content" Value="{StaticResource Panellocal}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border}}}" Value="False">
+                                        <Setter Property="Content" Value="{StaticResource PanelCaption}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentPresenter.Style>
+                    </ContentPresenter>
+                </Border>
+                <local:TabBar ItemsSource="{Binding Path=ChildNodes}" TabMinWidth="75" TabMaxWidth="200" />
+            </DockPanel>
+        </Border>
+    </Border>
+</UserControl>

@@ -1,0 +1,132 @@
+﻿<UserControl x:Class="FancyWM.Controls.TilingNodeTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FancyWM.Controls" 
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:viewmodels="clr-namespace:FancyWM.ViewModels" 
+             xmlns:res="clr-namespace:FancyWM.Resources"
+             d:DataContext="{d:DesignInstance Type=viewmodels:TilingNodeViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="18" d:DesignWidth="64">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type Button}" x:Key="TabButton">
+                <Style.Resources>
+                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseMediumColor}" Opacity="0.2" />
+                    <SolidColorBrush x:Key="ButtonBackgroundFocused" Color="White" Opacity="0.4" />
+                </Style.Resources>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding HasFocus}" Value="False">
+                        <Setter Property="Background" Value="Transparent"/>
+                    </DataTrigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <SolidColorBrush Color="{DynamicResource LightenLowColor}" />
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                    <DataTrigger Binding="{Binding HasFocus}" Value="True">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <SolidColorBrush Color="{DynamicResource LightenMediumColor}" />
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsHitTestVisible="True" Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                                <ContentPresenter Content="{Binding Path=Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                <Setter Property="TextBlock.Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.InputBindings>
+            <MouseBinding
+                MouseAction="MiddleClick"
+                Command="{Binding CloseCommand}"
+                CommandParameter="{Binding}" />
+        </Grid.InputBindings>
+        <Button HorizontalContentAlignment="Left" Style="{StaticResource TabButton}" BorderThickness="0" Padding="0" Margin="3,0,0,0">
+            <Button.ToolTip>
+                <StackPanel>
+                    <local:TilingNodeCaptionBlock MaxCharacters="25" HorizontalAlignment="Left" TextBlock.FontWeight="Bold" DataContext="{Binding}" />
+                    <TextBlock>
+                        • <Run Text="{x:Static res:Strings.Overlay_Window_SingleClickToFocus}" />
+                        <LineBreak />
+                        • <Run Text="{x:Static res:Strings.Overlay_Window_RightClickToPullUp}" />
+                    </TextBlock>
+                </StackPanel>
+            </Button.ToolTip>
+            <Button.InputBindings>
+                <MouseBinding
+                    MouseAction="LeftClick"
+                    Command="{Binding PrimaryActionCommand}"
+                    CommandParameter="{Binding}" />
+                <MouseBinding
+                    MouseAction="RightClick"
+                    Command="{Binding SecondaryActionCommand}"
+                    CommandParameter="{Binding}" />
+            </Button.InputBindings>
+            <Grid HorizontalAlignment="Stretch" MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Button}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Margin="0,0,5,0" Height="{DynamicResource OverlayFontSize}" Width="3" CornerRadius="2">
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasFocus}" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource SystemControlHighlightAccentRevealBackgroundBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+
+                <Image Grid.Column="1" Width="{DynamicResource OverlayFontSize}" Height="{DynamicResource OverlayFontSize}" Stretch="Fill" Margin="0,1,5,1" Source="{Binding Icon}" Visibility="{Binding IconVisibility}" />
+                <local:TilingNodeCaptionBlock Grid.Column="2" MaxCharacters="12" FontSize="{DynamicResource OverlayFontSize}" DataContext="{Binding}" />
+
+                <Button Grid.Column="3" ToolTip="{x:Static res:Strings.Close}" Background="Transparent" Padding="0" Margin="0,0,2,0" Width="14" Height="14">
+                    <Button.InputBindings>
+                        <MouseBinding
+                            MouseAction="LeftClick"
+                            Command="{Binding CloseCommand}"
+                            CommandParameter="{Binding}" />
+                    </Button.InputBindings>
+                    <ui:FontIcon FontSize="6" FontFamily="Segoe MDL2 Assets" Glyph="&#xE8BB;">
+                        <ui:FontIcon.Style>
+                            <Style TargetType="ui:FontIcon">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=local:TilingNodeTab}}" Value="True">
+                                        <Setter Property="Opacity" Value="0.5" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=local:TilingNodeTab}}" Value="False">
+                                        <Setter Property="Opacity" Value="0" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:FontIcon.Style>
+                    </ui:FontIcon>
+                </Button>
+            </Grid>
+        </Button>
+    </Grid>
+</UserControl>
