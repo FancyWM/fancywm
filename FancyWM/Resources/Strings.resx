@@ -1,0 +1,894 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Keybinding.Cancel.Caption" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Keybinding.Cancel.Description" xml:space="preserve">
+    <value>Cancel the action</value>
+  </data>
+  <data name="Keybinding.CreateHorizontalPanel.Caption" xml:space="preserve">
+    <value>Wrap in horizontal panel</value>
+  </data>
+  <data name="Keybinding.CreateHorizontalPanel.Description" xml:space="preserve">
+    <value>Create a new horizontal panel around the focused window</value>
+  </data>
+  <data name="Keybinding.CreateStackPanel.Caption" xml:space="preserve">
+    <value>Wrap in stack panel</value>
+  </data>
+  <data name="Keybinding.CreateStackPanel.Description" xml:space="preserve">
+    <value>Create a new stack panel around the focused window</value>
+  </data>
+  <data name="Keybinding.CreateVerticalPanel.Caption" xml:space="preserve">
+    <value>Wrap in vertical panel</value>
+  </data>
+  <data name="Keybinding.CreateVerticalPanel.Description" xml:space="preserve">
+    <value>Create a new vertical panel around the focused window</value>
+  </data>
+  <data name="Keybinding.DecreaseHeight.Caption" xml:space="preserve">
+    <value>Decrease height</value>
+  </data>
+  <data name="Keybinding.DecreaseHeight.Description" xml:space="preserve">
+    <value>Decrease the height of the focused window</value>
+  </data>
+  <data name="Keybinding.DecreaseWidth.Caption" xml:space="preserve">
+    <value>Decrease width</value>
+  </data>
+  <data name="Keybinding.DecreaseWidth.Description" xml:space="preserve">
+    <value>Decrease the width of the focused window</value>
+  </data>
+  <data name="Keybinding.IncreaseHeight.Caption" xml:space="preserve">
+    <value>Increase height</value>
+  </data>
+  <data name="Keybinding.IncreaseHeight.Description" xml:space="preserve">
+    <value>Increase the height of the focused window</value>
+  </data>
+  <data name="Keybinding.IncreaseWidth.Caption" xml:space="preserve">
+    <value>Increase width</value>
+  </data>
+  <data name="Keybinding.IncreaseWidth.Description" xml:space="preserve">
+    <value>Increase the width of the focused window</value>
+  </data>
+  <data name="Keybinding.MoveDown.Caption" xml:space="preserve">
+    <value>Move down</value>
+  </data>
+  <data name="Keybinding.MoveDown.Description" xml:space="preserve">
+    <value>Move the window next to the window below</value>
+  </data>
+  <data name="Keybinding.MoveFocusDown.Caption" xml:space="preserve">
+    <value>Move focus down</value>
+  </data>
+  <data name="Keybinding.MoveFocusDown.Description" xml:space="preserve">
+    <value>Focus the window below the current window</value>
+  </data>
+  <data name="Keybinding.MoveFocusLeft.Caption" xml:space="preserve">
+    <value>Move focus left</value>
+  </data>
+  <data name="Keybinding.MoveFocusLeft.Description" xml:space="preserve">
+    <value>Focus the window to the left of the current window</value>
+  </data>
+  <data name="Keybinding.MoveFocusRight.Caption" xml:space="preserve">
+    <value>Move focus right</value>
+  </data>
+  <data name="Keybinding.MoveFocusRight.Description" xml:space="preserve">
+    <value>Focus the window to the right of the current window</value>
+  </data>
+  <data name="Keybinding.MoveFocusUp.Caption" xml:space="preserve">
+    <value>Move focus up</value>
+  </data>
+  <data name="Keybinding.MoveFocusUp.Description" xml:space="preserve">
+    <value>Focus the window above the current window</value>
+  </data>
+  <data name="Keybinding.MoveLeft.Caption" xml:space="preserve">
+    <value>Move left</value>
+  </data>
+  <data name="Keybinding.MoveLeft.Description" xml:space="preserve">
+    <value>Move the window next to the window on the left</value>
+  </data>
+  <data name="Keybinding.MoveRight.Caption" xml:space="preserve">
+    <value>Move right</value>
+  </data>
+  <data name="Keybinding.MoveRight.Description" xml:space="preserve">
+    <value>Move the window next to the window on the right</value>
+  </data>
+  <data name="Keybinding.MoveUp.Caption" xml:space="preserve">
+    <value>Move up</value>
+  </data>
+  <data name="Keybinding.MoveUp.Description" xml:space="preserve">
+    <value>Move the window next to the window above</value>
+  </data>
+  <data name="Keybinding.PullWindowUp.Caption" xml:space="preserve">
+    <value>Move to upper level</value>
+  </data>
+  <data name="Keybinding.PullWindowUp.Description" xml:space="preserve">
+    <value>Move the window out of its containing panel</value>
+  </data>
+  <data name="Keybinding.RefreshWorkspace.Caption" xml:space="preserve">
+    <value>Force refresh workspace</value>
+  </data>
+  <data name="Keybinding.RefreshWorkspace.Description" xml:space="preserve">
+    <value>Force a change-detection cycle of the whole workspace</value>
+  </data>
+  <data name="Keybinding.SwapDown.Caption" xml:space="preserve">
+    <value>Swap down</value>
+  </data>
+  <data name="Keybinding.SwapDown.Description" xml:space="preserve">
+    <value>Swap the current window with the window below it</value>
+  </data>
+  <data name="Keybinding.SwapLeft.Caption" xml:space="preserve">
+    <value>Swap left</value>
+  </data>
+  <data name="Keybinding.SwapLeft.Description" xml:space="preserve">
+    <value>Swap the current window with the window on its left</value>
+  </data>
+  <data name="Keybinding.SwapRight.Caption" xml:space="preserve">
+    <value>Swap right</value>
+  </data>
+  <data name="Keybinding.SwapRight.Description" xml:space="preserve">
+    <value>Swap the current window with the window on its right</value>
+  </data>
+  <data name="Keybinding.SwapUp.Caption" xml:space="preserve">
+    <value>Swap up</value>
+  </data>
+  <data name="Keybinding.SwapUp.Description" xml:space="preserve">
+    <value>Swap the current window with the window above it</value>
+  </data>
+  <data name="Keybinding.ToggleFloatingMode.Caption" xml:space="preserve">
+    <value>Float window</value>
+  </data>
+  <data name="Keybinding.ToggleFloatingMode.Description" xml:space="preserve">
+    <value>Toggle floating mode for the focused window</value>
+  </data>
+  <data name="Keybinding.ToggleManager.Caption" xml:space="preserve">
+    <value>Toggle window management</value>
+  </data>
+  <data name="Keybinding.ToggleManager.Description" xml:space="preserve">
+    <value>Toggle FancyWM's window management functionality</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop1.Caption" xml:space="preserve">
+    <value>Switch to desktop 1</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop1.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to virtual desktop 1</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop2.Caption" xml:space="preserve">
+    <value>Switch to desktop 2</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop2.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to virtual desktop 2</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop3.Caption" xml:space="preserve">
+    <value>Switch to desktop 3</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop3.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to virtual desktop 3</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop4.Caption" xml:space="preserve">
+    <value>Switch to desktop 4</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop4.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to virtual desktop 4</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop5.Caption" xml:space="preserve">
+    <value>Switch to desktop 5</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop5.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to virtual desktop 5</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop6.Caption" xml:space="preserve">
+    <value>Switch to desktop 6</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop6.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to virtual desktop 6</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop7.Caption" xml:space="preserve">
+    <value>Switch to desktop 7</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop7.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to virtual desktop 7</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop8.Caption" xml:space="preserve">
+    <value>Switch to desktop 8</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop8.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to virtual desktop 8</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop9.Caption" xml:space="preserve">
+    <value>Switch to desktop 9</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop9.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to virtual desktop 9</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop1.Caption" xml:space="preserve">
+    <value>Move window to desktop 1</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop1.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop 1</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop2.Caption" xml:space="preserve">
+    <value>Move window to desktop 2</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop2.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop 2</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop3.Caption" xml:space="preserve">
+    <value>Move window to desktop 3</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop3.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop 3</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop4.Caption" xml:space="preserve">
+    <value>Move window to desktop 4</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop4.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop 4</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop5.Caption" xml:space="preserve">
+    <value>Move window to desktop 5</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop5.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop 5</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop6.Caption" xml:space="preserve">
+    <value>Move window to desktop 6</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop6.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop 6</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop7.Caption" xml:space="preserve">
+    <value>Move window to desktop 7</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop7.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop 7</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop8.Caption" xml:space="preserve">
+    <value>Move window to desktop 8</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop8.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop 8</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop9.Caption" xml:space="preserve">
+    <value>Move window to desktop 9</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop9.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop 9</value>
+  </data>
+  <data name="General.AllocateNewPanelSpace" xml:space="preserve">
+    <value>Reserve empty space in new panels</value>
+  </data>
+  <data name="General.AllocateNewPanelSpace.Description" xml:space="preserve">
+    <value>New panels have will have empty space until a second window is added.</value>
+  </data>
+  <data name="General.AnimateWindowMovement" xml:space="preserve">
+    <value>Animate window movement</value>
+  </data>
+  <data name="General.Caption" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="General.Interface" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="General.ShowSettingsConfig" xml:space="preserve">
+    <value>Show settings.json in containing folder</value>
+  </data>
+  <data name="General.OverrideAccentColor" xml:space="preserve">
+    <value>Override accent color</value>
+  </data>
+  <data name="General.PanelFontSize" xml:space="preserve">
+    <value>Panel font size</value>
+  </data>
+  <data name="General.PanelHeight" xml:space="preserve">
+    <value>Panel height</value>
+  </data>
+  <data name="General.RunsAsAdmin" xml:space="preserve">
+    <value>Run with administrator privileges</value>
+  </data>
+  <data name="General.RunsAsAdmin.AdminDescription" xml:space="preserve">
+    <value>FancyWM is currently running with administrator privileges and can manage all of your windows.</value>
+  </data>
+  <data name="General.RunsAsAdmin.NonAdminDescription" xml:space="preserve">
+    <value>FancyWM cannot manage windows from elevated processes unless it is run as administrator. Enable this option and restart FancyWM to fix this.</value>
+  </data>
+  <data name="General.RunsAtStartup" xml:space="preserve">
+    <value>Run automatically at system startup</value>
+  </data>
+  <data name="General.ShowContextHints" xml:space="preserve">
+    <value>Show contextual hints in pop-up</value>
+  </data>
+  <data name="General.ShowContextHints.Description" xml:space="preserve">
+    <value>Shows the list of available keybindings after 1s of inactivity. The command pop-up stays on-screen for longer, but you can close it with</value>
+  </data>
+  <data name="General.ShowFocusDuringAction" xml:space="preserve">
+    <value>Show focused window reminder</value>
+  </data>
+  <data name="General.ShowFocusDuringAction.Description" xml:space="preserve">
+    <value>Highlights the focused window when the command pop-up is shown.</value>
+  </data>
+  <data name="General.ShowStartupWindow" xml:space="preserve">
+    <value>Show the startup window at program startup</value>
+  </data>
+  <data name="General.SoundOnFailure" xml:space="preserve">
+    <value>Play a sound when an action fails</value>
+  </data>
+  <data name="General.Sounds" xml:space="preserve">
+    <value>Sounds</value>
+  </data>
+  <data name="General.Startup" xml:space="preserve">
+    <value>Startup</value>
+  </data>
+  <data name="General.TilingBehavior" xml:space="preserve">
+    <value>Tiling behavior</value>
+  </data>
+  <data name="General.WindowPadding" xml:space="preserve">
+    <value>Window gap</value>
+  </data>
+  <data name="Displays.Caption" xml:space="preserve">
+    <value>Displays</value>
+  </data>
+  <data name="Displays.MultiMonitorSupport" xml:space="preserve">
+    <value>Enable tiling on all connected displays</value>
+  </data>
+  <data name="Displays.TilingOnMultipleDisplays" xml:space="preserve">
+    <value>Tiling on multiple displays</value>
+  </data>
+  <data name="About.AppVersion" xml:space="preserve">
+    <value>App version:</value>
+  </data>
+  <data name="About.Caption" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="About.Copyright" xml:space="preserve">
+    <value>Copyright © 2022 Vesko Karaganev. All Rights Reserved.</value>
+  </data>
+  <data name="About.Credits" xml:space="preserve">
+    <value>Credits</value>
+  </data>
+  <data name="About.Credits.Description" xml:space="preserve">
+    <value>Made possible by the following awesome open-source software.</value>
+  </data>
+  <data name="Advanced.Caption" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="Advanced.Scripting.CreateScript" xml:space="preserve">
+    <value>Create script</value>
+  </data>
+  <data name="Advanced.Scripting.Description" xml:space="preserve">
+    <value>Scripting support is still in preview.</value>
+  </data>
+  <data name="ContactTheDeveloper" xml:space="preserve">
+    <value>contact the developer</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Displays.MultiMonitorSupport.Description" xml:space="preserve">
+    <value>Restart FancyWM for changes to take effect!</value>
+  </data>
+  <data name="ErrorMessageBox.Caption" xml:space="preserve">
+    <value>A fatal error has occurred in FancyWM!</value>
+  </data>
+  <data name="ErrorMessageBox.Description.CheckForSolution" xml:space="preserve">
+    <value>FancyWM will now close. If this issue persists, please check for a solution and/or open a bug report on</value>
+  </data>
+  <data name="ErrorMessageBox.Description.SubmittingALog" xml:space="preserve">
+    <value>By submitting a log you can help diagnose the issue. The log file contains a history of the events leading up to the crash. Sensitive information is obfuscated.</value>
+  </data>
+  <data name="ErrorMessageBox.SubmitLog" xml:space="preserve">
+    <value>Submit log</value>
+  </data>
+  <data name="Experimental" xml:space="preserve">
+    <value>EXPERIMENTAL</value>
+  </data>
+  <data name="Help.Caption" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="Keybinding.ActivationHotkey" xml:space="preserve">
+    <value>Activation hotkey</value>
+  </data>
+  <data name="Keybindings.Caption" xml:space="preserve">
+    <value>Keybindings</value>
+  </data>
+  <data name="Keybindings.DirectMode.About" xml:space="preserve">
+    <value>Registers the keybinding as a system hotkey, allowing it to be used without the Activation hotkey. The keybinding must use at least one modifier key (Ctrl, Shift, Alt, Win).</value>
+  </data>
+  <data name="Keybindings.DirectMode.FailModes" xml:space="preserve">
+    <value>Windows will not allow FancyWM to register a hotkey that is already used by it or another application.</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="Quit" xml:space="preserve">
+    <value>Quit</value>
+  </data>
+  <data name="Rules.Caption" xml:space="preserve">
+    <value>Rules</value>
+  </data>
+  <data name="Rules.ClassIgnoreList" xml:space="preserve">
+    <value>Automatically float by window class</value>
+  </data>
+  <data name="Rules.ClassIgnoreList.Description" xml:space="preserve">
+    <value>Floating mode will be automatically enabled for windows with a matching window class. The matching is not case-sensitive and you may use regular expressions.</value>
+  </data>
+  <data name="Rules.FloatingWindows" xml:space="preserve">
+    <value>Floating windows</value>
+  </data>
+  <data name="Rules.ProcessIgnoreList" xml:space="preserve">
+    <value>Automatically float by process name</value>
+  </data>
+  <data name="Rules.ProcessIgnoreList.Description" xml:space="preserve">
+    <value>Floating mode will be automatically enabled for windows belonging to one of the processes. Enter one process name per line, excluding the ".exe" extension (e.g. "explorer"). The matching is not case-sensitive and you may use regular expressions.</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings.FancyWM" xml:space="preserve">
+    <value>FancyWM Settings</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="PleaseSee" xml:space="preserve">
+    <value>Please see</value>
+  </data>
+  <data name="Startup.Caption" xml:space="preserve">
+    <value>FancyWM Startup</value>
+  </data>
+  <data name="Startup.FancyWMIsRunning" xml:space="preserve">
+    <value>FancyWM is now running!</value>
+  </data>
+  <data name="Startup.FirstTimeUsers" xml:space="preserve">
+    <value>First-time users:</value>
+  </data>
+  <data name="Startup.InSystemTray" xml:space="preserve">
+    <value>You can always find it in the System Tray.</value>
+  </data>
+  <data name="Startup.Paragraph1" xml:space="preserve">
+    <value>To change the layout for the focused window, press the activation keybinding, [⇧ Shift] and [⊞ Win], and once the toast popup is visible, press [H], [V] or [S].</value>
+  </data>
+  <data name="Startup.Paragraph2" xml:space="preserve">
+    <value>You can also hover over the top border of the focused window to change the layout.</value>
+  </data>
+  <data name="Startup.ShowThisWindow" xml:space="preserve">
+    <value>Show this window when FancyWM starts</value>
+  </data>
+  <data name="AddNew" xml:space="preserve">
+    <value>Add new</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Clear all</value>
+  </data>
+  <data name="Common.Moved" xml:space="preserve">
+    <value>Moved</value>
+  </data>
+  <data name="Common.To" xml:space="preserve">
+    <value>to</value>
+  </data>
+  <data name="Common.Window" xml:space="preserve">
+    <value>window</value>
+  </data>
+  <data name="Messages.AskForReview" xml:space="preserve">
+    <value>If you are, please take a moment to review it on the Microsoft Store. Thank you for your support!</value>
+  </data>
+  <data name="Messages.CannotBeResizedToFit" xml:space="preserve">
+    <value>The window cannot be resized to fit!</value>
+  </data>
+  <data name="Messages.CouldNot" xml:space="preserve">
+    <value>Could not</value>
+  </data>
+  <data name="Messages.DirectHotkeyRegistrationFailed" xml:space="preserve">
+    <value>Could not register one or more keybindings as system hotkeys!</value>
+  </data>
+  <data name="Messages.EnjoyingFancyWM" xml:space="preserve">
+    <value>Enjoying FancyWM?</value>
+  </data>
+  <data name="Messages.FloatingModeEnabledFor" xml:space="preserve">
+    <value>Floating mode enabled for</value>
+  </data>
+  <data name="Messages.IsAlreadyOn" xml:space="preserve">
+    <value>is already on</value>
+  </data>
+  <data name="Messages.NoFocusedWindow" xml:space="preserve">
+    <value>No focused window!</value>
+  </data>
+  <data name="Messages.NothingIsAssignedTo" xml:space="preserve">
+    <value>Nothing is assigned to</value>
+  </data>
+  <data name="Messages.NothingToDo" xml:space="preserve">
+    <value>Nothing to do on this desktop.</value>
+  </data>
+  <data name="Messages.OperationFailed" xml:space="preserve">
+    <value>Operation failed!</value>
+  </data>
+  <data name="Messages.PressF1ForHelp" xml:space="preserve">
+    <value>Press F1 for help</value>
+  </data>
+  <data name="Messages.ReceivedInvalidCommand" xml:space="preserve">
+    <value>Received invalid command</value>
+  </data>
+  <data name="Messages.StoreCommunicationFailed.Caption" xml:space="preserve">
+    <value>FancyWM Error</value>
+  </data>
+  <data name="Messages.StoreCommunicationFailed.Description" xml:space="preserve">
+    <value>Communication with the Microsoft Store failed with code</value>
+  </data>
+  <data name="Messages.UnrecognizedKeybinding" xml:space="preserve">
+    <value>Unrecognized keybinding!</value>
+  </data>
+  <data name="Messages.UpdateCheck.Caption" xml:space="preserve">
+    <value>FancyWM Update Check</value>
+  </data>
+  <data name="Messages.UpdateCheck.UpdateAvailable" xml:space="preserve">
+    <value>A new version of FancyWM is available! Download the latest update in the background?</value>
+  </data>
+  <data name="Messages.UpdateCheck.UpdateDownloadComplete" xml:space="preserve">
+    <value>Update download completed! Restart FancyWM to install it?</value>
+  </data>
+  <data name="Messages.WaitingForAction" xml:space="preserve">
+    <value>Waiting for action...</value>
+  </data>
+  <data name="TilingError.CausesRecursiveNesting" xml:space="preserve">
+    <value>Cannot nest panel inside itself!</value>
+  </data>
+  <data name="TilingError.InvalidTarget" xml:space="preserve">
+    <value>The target panel does not support this operation!</value>
+  </data>
+  <data name="TilingError.MissingAdjacentWindow" xml:space="preserve">
+    <value>No adjacent window!</value>
+  </data>
+  <data name="TilingError.MissingTarget" xml:space="preserve">
+    <value>No focused window!</value>
+  </data>
+  <data name="TilingError.ModifiesTopLevelPanel" xml:space="preserve">
+    <value>Cannot modify the top-level panel!</value>
+  </data>
+  <data name="TilingError.NestingInStackPanel" xml:space="preserve">
+    <value>Stack panel cannot contain other panels!</value>
+  </data>
+  <data name="TilingError.NoValidPlacementExists" xml:space="preserve">
+    <value>No valid placement exists!</value>
+  </data>
+  <data name="TilingError.PullsBeyondTopLevelPanel" xml:space="preserve">
+    <value>Cannot move up any further!</value>
+  </data>
+  <data name="TilingError.TargetCannotFit" xml:space="preserve">
+    <value>Cannot fit in the target panel!</value>
+  </data>
+  <data name="ErrorMessageBox.RestartFancyWM" xml:space="preserve">
+    <value>Restart FancyWM</value>
+  </data>
+  <data name="Overlay.Window.AddRuleForClass" xml:space="preserve">
+    <value>Add floating rule for window class</value>
+  </data>
+  <data name="Overlay.Window.AddRuleForProcess" xml:space="preserve">
+    <value>Add floating rule for process</value>
+  </data>
+  <data name="Overlay.Window.MoreOptions" xml:space="preserve">
+    <value>More options</value>
+  </data>
+  <data name="Overlay.Window.RightClickToPullUp" xml:space="preserve">
+    <value>Right click to move to upper level</value>
+  </data>
+  <data name="Overlay.Window.SingleClickToFocus" xml:space="preserve">
+    <value>Single click to focus</value>
+  </data>
+  <data name="Messages.NoPreviousDesktop" xml:space="preserve">
+    <value>No previous desktop.</value>
+  </data>
+  <data name="Keybinding.MoveToPreviousDesktop.Caption" xml:space="preserve">
+    <value>Move window to previous desktop</value>
+  </data>
+  <data name="Keybinding.MoveToPreviousDesktop.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to the previous virtual desktop</value>
+  </data>
+  <data name="Keybinding.SwitchToPreviousDesktop.Caption" xml:space="preserve">
+    <value>Switch to previous desktop</value>
+  </data>
+  <data name="Keybinding.SwitchToPreviousDesktop.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to the previous virtual desktop</value>
+  </data>
+  <data name="Overlay.Window.DragActionDetail" xml:space="preserve">
+    <value>Drag over another window to group</value>
+  </data>
+  <data name="General.AutoCollapsePanels" xml:space="preserve">
+    <value>Automatically collapse panels</value>
+  </data>
+  <data name="General.AutoCollapsePanels.Description" xml:space="preserve">
+    <value>Panels with a single window will be removed automatically.</value>
+  </data>
+  <data name="Messages.NoPreviousDisplay" xml:space="preserve">
+    <value>No previous display.</value>
+  </data>
+  <data name="Common.Display" xml:space="preserve">
+    <value>display</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay1.Caption" xml:space="preserve">
+    <value>Move window to display 1</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay1.Description" xml:space="preserve">
+    <value>Move the focused window from the current display to display 1</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay2.Caption" xml:space="preserve">
+    <value>Move window to display 2</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay2.Description" xml:space="preserve">
+    <value>Move the focused window from the current display to display 2</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay3.Caption" xml:space="preserve">
+    <value>Move window to display 3</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay3.Description" xml:space="preserve">
+    <value>Move the focused window from the current display to display 3</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay4.Caption" xml:space="preserve">
+    <value>Move window to display 4</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay4.Description" xml:space="preserve">
+    <value>Move the focused window from the current display to display 4</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay5.Caption" xml:space="preserve">
+    <value>Move window to display 5</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay5.Description" xml:space="preserve">
+    <value>Move the focused window from the current display to display 5</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay6.Caption" xml:space="preserve">
+    <value>Move window to display 6</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay6.Description" xml:space="preserve">
+    <value>Move the focused window from the current display to display 6</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay7.Caption" xml:space="preserve">
+    <value>Move window to display 7</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay7.Description" xml:space="preserve">
+    <value>Move the focused window from the current display to display 7</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay8.Caption" xml:space="preserve">
+    <value>Move window to display 8</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay8.Description" xml:space="preserve">
+    <value>Move the focused window from the current display to display 8</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay9.Caption" xml:space="preserve">
+    <value>Move window to display 9</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay9.Description" xml:space="preserve">
+    <value>Move the focused window from the current display to display 9</value>
+  </data>
+  <data name="Keybinding.MoveToPreviousDisplay.Caption" xml:space="preserve">
+    <value>Move window to previous display</value>
+  </data>
+  <data name="Keybinding.MoveToPreviousDisplay.Description" xml:space="preserve">
+    <value>Move the focused window from the current display to the previous display</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay1.Caption" xml:space="preserve">
+    <value>Switch to display 1</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay1.Description" xml:space="preserve">
+    <value>Switch from the current display to display 1</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay2.Caption" xml:space="preserve">
+    <value>Switch to display 2</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay2.Description" xml:space="preserve">
+    <value>Switch from the current display to display 2</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay3.Caption" xml:space="preserve">
+    <value>Switch to display 3</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay3.Description" xml:space="preserve">
+    <value>Switch from the current display to display 3</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay4.Caption" xml:space="preserve">
+    <value>Switch to display 4</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay4.Description" xml:space="preserve">
+    <value>Switch from the current display to display 4</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay5.Caption" xml:space="preserve">
+    <value>Switch to display 5</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay5.Description" xml:space="preserve">
+    <value>Switch from the current display to display 5</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay6.Caption" xml:space="preserve">
+    <value>Switch to display 6</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay6.Description" xml:space="preserve">
+    <value>Switch from the current display to display 6</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay7.Caption" xml:space="preserve">
+    <value>Switch to display 7</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay7.Description" xml:space="preserve">
+    <value>Switch from the current display to display 7</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay8.Caption" xml:space="preserve">
+    <value>Switch to display 8</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay8.Description" xml:space="preserve">
+    <value>Switch from the current display to display 8</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay9.Caption" xml:space="preserve">
+    <value>Switch to display 9</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay9.Description" xml:space="preserve">
+    <value>Switch from the current display to display 9</value>
+  </data>
+  <data name="Keybinding.SwitchToPreviousDisplay.Caption" xml:space="preserve">
+    <value>Switch to previous display</value>
+  </data>
+  <data name="Keybinding.SwitchToPreviousDisplay.Description" xml:space="preserve">
+    <value>Switch from the current display to the previous display</value>
+  </data>
+  <data name="Keybinding.ShowDesktop.Caption" xml:space="preserve">
+    <value>Show desktop</value>
+  </data>
+  <data name="Keybinding.ShowDesktop.Description" xml:space="preserve">
+    <value>Show/hide the desktop</value>
+  </data>
+  <data name="Keybindings.Focus" xml:space="preserve">
+    <value>Focus</value>
+  </data>
+  <data name="Keybindings.MultipleDisplays" xml:space="preserve">
+    <value>Displays</value>
+  </data>
+  <data name="Keybindings.Panels" xml:space="preserve">
+    <value>Panels</value>
+  </data>
+  <data name="Keybindings.Sizing" xml:space="preserve">
+    <value>Sizing</value>
+  </data>
+  <data name="Keybindings.VirtualDesktops" xml:space="preserve">
+    <value>Virtual Desktops</value>
+  </data>
+  <data name="Keybindings.Windows" xml:space="preserve">
+    <value>Windows</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Messages.WindowsVersionNotSupported.Caption" xml:space="preserve">
+    <value>Your version of Windows is not supported!</value>
+  </data>
+  <data name="Messages.WindowsVersionNotSupported.Description" xml:space="preserve">
+    <value>You may experience limited functionality until your version of Windows becomes supported or until you upgrade to a stable release. If you think this is a mistake, please select Yes to report it. </value>
+  </data>
+  <data name="Keybindings.DirectMode.Checkbox" xml:space="preserve">
+    <value>Use without Activation hotkey?</value>
+  </data>
+  <data name="General.ModifierMoveWindow" xml:space="preserve">
+    <value>Move windows by holding</value>
+  </data>
+  <data name="General.ModifierMoveWindowFocus" xml:space="preserve">
+    <value>Automatically activate the moved window</value>
+  </data>
+  <data name="General.ModifierMoveWindowFocus.Description" xml:space="preserve">
+    <value>will activate the window</value>
+  </data>
+  <data name="General.WindowMovement" xml:space="preserve">
+    <value>Window movement</value>
+  </data>
+</root>

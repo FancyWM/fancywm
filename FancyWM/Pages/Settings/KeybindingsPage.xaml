@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="FancyWM.Pages.Settings.KeybindingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:res="clr-namespace:FancyWM.Resources"
+             xmlns:local="clr-namespace:FancyWM.Pages.Settings" 
+             xmlns:ui="http://schemas.modernwpf.com/2019" xmlns:controls="clr-namespace:FancyWM.Controls" xmlns:viewmodels="clr-namespace:FancyWM.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:SettingsViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MaxWidth="1024"/>
+        </Grid.ColumnDefinitions>
+        <ui:SimpleStackPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Orientation="Vertical" Margin="12" Spacing="4">
+            <TextBlock Text="{x:Static res:Strings.Keybindings_Caption}" Style="{DynamicResource TitleTextBlockStyle}" Margin="0,0,0,20" />
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="MyGroup"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{x:Static res:Strings.Keybinding_ActivationHotkey}" Margin="0, 0, 10, 0" />
+                    <ComboBox Grid.Column="2" SelectedItem="{Binding SelectedActivationHotkey, Mode=TwoWay}" ItemsSource="{Binding ActivationHotkeyOptions}" Width="150" Margin="0, 0, 10, 0">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+            </Border>
+
+            <ItemsControl ItemsSource="{Binding Path=KeybindingGroups}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Path=GroupKey}"  Style="{DynamicResource SubtitleTextBlockStyle}" Margin="0,16,0,20" />
+                            <ItemsControl ItemsSource="{Binding Path=Keybindings}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{DynamicResource SettingsItemStyle}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" SharedSizeGroup="MyGroup"/>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0, 0, 10, 0" ToolTipService.InitialShowDelay="0">
+                                                    <TextBlock.ToolTip>
+                                                        <TextBlock Text="{Binding Description}" />
+                                                    </TextBlock.ToolTip>
+                                                    <Run Text="{Binding Caption, Mode=OneWay}" />
+                                                    <Run Text="ⓘ" />
+                                                </TextBlock>
+
+                                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                                                    <TextBlock Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" Margin="0,0,15,0" VerticalAlignment="Center" Text="{x:Static res:Strings.Keybindings_DirectMode_Checkbox}" />
+                                                    <CheckBox Grid.Column="0"
+                                                            IsChecked="{Binding IsDirectMode, Mode=TwoWay}"
+                                                            ToolTipService.InitialShowDelay="0">
+                                                        <CheckBox.ToolTip>
+                                                            <TextBlock>
+                                                                <Run Text="{x:Static res:Strings.Keybindings_DirectMode_About}" />
+                                                                <LineBreak />
+                                                                <LineBreak />
+                                                                <Run Text="{x:Static res:Strings.Keybindings_DirectMode_FailModes}" />
+                                                            </TextBlock>
+                                                        </CheckBox.ToolTip>
+                                                    </CheckBox>
+                                                </StackPanel>
+                                                
+                                                <controls:KeyPressBox Grid.Column="2" Pattern="{Binding Pattern, Mode=TwoWay}" Width="150" Margin="0, 0, 10, 0">
+                                                    <controls:KeyPressBox.Style>
+                                                        <Style>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Path=HasErrors}" Value="True">
+                                                                    <Setter Property="controls:KeyPressBox.Background" Value="{DynamicResource SystemControlErrorTextForegroundBrush}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </controls:KeyPressBox.Style>
+                                                </controls:KeyPressBox>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <ui:SimpleStackPanel HorizontalAlignment="Stretch" Orientation="Vertical" IsItemsHost="True" Spacing="4" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+
+                        </StackPanel>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ui:SimpleStackPanel HorizontalAlignment="Stretch" Orientation="Vertical" IsItemsHost="True" Spacing="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+        </ui:SimpleStackPanel>
+    </Grid>
+</UserControl>

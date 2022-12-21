@@ -1,0 +1,293 @@
+﻿<UserControl x:Class="FancyWM.Pages.Settings.AboutPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FancyWM.Pages.Settings" xmlns:controls="clr-namespace:FancyWM.Controls" xmlns:ui="http://schemas.modernwpf.com/2019"
+             mc:Ignorable="d"
+             xmlns:res="clr-namespace:FancyWM.Resources"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MaxWidth="1024"/>
+        </Grid.ColumnDefinitions>
+        <ui:SimpleStackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Margin="12" Spacing="24">
+            <TextBlock Text="{x:Static res:Strings.About_Caption}" Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock Text="FancyWM" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <Image HorizontalAlignment="Left" Width="96" Height="96" Source="../../Resources/Icon.ico" />
+                    <TextBlock>
+                    <Run Text="{x:Static res:Strings.About_AppVersion}" /> <Run Text="{Binding AppVersionText, Mode=OneTime}" /> <LineBreak />
+                    <Run Text="{x:Static res:Strings.About_Copyright}" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+            <TextBlock>
+            <Hyperlink NavigateUri="https://www.microsoft.com/en-aq/store/standard-application-license-terms">Standard Application License Terms</Hyperlink>
+            </TextBlock>
+            <TextBlock Text="{x:Static res:Strings.About_Credits}" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Margin="0,0,0,12">
+                        <Run Text="{x:Static res:Strings.About_Credits_Description}" />
+                    </TextBlock>
+                    <StackPanel Orientation="Vertical">
+                        <Expander>
+                            <Expander.Header>
+                                <TextBlock>
+                        <Hyperlink NavigateUri="https://github.com/dotnet/runtime" RequestNavigate="OnHyperlinkRequestNavigate">.NET Runtime</Hyperlink>
+                                </TextBlock>
+                            </Expander.Header>
+                            <TextBlock xml:space="preserve">The MIT License (MIT)
+
+Copyright (c) .NET Foundation and Contributors
+
+All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</TextBlock>
+                        </Expander>
+                        <Expander>
+                            <Expander.Header>
+                                <TextBlock>
+                        <Hyperlink NavigateUri="https://github.com/dotnet/winforms" RequestNavigate="OnHyperlinkRequestNavigate">.NET Windows Forms</Hyperlink>
+                                </TextBlock>
+                            </Expander.Header>
+                            <TextBlock xml:space="preserve">The MIT License (MIT)
+
+Copyright (c) .NET Foundation and Contributors
+
+All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</TextBlock>
+                        </Expander>
+                        <Expander>
+                            <Expander.Header>
+                                <TextBlock>
+                        <Hyperlink NavigateUri="https://github.com/chromium/chromium" RequestNavigate="OnHyperlinkRequestNavigate">The Chromium Project</Hyperlink>
+                                </TextBlock>
+                            </Expander.Header>
+                            <TextBlock xml:space="preserve">// Copyright 2015 The Chromium Authors. All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//    * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//    * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//    * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</TextBlock>
+                        </Expander>
+                        <Expander>
+                            <Expander.Header>
+                                <TextBlock>
+                        <Hyperlink NavigateUri="https://github.com/HavenDV/H.NotifyIcon.WPF" RequestNavigate="OnHyperlinkRequestNavigate">H.NotifyIcon.WPF</Hyperlink>
+                                </TextBlock>
+                            </Expander.Header>
+                            <TextBlock xml:space="preserve">MIT License
+
+Copyright (c) 2020 havendv
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</TextBlock>
+                        </Expander>
+                        <Expander>
+                            <Expander.Header>
+                                <TextBlock>
+                        <Hyperlink NavigateUri="https://github.com/Kinnara/ModernWpf" RequestNavigate="OnHyperlinkRequestNavigate">ModernWPF UI Library</Hyperlink>
+                                </TextBlock>
+                            </Expander.Header>
+                            <TextBlock xml:space="preserve">MIT License
+
+Copyright (c) 2019 Yimeng Wu
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</TextBlock>
+                        </Expander>
+                        <Expander>
+                            <Expander.Header>
+                                <TextBlock>
+                        <Hyperlink NavigateUri="https://github.com/dotnet/reactive" RequestNavigate="OnHyperlinkRequestNavigate">Reactive Extensions</Hyperlink>
+                                </TextBlock>
+                            </Expander.Header>
+                            <TextBlock xml:space="preserve">The MIT License (MIT)
+
+Copyright (c) .NET Foundation and Contributors
+
+All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</TextBlock>
+                        </Expander>
+                        <Expander>
+                            <Expander.Header>
+                                <TextBlock>
+                        <Hyperlink NavigateUri="https://github.com/MScholtes/VirtualDesktop" RequestNavigate="OnHyperlinkRequestNavigate">VirtualDesktop</Hyperlink>
+                                </TextBlock>
+                            </Expander.Header>
+                            <TextBlock xml:space="preserve">MIT License
+
+Copyright (c) 2017 Markus Scholtes
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</TextBlock>
+                        </Expander>
+                        <Expander>
+                            <Expander.Header>
+                                <TextBlock>
+                        <Hyperlink NavigateUri="https://github.com/fancywm/winman" RequestNavigate="OnHyperlinkRequestNavigate">WinMan</Hyperlink>
+                                </TextBlock>
+                            </Expander.Header>
+                            <TextBlock xml:space="preserve">MIT License
+
+Copyright (c) 2021 Vesko Karaganev
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</TextBlock>
+                        </Expander>
+                        <Expander>
+                            <Expander.Header>
+                                <TextBlock>
+                        <Hyperlink NavigateUri="https://github.com/fancywm/winman-win32" RequestNavigate="OnHyperlinkRequestNavigate">WinMan.Windows</Hyperlink>
+                                </TextBlock>
+                            </Expander.Header>
+                            <TextBlock xml:space="preserve">MIT License
+
+Copyright (c) 2021 Vesko Karaganev
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</TextBlock>
+                        </Expander>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </ui:SimpleStackPanel>
+    </Grid>
+</UserControl>

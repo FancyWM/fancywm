@@ -1,0 +1,78 @@
+﻿<Window x:Class="FancyWM.Windows.ErrorMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:local="clr-namespace:FancyWM.Windows" 
+        xmlns:res="clr-namespace:FancyWM.Resources"
+        xmlns:viewmodels="clr-namespace:FancyWM.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=local:ErrorMessageBox}"
+        mc:Ignorable="d"
+        Title="{x:Static res:Strings.ErrorMessageBox_Caption}" 
+        Width="480"
+        Height="320" 
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        FontSize="14"
+        Topmost="True"
+        Foreground="{DynamicResource SystemControlBackgroundBaseHighBrush}"
+        Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+    <Window.Resources>
+        <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="{DynamicResource SystemAccentColor}" />
+    </Window.Resources>
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ui:FontIcon Margin="16"  Grid.Column="0" VerticalAlignment="Center" Foreground="#f44336" FontSize="48" FontFamily="Segoe MDL2 Assets" Glyph="&#xEA39;" />
+            <StackPanel Orientation="Vertical" Margin="0,16,16,16" Grid.Column="1">
+                <TextBlock TextWrapping="Wrap">
+                    <Run Text="{x:Static res:Strings.ErrorMessageBox_Description_CheckForSolution}" />
+                    <!-- Seems like anything from ModernWpf accessing the Accent Color from another thread crashes. We simulate a link here, intead of using Hyperlink, to work around this. -->
+                    <Run Cursor="Hand" Foreground="#0078D7" TextDecorations="Underline"  MouseDown="OnRequestNavigate">github.com/fancywm/fancywm-issues/issues</Run>.
+                    <LineBreak />
+                    <LineBreak />
+                    <Run Text="{x:Static res:Strings.ErrorMessageBox_Description_SubmittingALog}" />
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap" Text="{Binding ExceptionMessage, Mode=OneTime}" />
+                <CheckBox Margin="0,12,0,0" IsChecked="{Binding IsRestartEnabled}" Content="{x:Static res:Strings.ErrorMessageBox_RestartFancyWM}" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Vertical">
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Margin="16,0" Click="OnDetailsButtonClick">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="0,0,5,0" Text="{x:Static res:Strings.Details}" />
+                            <ui:FontIcon Margin="0,2,0,0" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Glyph="&#xE70D;" FontSize="12" />
+                        </StackPanel>
+                    </Button>
+                    <Button IsEnabled="{Binding IsSubmitLogEnabled}" Grid.Column="2" Margin="4,0" Click="OnSubmitLogButtonClick" Background="{StaticResource SystemControlHighlightAccentBrush}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static res:Strings.ErrorMessageBox_SubmitLog}" />
+                            <ui:FontIcon Margin="5,2,0,0" FontSize="12" FontFamily="Segoe MDL2 Assets" Glyph="&#xE898;" />
+                        </StackPanel>
+                    </Button>
+                    <Button Grid.Column="3" Margin="4,0,16,0" Click="OnQuitButtonClick" Content="{x:Static res:Strings.Quit}" />
+                </Grid>
+
+                <ui:ScrollViewerEx Visibility="{Binding DetailsVisibility}" HorizontalScrollBarVisibility="Auto" Height="160">
+                    <TextBox BorderThickness="0" IsReadOnly="True" FontSize="12" FontFamily="Consolas" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Text="{Binding ExceptionText, Mode=OneTime}" />
+                </ui:ScrollViewerEx>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</Window>

@@ -1,0 +1,56 @@
+﻿<Window x:Class="FancyWM.Windows.StartupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:local="clr-namespace:FancyWM.Windows" 
+        xmlns:controls="clr-namespace:FancyWM.Controls" 
+        xmlns:res="clr-namespace:FancyWM.Resources"
+        xmlns:viewmodels="clr-namespace:FancyWM.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:SettingsViewModel}"
+        mc:Ignorable="d"
+        Title="{x:Static res:Strings.Startup_Caption}"
+        ResizeMode="NoResize"
+        SizeToContent="Height"
+        Width="600"
+        ShowActivated="True"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
+        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+        ui:ThemeManager.IsThemeAware="True"
+        ui:WindowHelper.UseModernWindowStyle="True">
+    <DockPanel LastChildFill="True">
+        <Border DockPanel.Dock="Left" Margin="15">
+            <Image Width="128" Height="128" Source="../Resources/Icon.ico" />
+        </Border>
+        <ui:SimpleStackPanel Orientation="Vertical" Margin="16" Spacing="16">
+            <TextBlock Style="{DynamicResource TitleTextBlockStyle}">
+                <Run Text="{x:Static res:Strings.Startup_FancyWMIsRunning}" />
+                <Run Text="🚀" />
+            </TextBlock>
+            <TextBlock Text="{x:Static res:Strings.Startup_InSystemTray}" Style="{DynamicResource SubtitleTextBlockStyle}" />
+            <StackPanel Orientation="Vertical">
+                <Border BorderThickness="1,1,1,0" CornerRadius="{DynamicResource ControlCornerRadiusTop}" Style="{DynamicResource SettingsItemStyle}">
+                    <TextBlock TextWrapping="Wrap" Text="{x:Static res:Strings.Startup_Paragraph1}" />
+                </Border>
+                <Border BorderThickness="1,1,1,0" CornerRadius="0" Style="{DynamicResource SettingsItemStyle}">
+                    <TextBlock TextWrapping="Wrap" Text="{x:Static res:Strings.Startup_Paragraph2}" />
+                </Border>
+                <Border BorderThickness="1,1,1,0" CornerRadius="0" Style="{DynamicResource SettingsItemStyle}">
+                    <DockPanel LastChildFill="True">
+                        <Border DockPanel.Dock="Right" Width="64" Height="20">
+                            <CheckBox IsChecked="{Binding Path=ShowStartupWindow, Mode=TwoWay}" />
+                        </Border>
+                        <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_ShowStartupWindow}" />
+                    </DockPanel>
+                </Border>
+                <Border CornerRadius="{DynamicResource ControlCornerRadiusBottom}" Style="{DynamicResource SettingsItemStyle}">
+                    <TextBlock TextWrapping="Wrap">
+                        <Run FontWeight="Bold" Text="{x:Static res:Strings.Startup_FirstTimeUsers}"/> <Run Text="{x:Static res:Strings.PleaseSee}" /> <Hyperlink Click="OnSettingsClick"><Run Text="{x:Static res:Strings.Help_Caption}" /></Hyperlink>.
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+        </ui:SimpleStackPanel>
+    </DockPanel>
+</Window>

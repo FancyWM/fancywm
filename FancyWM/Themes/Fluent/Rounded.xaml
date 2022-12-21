@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=netstandard">
+    <sys:Double x:Key="ControlCornerRadiusPx">4</sys:Double>
+    <CornerRadius x:Key="ControlCornerRadius">4,4,4,4</CornerRadius>
+    <CornerRadius x:Key="ControlCornerRadiusLeft">4,0,4,0</CornerRadius>
+    <CornerRadius x:Key="ControlCornerRadiusTop">4,4,0,0</CornerRadius>
+    <CornerRadius x:Key="ControlCornerRadiusRight">0,4,0,4</CornerRadius>
+    <CornerRadius x:Key="ControlCornerRadiusBottom">0,0,4,4</CornerRadius>
+    <sys:Double x:Key="OverlayCornerRadiusPx">8</sys:Double>
+    <CornerRadius x:Key="OverlayCornerRadius">8,8,8,8</CornerRadius>
+    <CornerRadius x:Key="OverlayCornerRadiusLeft">8,0,8,0</CornerRadius>
+    <CornerRadius x:Key="OverlayCornerRadiusTop">8,8,0,0</CornerRadius>
+    <CornerRadius x:Key="OverlayCornerRadiusRight">0,8,0,8</CornerRadius>
+    <CornerRadius x:Key="OverlayCornerRadiusBottom">0,0,8,8</CornerRadius>
+</ResourceDictionary>
