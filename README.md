@@ -31,9 +31,12 @@ FancyWM is a dynamic tiling window manager for Windows 10/11
 
 FancyWM uses [⇧ Shift] + [⊞ Win] as the start of a command sequence (Activation hotkey). To start a command sequence, press and release these keys simultaneously, then follow up by pressing one of the keybindings you have configured in the settings.
 
-FancyWM only manages restored (not minimized, not maximized) top-level application windows, so it doesn't interfere with popups, and still allows you to use all of your available display area for when you need to focus on a window.
+FancyWM only manages restored (not minimized, not maximized) top-level application windows, so it doesn't interfere with popups, and still allows you to use all of your available display area for when you need to focus on a window
 
-## Issues
+## [User's Guide](https://github.com/FancyWM/fancywm/wiki#users-guide)
+Head over to the [Wiki](https://github.com/FancyWM/fancywm/wiki).
+
+## [Issues](https://github.com/FancyWM/fancywm/issues)
 Please, take the time to report any problems you experience by:
 - Opening an issue on https://github.com/veselink1/fancywm/issues (feature requests also welcome)
 In case of crashes, please also remember to save and attach the log file produced by the application.
