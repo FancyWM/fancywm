@@ -41,6 +41,16 @@ Please, take the time to report any problems you experience by:
 - Opening an issue on https://github.com/veselink1/fancywm/issues (feature requests also welcome)
 In case of crashes, please also remember to save and attach the log file produced by the application.
 
+## Building from source
+
+Clone this repo, including submodules.
+
+```bash
+git clone --recursive https://github.com/FancyWM/fancywm.git
+```
+
+Open the .sln file with Visual Studio 2022 and build the FancyWM project.
+
 ## WinMan & WinMan.Windows
 FancyWM is based on [WinMan](https://github.com/veselink1/winman) and [WinMan.Windows](https://github.com/veselink1/winman-windows).
 
