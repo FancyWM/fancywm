@@ -116,6 +116,7 @@ namespace FancyWM
             {
                 FileName = "https://www.paypal.com/donate/?hosted_button_id=NKQ6DKGFVN7S2",
                 UseShellExecute = true,
+                Verb = "open",
             });
         }
 
