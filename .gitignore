@@ -363,3 +363,6 @@ FodyWeavers.xsd
 
 # Designer files
 *.[Dd]esigner.cs
+
+# FancyWM packaging project
+PackageProject/
