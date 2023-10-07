@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Interop;
 
 using FancyWM.Tests.TestUtilities;
 
@@ -15,7 +17,8 @@ namespace FancyWM.Utilities.Tests
         {
             await Applications.WithAppContextAsync(async () =>
             {
-                var ghk = new GlobalHotkey(IntPtr.Zero, DllImports.RegisterHotKey_fsModifiersFlags.MOD_ALT | DllImports.RegisterHotKey_fsModifiersFlags.MOD_CONTROL, KeyCode.Home);
+                var hwnd = new WindowInteropHelper(Application.Current.MainWindow).EnsureHandle();
+                var ghk = new GlobalHotkey(hwnd, DllImports.RegisterHotKey_fsModifiersFlags.MOD_ALT | DllImports.RegisterHotKey_fsModifiersFlags.MOD_CONTROL, KeyCode.Home);
                 ghk.Register();
                 ghk.Unregiser();
             });
