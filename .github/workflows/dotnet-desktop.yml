@@ -3,6 +3,8 @@ name: .NET Desktop
 on:
   push:
     branches: [ "main" ]
+    tags:
+      - "v*"
   pull_request:
     branches: [ "main" ]
 
@@ -42,10 +44,23 @@ jobs:
 
     # Build the application
     - name: Build the application
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --property WarningLevel=0
       env:
         Configuration: ${{ matrix.configuration }}
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
       run: dotnet test
+
+    - name: Generate archive
+      run: |
+        Compress-Archive -Path FancyWM/bin/${{ matrix.configuration }}/net6.0-windows10.0.18362.0/*.* -DestinationPath ${{ matrix.configuration }}.zip
+        (Get-FileHash ${{ matrix.configuration }}.zip -Algorithm SHA256).Hash | Out-File ${{ matrix.configuration }}.zip.sha256sum
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: |
+          ${{ matrix.configuration }}.zip
+          ${{ matrix.configuration }}.zip.sha256sum
