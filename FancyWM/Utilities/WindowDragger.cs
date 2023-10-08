@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Threading;
 
 using WinMan;
 using WinMan.Windows;
@@ -32,14 +33,14 @@ namespace FancyWM.Utilities
             {
                 FocusHelper.ForceActivate(m_window.Handle);
             }
-            m_window.RaisePositionChangeStart();
             m_window.Workspace.CursorLocationChanged += OnCursorLocationChanged;
+            Dispatcher.CurrentDispatcher.InvokeAsync(() => m_window.RaisePositionChangeStart());
         }
 
         internal void End()
         {
             m_window.Workspace.CursorLocationChanged -= OnCursorLocationChanged;
-            m_window.RaisePositionChangeEnd();
+            Dispatcher.CurrentDispatcher.InvokeAsync(() => m_window.RaisePositionChangeEnd());
         }
 
         private void OnCursorLocationChanged(object? sender, CursorLocationChangedEventArgs e)
