@@ -120,10 +120,10 @@ namespace FancyWM
             bool exitNormally = false;
             try
             {
-                // Create the app 
+                // Create the app
                 var app = new App(provider);
                 // We want this running after the one attached in App()
-                AppDomain.CurrentDomain.UnhandledException += (s, e) => 
+                AppDomain.CurrentDomain.UnhandledException += (s, e) =>
                 {
                     logger.Fatal("{Exception}", e.ExceptionObject);
                     CrashCleanup?.Invoke();
@@ -180,31 +180,6 @@ namespace FancyWM
             ConfigureLogging(services, args);
             services.AddSingleton<IMicaProvider>(_ => new FauxMicaProvider(TimeSpan.FromSeconds(1)));
             services.AddSingleton(_ => new LowLevelMouseHook());
-
-            // Disable aero snap
-            try
-            {
-                var originalSnapState = WinAero.IsAeroSnapEnabled;
-                if (originalSnapState)
-                {
-                    WinAero.IsAeroSnapEnabled = false;
-                    ProgramExit += () =>
-                    {
-                        try
-                        {
-                            WinAero.IsAeroSnapEnabled = originalSnapState;
-                        }
-                        catch (Exception)
-                        {
-                            // Suppress
-                        }
-                    };
-                }
-            }
-            catch (Exception)
-            {
-                // Suppress
-            }
         }
 
         private static void ConfigureLogging(IServiceCollection services, Arguments args)
