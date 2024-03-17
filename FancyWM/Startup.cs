@@ -39,18 +39,6 @@ namespace FancyWM
             }
             Directory.SetCurrentDirectory(fullPath);
 
-            try
-            {
-                if (global::Windows.ApplicationModel.AppInstance.GetActivatedEventArgs() is global::Windows.ApplicationModel.Activation.CommandLineActivatedEventArgs storeAppArgs)
-                {
-                    args = storeAppArgs.Operation.Arguments.Split();
-                }
-            }
-            catch (COMException)
-            {
-                // not a store packaged app
-            }
-
             if (args.Contains("--action"))
             {
                 ExecuteAction(args[args.IndexOf("--action") + 1]);
