@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using System.Windows.Input;
 
 using FancyWM.Utilities;
 
@@ -11,10 +10,10 @@ namespace FancyWM.Models
 {
     public class Keybinding : IEquatable<Keybinding>
     {
-        public IReadOnlySet<Key> Keys { get; }
+        public IReadOnlySet<KeyCode> Keys { get; }
         public bool IsDirectMode { get; }
 
-        public Keybinding(IReadOnlySet<Key> keys, bool isDirectMode)
+        public Keybinding(IReadOnlySet<KeyCode> keys, bool isDirectMode)
         {
             Keys = keys ?? throw new ArgumentNullException(nameof(keys));
             IsDirectMode = isDirectMode;
@@ -41,7 +40,7 @@ namespace FancyWM.Models
         {
             if (useDefaults)
             {
-                var keybindingSet = new HashSet<IReadOnlySet<Key>?>(EqualityComparer<Key>.Default.ToSequenceComparer());
+                var keybindingSet = new HashSet<IReadOnlySet<KeyCode>?>(EqualityComparer<KeyCode>.Default.ToSequenceComparer());
                 var members = typeof(BindableAction).GetFields(BindingFlags.Static | BindingFlags.Public);
                 foreach (var member in members)
                 {

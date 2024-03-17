@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Windows.Input;
 
 using FancyWM.Models;
+using FancyWM.Utilities;
 
 namespace FancyWM.Converters
 {
@@ -83,7 +83,7 @@ namespace FancyWM.Converters
                 try
                 {
                     var key = (BindableAction)Enum.Parse(typeof(BindableAction), keyName, ignoreCase: true);
-                    defaultDict[key] = keyBinds == null ? null : new Keybinding(new HashSet<Key>(keyBinds.Keys.Select(x => (Key)Enum.Parse(typeof(Key), x))), keyBinds.IsDirectMode);
+                    defaultDict[key] = keyBinds == null ? null : new Keybinding(new HashSet<KeyCode>(keyBinds.Keys.Select(x => (KeyCode)Enum.Parse(typeof(KeyCode), x))), keyBinds.IsDirectMode);
                 }
                 catch (ArgumentException)
                 {
@@ -110,7 +110,7 @@ namespace FancyWM.Converters
                 try
                 {
                     var key = (BindableAction)Enum.Parse(typeof(BindableAction), keyName, ignoreCase: true);
-                    var value = new HashSet<Key>(keyStrings.Select(x => (Key)Enum.Parse(typeof(Key), x)));
+                    var value = new HashSet<KeyCode>(keyStrings.Select(x => (KeyCode)Enum.Parse(typeof(KeyCode), x)));
                     defaultDict[key] = new Keybinding(value, false);
                 }
                 catch (ArgumentException)

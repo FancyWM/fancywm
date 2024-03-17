@@ -13,9 +13,9 @@ namespace FancyWM.Models
 
         public static IReadOnlyList<ActivationHotkey> AllowedHotkeys { get; } = new ActivationHotkey[]
         {
-            new(KeyCode.LShiftKey, KeyCode.LWin, "⇧ + ⊞"),
-            new(KeyCode.LControlKey, KeyCode.LWin, "Ctrl + ⊞"),
-            new(KeyCode.LMenu, KeyCode.LWin, "Alt + ⊞"),
+            new(KeyCode.LeftShift, KeyCode.LWin, "⇧ + ⊞"),
+            new(KeyCode.LeftCtrl, KeyCode.LWin, "Ctrl + ⊞"),
+            new(KeyCode.LeftAlt, KeyCode.LWin, "Alt + ⊞"),
             new(KeyCode.None, KeyCode.None, "Disabled"),
         };
 

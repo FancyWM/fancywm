@@ -17,7 +17,7 @@ namespace FancyWM.Converters
 
             var hotkey = ActivationHotkey.AllowedHotkeys.FirstOrDefault(x => $"{x.KeyA}_{x.KeyB}" == str);
             if (hotkey == null)
-                throw new FormatException();
+                hotkey = ActivationHotkey.AllowedHotkeys[0];
 
             return hotkey;
         }

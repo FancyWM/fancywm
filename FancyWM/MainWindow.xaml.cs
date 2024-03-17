@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Diagnostics;
 using System.Reactive.Linq;
 
@@ -321,10 +320,10 @@ namespace FancyWM
             {
                 return k switch
                 {
-                    KeyCode.RShiftKey => KeyCode.LShiftKey,
-                    KeyCode.RControlKey => KeyCode.LControlKey,
+                    KeyCode.RightShift => KeyCode.LeftShift,
+                    KeyCode.RightCtrl => KeyCode.LeftCtrl,
                     KeyCode.RWin => KeyCode.LWin,
-                    KeyCode.RMenu => KeyCode.LMenu,
+                    KeyCode.RightAlt => KeyCode.LeftAlt,
                     _ => k,
                 };
             }
@@ -333,10 +332,10 @@ namespace FancyWM
             {
                 return k switch
                 {
-                    KeyCode.LShiftKey => KeyCode.RShiftKey,
-                    KeyCode.LControlKey => KeyCode.RControlKey,
+                    KeyCode.LeftShift => KeyCode.RightShift,
+                    KeyCode.LeftCtrl => KeyCode.RightCtrl,
                     KeyCode.LWin => KeyCode.RWin,
-                    KeyCode.LMenu => KeyCode.RMenu,
+                    KeyCode.LeftAlt => KeyCode.RightAlt,
                     _ => k,
                 };
             }
@@ -393,7 +392,7 @@ namespace FancyWM
             {
                 try
                 {
-                    var (modifiers, key) = KeyCodeHelper.GetModifierAndKeyCode(x.Value!.Keys.Select(KeyCodeHelper.MapToKeyCode));
+                    var (modifiers, key) = KeyCodeHelper.GetModifierAndKeyCode(x.Value!.Keys);
                     var hk = new GlobalHotkey(m_hwnd, modifiers, key);
                     hk.Pressed += delegate { OnDirectHotkeyPressed(x.Key); };
                     hk.Register();
@@ -463,7 +462,7 @@ namespace FancyWM
             }
         }
 
-        private async void OnCommandKey(IReadOnlySet<Key> keys)
+        private async void OnCommandKey(IReadOnlySet<KeyCode> keys)
         {
             // This is to allow for focus to return to the window before movement
             await Task.Delay(50);
@@ -483,22 +482,22 @@ namespace FancyWM
                     var key = keys.First();
                     switch (key)
                     {
-                        case Key.F1:
+                        case KeyCode.F1:
                             OpenHelp();
                             return;
-                        case Key.Snapshot:
+                        case KeyCode.Snapshot:
                             Debugger.Break();
                             return;
                     }
                 }
-                else if (keys.SetEquals(new[] { Key.LeftShift, Key.Snapshot }))
+                else if (keys.SetEquals(new[] { KeyCode.LeftShift, KeyCode.Snapshot }))
                 {
                     throw new Exception("Program break requested!");
                 }
 
-                if (keys.Count() == 2 && keys.Contains(Key.LWin)
-                    && (keys.Contains(Key.LeftShift) || keys.Contains(Key.LeftCtrl) || keys.Contains(Key.LeftAlt)
-                    || keys.Contains(Key.RightShift) || keys.Contains(Key.RightCtrl) || keys.Contains(Key.RightAlt)))
+                if (keys.Count() == 2 && keys.Contains(KeyCode.LeftAlt)
+                    && (keys.Contains(KeyCode.LeftShift) || keys.Contains(KeyCode.LeftCtrl) || keys.Contains(KeyCode.LeftAlt)
+                    || keys.Contains(KeyCode.RightShift) || keys.Contains(KeyCode.RightCtrl) || keys.Contains(KeyCode.RightAlt)))
                 {
                     return;
                 }

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 using FancyWM.Converters;
 using FancyWM.Models;
+using FancyWM.Utilities;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -36,8 +36,8 @@ namespace FancyWM.Tests.Converters
                 ]
             }")), WriteString(new KeybindingDictionary(useDefaults: false)
             {
-                { BindableAction.MoveFocusDown, new Keybinding(new[] { Key.Down }.ToHashSet(), isDirectMode: false) },
-                { BindableAction.SwapLeft, new Keybinding(new[] { Key.LeftShift, Key.Left }.ToHashSet(), isDirectMode: false) },
+                { BindableAction.MoveFocusDown, new Keybinding(new[] { KeyCode.Down }.ToHashSet(), isDirectMode: false) },
+                { BindableAction.SwapLeft, new Keybinding(new[] { KeyCode.LeftShift, KeyCode.Left }.ToHashSet(), isDirectMode: false) },
             }));
         }
 
@@ -47,8 +47,8 @@ namespace FancyWM.Tests.Converters
         {
             var testObj = new KeybindingDictionary(useDefaults: false)
             {
-                { BindableAction.MoveFocusDown, new Keybinding(new[] { Key.Down }.ToHashSet(), isDirectMode: false) },
-                { BindableAction.SwapLeft, new Keybinding(new[] { Key.LeftShift, Key.Left }.ToHashSet(), isDirectMode: true) },
+                { BindableAction.MoveFocusDown, new Keybinding(new[] { KeyCode.Down }.ToHashSet(), isDirectMode: false) },
+                { BindableAction.SwapLeft, new Keybinding(new[] { KeyCode.LeftShift, KeyCode.Left }.ToHashSet(), isDirectMode: true) },
             };
             Assert.AreEqual(WriteString(ReadString(WriteString(testObj))), WriteString(testObj));
         }

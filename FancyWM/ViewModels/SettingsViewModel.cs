@@ -260,10 +260,10 @@ namespace FancyWM.ViewModels
             if (e.PropertyName == nameof(KeybindingViewModel.Pattern) || e.PropertyName == nameof(KeybindingViewModel.IsDirectMode))
             {
                 var vm = ((KeybindingViewModel)c!);
-                var keybindingSet = new Dictionary<IReadOnlySet<Key>, KeybindingViewModel>(EqualityComparer<Key>.Default.ToSequenceComparer());
+                var keybindingSet = new Dictionary<IReadOnlySet<KeyCode>, KeybindingViewModel>(EqualityComparer<KeyCode>.Default.ToSequenceComparer());
                 var duplicatesToRemove = Keybindings!
                     .Where(x => x.Pattern != null)
-                    .GroupBy(x => x.Pattern, EqualityComparer<Key>.Default.ToSequenceComparer())
+                    .GroupBy(x => x.Pattern, EqualityComparer<KeyCode>.Default.ToSequenceComparer())
                     .Where(g => g.Count() > 1);
                 foreach (var duplicates in duplicatesToRemove)
                 {

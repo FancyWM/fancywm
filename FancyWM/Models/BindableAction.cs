@@ -1,151 +1,152 @@
-﻿using System.Windows.Input;
+﻿
+using FancyWM.Utilities;
 
 namespace FancyWM.Models
 {
     public enum BindableAction
     {
         // Group: FancyWM
-        [DefaultKeybinding(Key.F11)]
+        [DefaultKeybinding(KeyCode.F11)]
         ToggleManager,
-        [DefaultKeybinding(Key.R)]
+        [DefaultKeybinding(KeyCode.R)]
         RefreshWorkspace,
-        [DefaultKeybinding(Key.Escape)]
+        [DefaultKeybinding(KeyCode.Escape)]
         Cancel,
 
         // Group: Focus
-        [DefaultKeybinding(Key.Left)]
+        [DefaultKeybinding(KeyCode.Left)]
         MoveFocusLeft,
-        [DefaultKeybinding(Key.Up)]
+        [DefaultKeybinding(KeyCode.Up)]
         MoveFocusUp,
-        [DefaultKeybinding(Key.Right)]
+        [DefaultKeybinding(KeyCode.Right)]
         MoveFocusRight,
-        [DefaultKeybinding(Key.Down)]
+        [DefaultKeybinding(KeyCode.Down)]
         MoveFocusDown,
-        [DefaultKeybinding(Key.D)]
+        [DefaultKeybinding(KeyCode.D)]
         ShowDesktop,
 
         // Group: Panels
-        [DefaultKeybinding(Key.H)]
+        [DefaultKeybinding(KeyCode.H)]
         CreateHorizontalPanel,
-        [DefaultKeybinding(Key.V)]
+        [DefaultKeybinding(KeyCode.V)]
         CreateVerticalPanel,
-        [DefaultKeybinding(Key.S)]
+        [DefaultKeybinding(KeyCode.S)]
         CreateStackPanel,
 
         // Group: Windows
-        [DefaultKeybinding(Key.Enter)]
+        [DefaultKeybinding(KeyCode.Enter)]
         PullWindowUp,
-        [DefaultKeybinding(Key.F)]
+        [DefaultKeybinding(KeyCode.F)]
         ToggleFloatingMode,
-        [DefaultKeybinding(Key.LeftCtrl, Key.Left)]
+        [DefaultKeybinding(KeyCode.LeftCtrl, KeyCode.Left)]
         MoveLeft,
-        [DefaultKeybinding(Key.LeftCtrl, Key.Up)]
+        [DefaultKeybinding(KeyCode.LeftCtrl, KeyCode.Up)]
         MoveUp,
-        [DefaultKeybinding(Key.LeftCtrl, Key.Right)]
+        [DefaultKeybinding(KeyCode.LeftCtrl, KeyCode.Right)]
         MoveRight,
-        [DefaultKeybinding(Key.LeftCtrl, Key.Down)]
+        [DefaultKeybinding(KeyCode.LeftCtrl, KeyCode.Down)]
         MoveDown,
-        [DefaultKeybinding(Key.LeftShift, Key.Left)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.Left)]
         SwapLeft,
-        [DefaultKeybinding(Key.LeftShift, Key.Up)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.Up)]
         SwapUp,
-        [DefaultKeybinding(Key.LeftShift, Key.Right)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.Right)]
         SwapRight,
-        [DefaultKeybinding(Key.LeftShift, Key.Down)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.Down)]
         SwapDown,
 
         // Group: Sizing
-        [DefaultKeybinding(Key.OemCloseBrackets)]
+        [DefaultKeybinding(KeyCode.OemCloseBrackets)]
         IncreaseWidth,
-        [DefaultKeybinding(Key.OemQuotes)]
+        [DefaultKeybinding(KeyCode.OemQuotes)]
         IncreaseHeight,
-        [DefaultKeybinding(Key.OemOpenBrackets)]
+        [DefaultKeybinding(KeyCode.OemOpenBrackets)]
         DecreaseWidth,
-        [DefaultKeybinding(Key.OemSemicolon)]
+        [DefaultKeybinding(KeyCode.OemSemicolon)]
         DecreaseHeight,
 
         // Group: Virtual Desktops
-        [DefaultKeybinding(Key.Q)]
+        [DefaultKeybinding(KeyCode.Q)]
         SwitchToPreviousDesktop,
-        [DefaultKeybinding(Key.D1)]
+        [DefaultKeybinding(KeyCode.D1)]
         SwitchToDesktop1,
-        [DefaultKeybinding(Key.D2)]
+        [DefaultKeybinding(KeyCode.D2)]
         SwitchToDesktop2,
-        [DefaultKeybinding(Key.D3)]
+        [DefaultKeybinding(KeyCode.D3)]
         SwitchToDesktop3,
-        [DefaultKeybinding(Key.D4)]
+        [DefaultKeybinding(KeyCode.D4)]
         SwitchToDesktop4,
-        [DefaultKeybinding(Key.D5)]
+        [DefaultKeybinding(KeyCode.D5)]
         SwitchToDesktop5,
-        [DefaultKeybinding(Key.D6)]
+        [DefaultKeybinding(KeyCode.D6)]
         SwitchToDesktop6,
-        [DefaultKeybinding(Key.D7)]
+        [DefaultKeybinding(KeyCode.D7)]
         SwitchToDesktop7,
-        [DefaultKeybinding(Key.D8)]
+        [DefaultKeybinding(KeyCode.D8)]
         SwitchToDesktop8,
-        [DefaultKeybinding(Key.D9)]
+        [DefaultKeybinding(KeyCode.D9)]
         SwitchToDesktop9,
-        [DefaultKeybinding(Key.LeftShift, Key.Q)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.Q)]
         MoveToPreviousDesktop,
-        [DefaultKeybinding(Key.LeftShift, Key.D1)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D1)]
         MoveToDesktop1,
-        [DefaultKeybinding(Key.LeftShift, Key.D2)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D2)]
         MoveToDesktop2,
-        [DefaultKeybinding(Key.LeftShift, Key.D3)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D3)]
         MoveToDesktop3,
-        [DefaultKeybinding(Key.LeftShift, Key.D4)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D4)]
         MoveToDesktop4,
-        [DefaultKeybinding(Key.LeftShift, Key.D5)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D5)]
         MoveToDesktop5,
-        [DefaultKeybinding(Key.LeftShift, Key.D6)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D6)]
         MoveToDesktop6,
-        [DefaultKeybinding(Key.LeftShift, Key.D7)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D7)]
         MoveToDesktop7,
-        [DefaultKeybinding(Key.LeftShift, Key.D8)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D8)]
         MoveToDesktop8,
-        [DefaultKeybinding(Key.LeftShift, Key.D9)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D9)]
         MoveToDesktop9,
 
         // Group: Multiple Displays
-        [DefaultKeybinding(Key.E)]
+        [DefaultKeybinding(KeyCode.E)]
         SwitchToPreviousDisplay,
-        [DefaultKeybinding(Key.F1)]
+        [DefaultKeybinding(KeyCode.F1)]
         SwitchToDisplay1,
-        [DefaultKeybinding(Key.F2)]
+        [DefaultKeybinding(KeyCode.F2)]
         SwitchToDisplay2,
-        [DefaultKeybinding(Key.F3)]
+        [DefaultKeybinding(KeyCode.F3)]
         SwitchToDisplay3,
-        [DefaultKeybinding(Key.F4)]
+        [DefaultKeybinding(KeyCode.F4)]
         SwitchToDisplay4,
-        [DefaultKeybinding(Key.F5)]
+        [DefaultKeybinding(KeyCode.F5)]
         SwitchToDisplay5,
-        [DefaultKeybinding(Key.F6)]
+        [DefaultKeybinding(KeyCode.F6)]
         SwitchToDisplay6,
-        [DefaultKeybinding(Key.F7)]
+        [DefaultKeybinding(KeyCode.F7)]
         SwitchToDisplay7,
-        [DefaultKeybinding(Key.F8)]
+        [DefaultKeybinding(KeyCode.F8)]
         SwitchToDisplay8,
-        [DefaultKeybinding(Key.F9)]
+        [DefaultKeybinding(KeyCode.F9)]
         SwitchToDisplay9,
-        [DefaultKeybinding(Key.LeftShift, Key.E)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.E)]
         MoveToPreviousDisplay,
-        [DefaultKeybinding(Key.LeftShift, Key.F1)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.F1)]
         MoveToDisplay1,
-        [DefaultKeybinding(Key.LeftShift, Key.F2)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.F2)]
         MoveToDisplay2,
-        [DefaultKeybinding(Key.LeftShift, Key.F3)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.F3)]
         MoveToDisplay3,
-        [DefaultKeybinding(Key.LeftShift, Key.F4)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.F4)]
         MoveToDisplay4,
-        [DefaultKeybinding(Key.LeftShift, Key.F5)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.F5)]
         MoveToDisplay5,
-        [DefaultKeybinding(Key.LeftShift, Key.F6)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.F6)]
         MoveToDisplay6,
-        [DefaultKeybinding(Key.LeftShift, Key.F7)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.F7)]
         MoveToDisplay7,
-        [DefaultKeybinding(Key.LeftShift, Key.F8)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.F8)]
         MoveToDisplay8,
-        [DefaultKeybinding(Key.LeftShift, Key.F9)]
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.F9)]
         MoveToDisplay9,
     }
 }

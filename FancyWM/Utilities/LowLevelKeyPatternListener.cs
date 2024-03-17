@@ -16,9 +16,9 @@ namespace FancyWM.Utilities
 
         public bool IsListening { get; private set; }
 
-        public IReadOnlySet<Key>? Pattern { get; private set; }
+        public IReadOnlySet<KeyCode>? Pattern { get; private set; }
 
-        private readonly HashSet<Key> m_pressedKeys = new HashSet<Key>();
+        private readonly HashSet<KeyCode> m_pressedKeys = new HashSet<KeyCode>();
         private readonly HashSet<KeyCode> m_pressedKeyCodes = new HashSet<KeyCode>();
 
         public event KeyPatternChangedEventHandler? PatternChanged;
@@ -62,7 +62,7 @@ namespace FancyWM.Utilities
             {
                 e.Handled = true;
                 m_pressedKeyCodes.Add(e.KeyCode);
-                m_pressedKeys.Add(KeyInterop.KeyFromVirtualKey((int)e.KeyCode));
+                m_pressedKeys.Add(e.KeyCode);
             }
             else
             {

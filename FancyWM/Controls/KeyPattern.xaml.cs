@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -23,13 +22,13 @@ namespace FancyWM.Controls
     {
         public static readonly DependencyProperty PatternProperty = DependencyProperty.Register(
             nameof(Pattern),
-            typeof(IReadOnlySet<Key>),
+            typeof(IReadOnlySet<KeyCode>),
             typeof(KeyPattern),
             new PropertyMetadata(null));
 
-        public IReadOnlySet<Key> Pattern
+        public IReadOnlySet<KeyCode> Pattern
         {
-            get => (IReadOnlySet<Key>)GetValue(PatternProperty);
+            get => (IReadOnlySet<KeyCode>)GetValue(PatternProperty);
             set => SetValue(PatternProperty, value);
         }
 

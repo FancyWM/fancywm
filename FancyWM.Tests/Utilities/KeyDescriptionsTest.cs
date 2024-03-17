@@ -9,7 +9,7 @@ namespace FancyWM.Utilities.Tests
         [TestMethod]
         public void TestCaseConversion()
         {
-            Assert.AreEqual("Browser Back", KeyDescriptions.GetDescription(System.Windows.Input.Key.BrowserBack));
+            Assert.AreEqual("Browser Back", KeyDescriptions.GetDescription(KeyCode.BrowserBack));
         }
     }
 }

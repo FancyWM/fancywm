@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Windows.Input;
 
 using FancyWM.Models;
+using FancyWM.Utilities;
 
 namespace FancyWM.ViewModels
 {
     public class KeybindingViewModel : ViewModelBase
     {
         private BindableAction m_action;
-        private IReadOnlySet<Key>? m_pattern;
+        private IReadOnlySet<KeyCode>? m_pattern;
         private bool m_hasErrors;
         private bool m_isDirectMode;
 
@@ -22,7 +22,7 @@ namespace FancyWM.ViewModels
             set => SetField(ref m_action, value);
         }
 
-        public IReadOnlySet<Key>? Pattern
+        public IReadOnlySet<KeyCode>? Pattern
         {
             get => m_pattern;
             set => SetField(ref m_pattern, value);

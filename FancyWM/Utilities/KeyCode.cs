@@ -11,11 +11,11 @@ namespace FancyWM.Utilities
 {
     public static class KeyCodeHelper
     {
-        public static bool CanMapToValidModifiersAndKeyCode(IEnumerable<Key> keys)
+        public static bool CanMapToValidModifiersAndKeyCode(IEnumerable<KeyCode> keys)
         {
             try
             {
-                GetModifierAndKeyCode(keys.Select(x => MapToKeyCode(x)));
+                GetModifierAndKeyCode(keys);
                 return true;
             }
             catch (ArgumentException)
@@ -28,12 +28,12 @@ namespace FancyWM.Utilities
         {
             var modifiers = keys.Where(x => x switch
             {
-                KeyCode.LShiftKey => true,
-                KeyCode.RShiftKey => true,
-                KeyCode.LMenu => true,
-                KeyCode.RMenu => true,
-                KeyCode.LControlKey => true,
-                KeyCode.RControlKey => true,
+                KeyCode.LeftShift => true,
+                KeyCode.RightShift => true,
+                KeyCode.LeftAlt => true,
+                KeyCode.RightAlt => true,
+                KeyCode.LeftCtrl => true,
+                KeyCode.RightCtrl => true,
                 KeyCode.LWin => true,
                 KeyCode.RWin => true,
                 _ => false,
@@ -71,10 +71,10 @@ namespace FancyWM.Utilities
                 Key.FinalMode => KeyCode.FinalMode,
                 Key.HanjaMode => KeyCode.HanjaMode,
                 Key.Escape => KeyCode.Escape,
-                Key.ImeConvert => KeyCode.IMEConvert,
-                Key.ImeNonConvert => KeyCode.IMENonconvert,
-                Key.ImeAccept => KeyCode.IMEAccept,
-                Key.ImeModeChange => KeyCode.IMEModeChange,
+                Key.ImeConvert => KeyCode.ImeConvert,
+                Key.ImeNonConvert => KeyCode.ImeNonConvert,
+                Key.ImeAccept => KeyCode.ImeAccept,
+                Key.ImeModeChange => KeyCode.ImeModeChange,
                 Key.Space => KeyCode.Space,
                 Key.PageUp => KeyCode.PageUp,
                 Key.Next => KeyCode.Next,
@@ -173,12 +173,12 @@ namespace FancyWM.Utilities
                 Key.F24 => KeyCode.F24,
                 Key.NumLock => KeyCode.NumLock,
                 Key.Scroll => KeyCode.Scroll,
-                Key.LeftShift => KeyCode.LShiftKey,
-                Key.RightShift => KeyCode.RShiftKey,
-                Key.LeftCtrl => KeyCode.LControlKey,
-                Key.RightCtrl => KeyCode.RControlKey,
-                Key.LeftAlt => KeyCode.LMenu,
-                Key.RightAlt => KeyCode.RMenu,
+                Key.LeftShift => KeyCode.LeftShift,
+                Key.RightShift => KeyCode.RightShift,
+                Key.LeftCtrl => KeyCode.LeftCtrl,
+                Key.RightCtrl => KeyCode.RightCtrl,
+                Key.LeftAlt => KeyCode.LeftAlt,
+                Key.RightAlt => KeyCode.RightAlt,
                 Key.BrowserBack => KeyCode.BrowserBack,
                 Key.BrowserForward => KeyCode.BrowserForward,
                 Key.BrowserRefresh => KeyCode.BrowserRefresh,
@@ -198,8 +198,8 @@ namespace FancyWM.Utilities
                 Key.LaunchApplication1 => KeyCode.LaunchApplication1,
                 Key.LaunchApplication2 => KeyCode.LaunchApplication2,
                 Key.Oem1 => KeyCode.Oem1,
-                Key.OemPlus => KeyCode.Oemplus,
-                Key.OemComma => KeyCode.Oemcomma,
+                Key.OemPlus => KeyCode.OemPlus,
+                Key.OemComma => KeyCode.OemComma,
                 Key.OemMinus => KeyCode.OemMinus,
                 Key.OemPeriod => KeyCode.OemPeriod,
                 Key.Oem2 => KeyCode.Oem2,
@@ -221,7 +221,7 @@ namespace FancyWM.Utilities
                 Key.DbeDbcsChar => KeyCode.None,
                 Key.DbeRoman => KeyCode.None,
                 Key.Attn => KeyCode.Attn,
-                Key.CrSel => KeyCode.Crsel,
+                Key.CrSel => KeyCode.CrSel,
                 Key.DbeEnterImeConfigureMode => KeyCode.None,
                 Key.DbeFlushString => KeyCode.None,
                 Key.DbeCodeInput => KeyCode.None,
@@ -230,6 +230,7 @@ namespace FancyWM.Utilities
                 Key.DbeEnterDialogConversionMode => KeyCode.None,
                 Key.OemClear => KeyCode.OemClear,
                 Key.DeadCharProcessed => KeyCode.None,
+                _ => throw new NotImplementedException(),
             };
         }
     }
@@ -388,27 +389,27 @@ namespace FancyWM.Utilities
         /// <summary>
         ///  The IME Convert key.
         /// </summary>
-        IMEConvert = 0x1C,
+        ImeConvert = 0x1C,
 
         /// <summary>
         ///  The IME NonConvert key.
         /// </summary>
-        IMENonconvert = 0x1D,
+        ImeNonConvert = 0x1D,
 
         /// <summary>
         ///  The IME Accept key.
         /// </summary>
-        IMEAccept = 0x1E,
+        ImeAccept = 0x1E,
 
         /// <summary>
         ///  The IME Accept key.
         /// </summary>
-        IMEAceept = IMEAccept,
+        IMEAceept = ImeAccept,
 
         /// <summary>
         ///  The IME Mode change request.
         /// </summary>
-        IMEModeChange = 0x1F,
+        ImeModeChange = 0x1F,
 
         /// <summary>
         ///  The SPACEBAR key.
@@ -918,32 +919,32 @@ namespace FancyWM.Utilities
         /// <summary>
         ///  The left SHIFT key.
         /// </summary>
-        LShiftKey = 0xA0,
+        LeftShift = 0xA0,
 
         /// <summary>
         ///  The right SHIFT key.
         /// </summary>
-        RShiftKey = 0xA1,
+        RightShift = 0xA1,
 
         /// <summary>
         ///  The left CTRL key.
         /// </summary>
-        LControlKey = 0xA2,
+        LeftCtrl = 0xA2,
 
         /// <summary>
         ///  The right CTRL key.
         /// </summary>
-        RControlKey = 0xA3,
+        RightCtrl = 0xA3,
 
         /// <summary>
         ///  The left ALT key.
         /// </summary>
-        LMenu = 0xA4,
+        LeftAlt = 0xA4,
 
         /// <summary>
         ///  The right ALT key.
         /// </summary>
-        RMenu = 0xA5,
+        RightAlt = 0xA5,
 
         /// <summary>
         ///  The Browser Back key.
@@ -1048,12 +1049,12 @@ namespace FancyWM.Utilities
         /// <summary>
         ///  The Oem plus key.
         /// </summary>
-        Oemplus = 0xBB,
+        OemPlus = 0xBB,
 
         /// <summary>
         ///  The Oem comma key.
         /// </summary>
-        Oemcomma = 0xBC,
+        OemComma = 0xBC,
 
         /// <summary>
         ///  The Oem Minus key.
@@ -1158,7 +1159,7 @@ namespace FancyWM.Utilities
         /// <summary>
         ///  The CRSEL key.
         /// </summary>
-        Crsel = 0xF7,
+        CrSel = 0xF7,
 
         /// <summary>
         ///  The EXSEL key.

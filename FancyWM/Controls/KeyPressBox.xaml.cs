@@ -26,13 +26,13 @@ namespace FancyWM.Controls
 
         public static readonly DependencyProperty PatternProperty = DependencyProperty.Register(
             nameof(Pattern),
-            typeof(IReadOnlySet<Key>),
+            typeof(IReadOnlySet<KeyCode>),
             typeof(KeyPressBox),
             new PropertyMetadata(null));
 
-        public IReadOnlySet<Key> Pattern
+        public IReadOnlySet<KeyCode> Pattern
         {
-            get => (IReadOnlySet<Key>)GetValue(PatternProperty);
+            get => (IReadOnlySet<KeyCode>)GetValue(PatternProperty);
             set => SetValue(PatternProperty, value);
         }
 
@@ -82,7 +82,7 @@ namespace FancyWM.Controls
             if (string.IsNullOrEmpty(InputBox.Text))
             {
                 InputBox.Text = EmptyPlaceholder;
-                PatternChanged?.Invoke(this, new KeyPatternChangedEventArgs(new HashSet<Key>()));
+                PatternChanged?.Invoke(this, new KeyPatternChangedEventArgs(new HashSet<KeyCode>()));
             }
         }
 
@@ -110,7 +110,7 @@ namespace FancyWM.Controls
         private string FormatPattern(string pattern)
         {
             return pattern.Split(',')
-                .Select(x => Enum.Parse<Key>(x))
+                .Select(Enum.Parse<KeyCode>)
                 .ToPrettyString();
         }
     }

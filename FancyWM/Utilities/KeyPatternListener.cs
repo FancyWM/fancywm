@@ -8,9 +8,9 @@ namespace FancyWM.Utilities
 {
     internal class KeyPatternChangedEventArgs : EventArgs
     {
-        public IReadOnlySet<Key> Keys { get; }
+        public IReadOnlySet<KeyCode> Keys { get; }
 
-        public KeyPatternChangedEventArgs(IReadOnlySet<Key> keys)
+        public KeyPatternChangedEventArgs(IReadOnlySet<KeyCode> keys)
         {
             Keys = keys ?? throw new ArgumentNullException(nameof(keys));
         }
@@ -24,7 +24,7 @@ namespace FancyWM.Utilities
 
         bool IsListening { get; }
 
-        IReadOnlySet<Key>? Pattern { get; }
+        IReadOnlySet<KeyCode>? Pattern { get; }
     }
 
     internal class KeyPatternListener : IKeyPatternListener
@@ -33,11 +33,11 @@ namespace FancyWM.Utilities
 
         public bool IsListening { get; private set; }
 
-        public IReadOnlySet<Key>? Pattern { get; private set; }
+        public IReadOnlySet<KeyCode>? Pattern { get; private set; }
 
         public UIElement EventSource { get; }
 
-        private readonly HashSet<Key> m_pressedKeys = new HashSet<Key>();
+        private readonly HashSet<KeyCode> m_pressedKeys = new HashSet<KeyCode>();
 
         public KeyPatternListener(UIElement eventSource)
         {
@@ -80,40 +80,40 @@ namespace FancyWM.Utilities
             e.Handled = true;
             if (e.SystemKey != Key.None)
             {
-                m_pressedKeys.Add(e.SystemKey);
+                m_pressedKeys.Add(KeyCodeHelper.MapToKeyCode(e.SystemKey));
             }
             else
             {
-                m_pressedKeys.Add(e.Key);
+                m_pressedKeys.Add(KeyCodeHelper.MapToKeyCode(e.Key));
             }
         }
     }
 
     public static class KeySetExtensions
     {
-        public static Key Normalize(this Key key)
+        public static KeyCode Normalize(this KeyCode key)
         {
             return key switch
             {
-                Key.RightCtrl => Key.LeftCtrl,
-                Key.RightAlt => Key.LeftAlt,
-                Key.RightShift => Key.LeftShift,
-                Key.RWin => Key.LWin,
+                KeyCode.RightCtrl => KeyCode.LeftCtrl,
+                KeyCode.RightAlt => KeyCode.LeftAlt,
+                KeyCode.RightShift => KeyCode.LeftShift,
+                KeyCode.RWin => KeyCode.LWin,
                 _ => key,
             };
         }
 
-        public static IEnumerable<Key> Normalize(this IEnumerable<Key> keys)
+        public static IEnumerable<KeyCode> Normalize(this IEnumerable<KeyCode> keys)
         {
             return keys.Select(x => x.Normalize());
         }
 
-        public static bool SetEqualsSideInsensitive(this IReadOnlySet<Key> keys, IEnumerable<Key> enumerable)
+        public static bool SetEqualsSideInsensitive(this IReadOnlySet<KeyCode> keys, IEnumerable<KeyCode> enumerable)
         {
             return keys.Select(x => x.Normalize()).ToHashSet().SetEquals(enumerable.Normalize());
         }
 
-        public static string ToPrettyString(this IEnumerable<Key> keys)
+        public static string ToPrettyString(this IEnumerable<KeyCode> keys)
         {
             if (!keys.Any())
             {

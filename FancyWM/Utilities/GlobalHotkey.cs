@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Interop;
 
 using FancyWM.DllImports;
@@ -50,15 +49,15 @@ namespace FancyWM.Utilities
         {
             var modifierSet = modifiers.ToHashSet();
             RegisterHotKey_fsModifiersFlags flags = default;
-            if (modifierSet.Remove(KeyCode.LControlKey) || modifierSet.Remove(KeyCode.RControlKey))
+            if (modifierSet.Remove(KeyCode.LeftCtrl) || modifierSet.Remove(KeyCode.RightCtrl))
             {
                 flags |= RegisterHotKey_fsModifiersFlags.MOD_CONTROL;
             }
-            if (modifierSet.Remove(KeyCode.LShiftKey) || modifierSet.Remove(KeyCode.RShiftKey))
+            if (modifierSet.Remove(KeyCode.LeftShift) || modifierSet.Remove(KeyCode.RightShift))
             {
                 flags |= RegisterHotKey_fsModifiersFlags.MOD_SHIFT;
             }
-            if (modifierSet.Remove(KeyCode.LMenu) || modifierSet.Remove(KeyCode.RMenu))
+            if (modifierSet.Remove(KeyCode.LeftAlt) || modifierSet.Remove(KeyCode.RightAlt))
             {
                 flags |= RegisterHotKey_fsModifiersFlags.MOD_ALT;
             }

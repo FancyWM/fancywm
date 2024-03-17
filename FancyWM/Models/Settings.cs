@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using System.Windows.Input;
 using System.Windows.Media;
 
 using FancyWM.Utilities;
@@ -21,9 +20,9 @@ namespace FancyWM.Models
 
     public class DefaultKeybindingAttribute : Attribute
     {
-        public readonly Key[] Keys;
+        public readonly KeyCode[] Keys;
 
-        public DefaultKeybindingAttribute(params Key[] keys)
+        public DefaultKeybindingAttribute(params KeyCode[] keys)
         {
             Keys = keys;
         }
@@ -106,7 +105,7 @@ namespace FancyWM.Models
                    ShowFocusDuringAction == settings.ShowFocusDuringAction;
         }
 
-        private bool Equals(IDictionary<BindableAction, IReadOnlySet<Key>?> left, IDictionary<BindableAction, IReadOnlySet<Key>?> right)
+        private bool Equals(IDictionary<BindableAction, IReadOnlySet<KeyCode>?> left, IDictionary<BindableAction, IReadOnlySet<KeyCode>?> right)
         {
             if (ReferenceEquals(left, right))
                 return true;
