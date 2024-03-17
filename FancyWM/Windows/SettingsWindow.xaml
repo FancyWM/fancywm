@@ -112,7 +112,7 @@
                 </Button>
             </StackPanel>
         </DockPanel>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer CanContentScroll="False" HorizontalScrollBarVisibility="Auto">
             <Border MinWidth="480" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollViewer}}" x:Name="PageContent" />
         </ScrollViewer>
     </DockPanel>
