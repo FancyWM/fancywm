@@ -18,8 +18,7 @@
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-        ui:ThemeManager.IsThemeAware="True"
-        ui:WindowHelper.UseModernWindowStyle="True">
+        ui:ThemeManager.IsThemeAware="True">
     <DockPanel LastChildFill="True">
         <Border DockPanel.Dock="Left" Margin="15">
             <Image Width="128" Height="128" Source="../Resources/Icon.ico" />

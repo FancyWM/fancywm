@@ -17,7 +17,6 @@
         ResizeMode="NoResize"
         FontSize="14"
         Topmost="True"
-        ui:WindowHelper.UseModernWindowStyle="True"
         ui:ThemeManager.IsThemeAware="True"
         Foreground="{DynamicResource SystemControlBackgroundBaseHighBrush}"
         Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}">

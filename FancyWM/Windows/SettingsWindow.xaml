@@ -17,7 +17,6 @@
         Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
         ui:ThemeManager.IsThemeAware="True"
-        ui:WindowHelper.UseModernWindowStyle="True"
         Focusable="True">
     <DockPanel>
         <DockPanel DockPanel.Dock="Left" LastChildFill="False">

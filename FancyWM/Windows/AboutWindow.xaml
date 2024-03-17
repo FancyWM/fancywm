@@ -13,8 +13,7 @@
         Width="800"
         Foreground="{DynamicResource SystemControlBackgroundBaseHighBrush}"
         Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
-        ui:ThemeManager.IsThemeAware="True"
-        ui:WindowHelper.UseModernWindowStyle="True">
+        ui:ThemeManager.IsThemeAware="True">
     <ui:ScrollViewerEx>
         <pages:AboutPage />
     </ui:ScrollViewerEx>
