@@ -27,13 +27,8 @@ using FancyWM.Toasts;
 using System.Threading;
 using FancyWM.Pages.Settings;
 using System.Media;
-using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Media.Animation;
-using System.Windows.Media;
-using System.Net.Http;
-using System.Net.Sockets;
-using System.Net;
 using System.Text;
 using FancyWM.Resources;
 

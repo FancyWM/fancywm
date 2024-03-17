@@ -6,8 +6,6 @@ using System.Windows.Media;
 
 using FancyWM.DllImports;
 
-using Microsoft.Extensions.DependencyInjection;
-
 namespace FancyWM.Utilities
 {
     internal class FauxMicaProvider : IMicaProvider

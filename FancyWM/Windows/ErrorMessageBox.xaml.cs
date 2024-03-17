@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
-
-using FancyWM.Utilities;
-
-using Microsoft.Extensions.DependencyInjection;
 
 using Windows.System;
 

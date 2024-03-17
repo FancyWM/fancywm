@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Principal;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 

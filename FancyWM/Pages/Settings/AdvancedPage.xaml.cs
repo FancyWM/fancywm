@@ -4,7 +4,6 @@ using System.Windows.Controls;
 
 using FancyWM.Resources;
 using FancyWM.ViewModels;
-using FancyWM.Windows;
 
 using Microsoft.Win32;
 

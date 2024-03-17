@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.ExceptionServices;
@@ -10,16 +9,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
-using System.Windows.Navigation;
 
 using FancyWM.Models;
-using FancyWM.Resources;
 using FancyWM.Utilities;
 using FancyWM.Windows;
 
 using Microsoft.Extensions.DependencyInjection;
-
-using ModernWpf;
 
 using Serilog;
 

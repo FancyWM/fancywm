@@ -8,7 +8,6 @@ using Serilog.Events;
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using FancyWM.Utilities;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Security.Principal;
 

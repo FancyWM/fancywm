@@ -1,13 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
-using FancyWM.Utilities;
 using FancyWM.ViewModels;
-using FancyWM.Windows;
-
-using Windows.System;
 
 namespace FancyWM.Pages.Settings
 {

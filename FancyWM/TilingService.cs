@@ -9,11 +9,9 @@ using System;
 using FancyWM.Models;
 using System.Reactive.Linq;
 using System.Reactive.Disposables;
-using System.Threading;
 using Serilog;
 using System.Threading.Tasks;
 using System.ComponentModel;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FancyWM
 {

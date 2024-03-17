@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Media;
 
 using FancyWM.Layouts.Tiling;
 using FancyWM.Utilities;
@@ -10,8 +9,6 @@ using FancyWM.ViewModels;
 using FancyWM.Controls;
 using WinMan;
 using FancyWM.Windows;
-using ModernWpf;
-using System.Windows.Input;
 
 namespace FancyWM
 {
