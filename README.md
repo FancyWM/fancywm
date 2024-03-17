@@ -1,4 +1,4 @@
-# [FancyWM](https://www.microsoft.com/store/apps/9P1741LKHQS9) <a href='//www.microsoft.com/store/apps/9p1741lkhqs9?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' width="138" height="50"/></a>
+# FancyWM
 
 [![Gitter](https://badges.gitter.im/FancyWM/community.svg)](https://gitter.im/FancyWM/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Donate via PayPal](https://shields.io/badge/Donate-gold?logo=paypal&style=flat)](https://www.paypal.com/donate/?hosted_button_id=NKQ6DKGFVN7S2)
@@ -32,6 +32,12 @@ FancyWM is a dynamic tiling window manager for Windows 10/11
 FancyWM uses [⇧ Shift] + [⊞ Win] as the start of a command sequence (Activation hotkey). To start a command sequence, press and release these keys simultaneously, then follow up by pressing one of the keybindings you have configured in the settings.
 
 FancyWM only manages restored (not minimized, not maximized) top-level application windows, so it doesn't interfere with popups, and still allows you to use all of your available display area for when you need to focus on a window
+
+## [Downloads](https://github.com/FancyWM/fancywm/releases)
+
+Pre-built binaries can be downloaded from [Releases](https://github.com/FancyWM/fancywm/releases).
+
+These are built by an automated GitHub Action and you can see all of the [build steps](https://github.com/FancyWM/fancywm/blob/main/.github/workflows/dotnet-desktop.yml) and [previous runs](https://github.com/FancyWM/fancywm/actions/workflows/dotnet-desktop.yml).
 
 ## [User's Guide](https://github.com/FancyWM/fancywm/wiki#users-guide)
 Head over to the [Wiki](https://github.com/FancyWM/fancywm/wiki).
