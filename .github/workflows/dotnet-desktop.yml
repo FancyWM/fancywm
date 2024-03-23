@@ -44,7 +44,7 @@ jobs:
 
     # Build the application
     - name: Build the application
-      run: dotnet build --no-restore --property WarningLevel=0
+      run: dotnet build --no-restore --property WarningLevel=0 FancyWM
       env:
         Configuration: ${{ matrix.configuration }}
 
