@@ -62,5 +62,5 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
-          ${{ matrix.configuration }}.zip
-          ${{ matrix.configuration }}.zip.sha256sum
+          ${{ matrix.configuration }}-${{ github.event.release.tag_name }}.zip
+          ${{ matrix.configuration }}-${{ github.event.release.tag_name }}.zip.sha256sum
