@@ -394,6 +394,24 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show warning on Virtual Desktop Service failure.
+        /// </summary>
+        public static string General_NotifyVirtualDesktopServiceIncompatibility {
+            get {
+                return ResourceManager.GetString("General.NotifyVirtualDesktopServiceIncompatibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FancyWM tries to use the internal Windows Virtual Desktop Service, which is unsupported by Microsoft. FancyWM can warn you if it is unsupported on this version of Windows..
+        /// </summary>
+        public static string General_NotifyVirtualDesktopServiceIncompatibility_Description {
+            get {
+                return ResourceManager.GetString("General.NotifyVirtualDesktopServiceIncompatibility.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Override accent color.
         /// </summary>
         public static string General_OverrideAccentColor {
@@ -2050,7 +2068,11 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You may experience limited functionality until your version of Windows becomes supported or until you upgrade to a stable release. If you think this is a mistake, please select Yes to report it. .
+        ///   Looks up a localized string similar to FancyWM tries to use the internal Windows Virtual Desktop Service, which is unsupported by Microsoft. This message can be disabled in Settings.
+        ///
+        ///It appears that in your version of Windows, Microsoft has changed the VDS interface, and FancyWM cannot detect your virtual desktops.
+        ///
+        ///If you are running a supported non-Insider Windows build and you see this message, please select Yes to report it..
         /// </summary>
         public static string Messages_WindowsVersionNotSupported_Description {
             get {

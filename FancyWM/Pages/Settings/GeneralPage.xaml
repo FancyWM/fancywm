@@ -58,6 +58,17 @@
                     </TextBlock>
                 </StackPanel>
             </Border>
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel Orientation="Vertical">
+                    <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=NotifyVirtualDesktopServiceIncompatibility, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_NotifyVirtualDesktopServiceIncompatibility}" Margin="0,0,16,0" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}">
+                        <Run Text="{x:Static res:Strings.General_NotifyVirtualDesktopServiceIncompatibility_Description}" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
 
             <TextBlock Text="{x:Static res:Strings.General_TilingBehavior}" Style="{DynamicResource SubtitleTextBlockStyle}" Margin="0, 20" />
             <Border Style="{DynamicResource SettingsItemStyle}">

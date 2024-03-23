@@ -874,7 +874,11 @@
     <value>Your version of Windows is not supported!</value>
   </data>
   <data name="Messages.WindowsVersionNotSupported.Description" xml:space="preserve">
-    <value>You may experience limited functionality until your version of Windows becomes supported or until you upgrade to a stable release. If you think this is a mistake, please select Yes to report it. </value>
+    <value>FancyWM tries to use the internal Windows Virtual Desktop Service, which is unsupported by Microsoft. This message can be disabled in Settings.
+
+It appears that in your version of Windows, Microsoft has changed the VDS interface, and FancyWM cannot detect your virtual desktops.
+
+If you are running a supported non-Insider Windows build and you see this message, please select Yes to report it.</value>
   </data>
   <data name="Keybindings.DirectMode.Checkbox" xml:space="preserve">
     <value>Use without Activation hotkey?</value>
@@ -890,5 +894,11 @@
   </data>
   <data name="General.WindowMovement" xml:space="preserve">
     <value>Window movement</value>
+  </data>
+  <data name="General.NotifyVirtualDesktopServiceIncompatibility" xml:space="preserve">
+    <value>Show warning on Virtual Desktop Service failure</value>
+  </data>
+  <data name="General.NotifyVirtualDesktopServiceIncompatibility.Description" xml:space="preserve">
+    <value>FancyWM tries to use the internal Windows Virtual Desktop Service, which is unsupported by Microsoft. FancyWM can warn you if it is unsupported on this version of Windows.</value>
   </data>
 </root>

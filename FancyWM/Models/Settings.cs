@@ -39,6 +39,8 @@ namespace FancyWM.Models
 
         public bool ShowStartupWindow { get; set; } = true;
 
+        public bool NotifyVirtualDesktopServiceIncompatibility { get; set; } = true;
+
         public bool AllocateNewPanelSpace { get; set; } = true;
 
         public bool AutoCollapsePanels { get; set; } = true;
@@ -87,6 +89,7 @@ namespace FancyWM.Models
         {
             return obj is Settings settings &&
                    ShowStartupWindow == settings.ShowStartupWindow &&
+                   NotifyVirtualDesktopServiceIncompatibility == settings.NotifyVirtualDesktopServiceIncompatibility &&
                    AllocateNewPanelSpace == settings.AllocateNewPanelSpace &&
                    RemindToRateReview == settings.RemindToRateReview &&
                    ShowContextHints == settings.ShowContextHints &&
@@ -128,6 +131,7 @@ namespace FancyWM.Models
         {
             HashCode hash = new();
             hash.Add(ShowStartupWindow);
+            hash.Add(NotifyVirtualDesktopServiceIncompatibility);
             hash.Add(AllocateNewPanelSpace);
             hash.Add(RemindToRateReview);
             hash.Add(ShowContextHints);

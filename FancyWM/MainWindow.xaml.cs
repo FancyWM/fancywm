@@ -78,6 +78,7 @@ namespace FancyWM
         private long m_cmdSequenceId = 0;
         private bool m_showFocusDuringAction;
         private bool m_autoCollapse;
+        private bool m_notifyVirtualDesktopServiceIncompatibility;
         private GlobalHotkey[] m_directHks = new GlobalHotkey[0];
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -112,6 +113,7 @@ namespace FancyWM
                 .Do(x => m_soundOnFailure = x.SoundOnFailure)
                 .Do(x => m_showFocusDuringAction = x.ShowFocusDuringAction)
                 .Do(x => m_autoCollapse = x.AutoCollapsePanels)
+                .Do(x => m_notifyVirtualDesktopServiceIncompatibility = x.NotifyVirtualDesktopServiceIncompatibility)
                 .Do(x =>
                 {
                     m_mvm.IsEnabled = x.ModifierMoveWindow;
@@ -291,7 +293,7 @@ namespace FancyWM
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (m_workspace.VirtualDesktopManager.GetType().Name == "DummyVirtualDesktopManager" && Environment.OSVersion.Version.Build >= 17661)
+            if (m_workspace.VirtualDesktopManager.GetType().Name == "DummyVirtualDesktopManager" && Environment.OSVersion.Version.Build >= 17661 && m_notifyVirtualDesktopServiceIncompatibility)
             {
                 if (new Windows.MessageBox { IconGlyph = "\xF1AD", Title = Strings.Messages_WindowsVersionNotSupported_Caption + " OS Build: " + Environment.OSVersion.Version.Build, Message = Strings.Messages_WindowsVersionNotSupported_Description }.ShowDialog() == true)
                 {

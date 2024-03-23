@@ -36,7 +36,7 @@ namespace FancyWM.ViewModels
             = new ObservableCollection<ActivationHotkey>(ActivationHotkey.AllowedHotkeys);
 
         public bool ShowStartupWindow { get => m_showStartupWindow; set => SetField(ref m_showStartupWindow, value); }
-
+        public bool NotifyVirtualDesktopServiceIncompatibility { get => m_notifyVirtualDesktopServiceIncompatibility; set => SetField(ref m_notifyVirtualDesktopServiceIncompatibility, value); }
         public bool AllocateNewPanelSpace { get => m_allocateNewPanelSpace; set => SetField(ref m_allocateNewPanelSpace, value); }
         public bool AutoCollapsePanels { get => m_autoCollapsePanels; set => SetField(ref m_autoCollapsePanels, value); }
         public bool AnimateWindowMovement { get => m_animateWindowMovement; set => SetField(ref m_animateWindowMovement, value); }
@@ -176,6 +176,7 @@ namespace FancyWM.ViewModels
         private bool m_runsAtStartup;
         private bool m_runsAsAdministrator;
         private bool m_showStartupWindow;
+        private bool m_notifyVirtualDesktopServiceIncompatibility;
         private bool m_allocateNewPanelSpace;
         private bool m_autoCollapsePanels;
         private bool m_customAccentColor;
@@ -212,6 +213,7 @@ namespace FancyWM.ViewModels
 
                     SelectedActivationHotkey = settings.ActivationHotkey;
                     ShowStartupWindow = settings.ShowStartupWindow;
+                    NotifyVirtualDesktopServiceIncompatibility = settings.NotifyVirtualDesktopServiceIncompatibility;
                     AllocateNewPanelSpace = settings.AllocateNewPanelSpace;
                     AutoCollapsePanels = settings.AutoCollapsePanels;
                     AnimateWindowMovement = settings.AnimateWindowMovement;
@@ -266,7 +268,7 @@ namespace FancyWM.ViewModels
                     .Where(g => g.Count() > 1);
                 foreach (var duplicates in duplicatesToRemove)
                 {
-                    foreach (var duplicate in duplicates) 
+                    foreach (var duplicate in duplicates)
                     {
                         if (duplicate != vm)
                         {
@@ -318,6 +320,7 @@ namespace FancyWM.ViewModels
                 x = x.Clone();
                 x.ActivationHotkey = SelectedActivationHotkey;
                 x.ShowStartupWindow = ShowStartupWindow;
+                x.NotifyVirtualDesktopServiceIncompatibility = NotifyVirtualDesktopServiceIncompatibility;
                 x.AllocateNewPanelSpace = AllocateNewPanelSpace;
                 x.AutoCollapsePanels = AutoCollapsePanels;
                 x.AnimateWindowMovement = AnimateWindowMovement;
