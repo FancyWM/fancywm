@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FancyWM.Utilities;
 using System.Text;
 using System.Security.Principal;
+using System.Runtime.InteropServices;
 
 namespace FancyWM
 {
@@ -37,6 +38,29 @@ namespace FancyWM
                 Directory.CreateDirectory(fullPath);
             }
             Directory.SetCurrentDirectory(fullPath);
+
+            bool isPackaged = false;
+            try
+            {
+                global::Windows.ApplicationModel.Package.Current.GetHashCode();
+                isPackaged = true;
+            }
+            catch (Exception)
+            {
+            }
+
+            if (isPackaged)
+            try
+            {
+                if (global::Windows.ApplicationModel.AppInstance.GetActivatedEventArgs() is global::Windows.ApplicationModel.Activation.CommandLineActivatedEventArgs storeAppArgs)
+                {
+                    args = storeAppArgs.Operation.Arguments.Split();
+                }
+            }
+            catch (COMException)
+            {
+                // not a store packaged app
+            }
 
             if (args.Contains("--action"))
             {
