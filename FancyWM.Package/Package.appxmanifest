@@ -6,7 +6,7 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
 
-  <Identity Name="FancyWM" Publisher="" Version="0.0.0.0" />
+  <Identity Name="FancyWM" Publisher="CN=18A4315F-5918-494C-B473-035F554CB857" Version="0.0.0.0" />
 
   <Properties>
     <DisplayName>FancyWM</DisplayName>
