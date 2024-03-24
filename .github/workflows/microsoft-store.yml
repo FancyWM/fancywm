@@ -112,7 +112,10 @@ jobs:
         run: |
           $BundlePath = (ls $env:Wap_Project_Directory\$env:App_Packages_Directory\*\*${{ matrix.targetplatform }}.msixbundle)[0].FullName
           $BundlePath = $BundlePath -replace '\\','/'
+          $SelfSignedCerPath = (ls $env:Wap_Project_Directory\$env:App_Packages_Directory\*\*${{ matrix.targetplatform }}.cer)[0].FullName
+          $SelfSignedCerPath = $SelfSignedCerPath -replace '\\','/'
           echo "App_Packages_Bundle_Path=$BundlePath" >> $env:GITHUB_ENV
+          echo "App_Packages_Cer_Path=$SelfSignedCerPath" >> $env:GITHUB_ENV
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -121,3 +124,4 @@ jobs:
           prerelease: ${{ steps.nbgv.outputs.PublicRelease }}
           files: |
             ${{ env.App_Packages_Bundle_Path }}
+            ${{ env.App_Packages_Cer_Path }}
