@@ -230,15 +230,8 @@ namespace FancyWM
 
         private static string GetVersionString()
         {
-            try
-            {
-                var version = global::Windows.ApplicationModel.Package.Current.Id.Version;
-                return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
-            }
-            catch (Exception)
-            {
-                return System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString() ?? "0.0.0.0";
-            }
+            var versionInfo = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly()!.Location);
+            return versionInfo.FileVersion ?? "0.0.0.0";
         }
 
         private static bool IsAdministrator()
