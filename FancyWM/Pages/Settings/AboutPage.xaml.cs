@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Controls;
 
@@ -43,7 +44,8 @@ namespace FancyWM.Pages.Settings
             }
             catch (Exception)
             {
-                return Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString() ?? "0.0.0.0";
+                var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location);
+                return versionInfo.FileVersion ?? "0.0.0.0";
             }
         }
     }
