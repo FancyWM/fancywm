@@ -39,6 +39,15 @@ Pre-built binaries can be downloaded from [Releases](https://github.com/FancyWM/
 
 These are built by an automated GitHub Action and you can see all of the [build steps](https://github.com/FancyWM/fancywm/blob/main/.github/workflows/dotnet-desktop.yml) and [previous runs](https://github.com/FancyWM/fancywm/actions/workflows/dotnet-desktop.yml).
 
+### Install .msixbundle (not recommended)
+You can test the Microsoft Store packages by installing them using PowerShell.
+
+#### PowerShell (as Administrator)
+```
+certutil.exe -addstore TrustedPeople .\FancyWM.Package_1.0.0.0.x64.cer
+Add-AppxPackage -Path .\FancyWM.Package_1.0.0.0.x64.msixbundle
+```
+
 ## [User's Guide](https://github.com/FancyWM/fancywm/wiki#users-guide)
 Head over to the [Wiki](https://github.com/FancyWM/fancywm/wiki).
 
