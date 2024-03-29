@@ -3,6 +3,7 @@
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
 
@@ -34,6 +35,25 @@
         Square44x44Logo="Images\Square44x44Logo.png">
         <uap:DefaultTile/>
       </uap:VisualElements>
+      <Extensions>
+        <uap5:Extension
+          Category="windows.startupTask"
+          Executable="FancyWM\FancyWM.exe"
+          EntryPoint="Windows.FullTrustApplication">
+          <uap5:StartupTask
+            TaskId="FancyWM"
+            Enabled="false"
+            DisplayName="FancyWM" />
+        </uap5:Extension>
+        <uap5:Extension
+          Category="windows.appExecutionAlias"
+          Executable="FancyWM\FancyWM.exe"
+          EntryPoint="Windows.FullTrustApplication">
+          <uap5:AppExecutionAlias>
+            <uap5:ExecutionAlias Alias="FancyWM.exe" />
+          </uap5:AppExecutionAlias>
+        </uap5:Extension>
+      </Extensions>
     </Application>
   </Applications>
 
