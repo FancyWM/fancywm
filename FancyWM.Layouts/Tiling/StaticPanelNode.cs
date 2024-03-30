@@ -6,21 +6,16 @@ using WinMan;
 
 namespace FancyWM.Layouts.Tiling
 {
-    public class StaticPanelNode : PanelNode
+    public class StaticPanelNode(ILayoutFunction layoutFunction) : PanelNode
     {
         public override TilingNodeType Type => TilingNodeType.Static;
 
         public override IReadOnlyList<TilingNode> Children => m_children;
 
-        public ILayoutFunction LayoutFunction { get; }
+        public ILayoutFunction LayoutFunction { get; } = layoutFunction;
 
 
-        private List<TilingNode> m_children = new List<TilingNode>();
-
-        public StaticPanelNode(ILayoutFunction layoutFunction)
-        {
-            LayoutFunction = layoutFunction;
-        }
+        private List<TilingNode> m_children = [];
 
         internal override void SetReference(int index, TilingNode node)
         {

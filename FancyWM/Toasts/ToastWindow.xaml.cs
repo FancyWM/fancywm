@@ -16,20 +16,14 @@ namespace FancyWM.Toasts
     /// </summary>
     public partial class ToastWindow : Window
     {
-        public class ToastItem : ViewModelBase
+        public class ToastItem(object content, Action? extraAction = null) : ViewModelBase
         {
-            public object Content { get; }
+            public object Content { get; } = content ?? throw new ArgumentNullException(nameof(content));
 
-            public Action? ExtraAction { get; }
-
-            public ToastItem(object content, Action? extraAction = null)
-            {
-                Content = content ?? throw new ArgumentNullException(nameof(content));
-                ExtraAction = extraAction;
-            }
+            public Action? ExtraAction { get; } = extraAction;
         }
 
-        public ObservableCollection<ToastItem> ToastItems { get; set; } = new ObservableCollection<ToastItem>();
+        public ObservableCollection<ToastItem> ToastItems { get; set; } = [];
 
         private readonly IWorkspace m_workspace;
         private IDisplay m_display;

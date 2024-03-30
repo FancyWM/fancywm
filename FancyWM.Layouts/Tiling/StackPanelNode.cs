@@ -12,7 +12,7 @@ namespace FancyWM.Layouts.Tiling
 
         public override IReadOnlyList<TilingNode> Children => m_children;
 
-        private List<TilingNode> m_children = new List<TilingNode>();
+        private List<TilingNode> m_children = [];
 
         protected override void AttachCore(int index, TilingNode node)
         {
@@ -34,7 +34,7 @@ namespace FancyWM.Layouts.Tiling
                 RectangleF childRect = rect;
                 if (child is WindowNode)
                 {
-                    RectangleF padding = new RectangleF(Spacing / 2, Spacing / 2, Spacing / 2, Spacing / 2);
+                    RectangleF padding = new(Spacing / 2, Spacing / 2, Spacing / 2, Spacing / 2);
                     childRect = childRect.Pad(padding);
                 }
                 child.Arrange(childRect);

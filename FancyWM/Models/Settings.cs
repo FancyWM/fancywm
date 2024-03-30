@@ -16,14 +16,10 @@ namespace FancyWM.Models
         int PanelHeight { get; }
     }
 
-    public class DefaultKeybindingAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Field)]
+    public class DefaultKeybindingAttribute(params KeyCode[] keys) : Attribute
     {
-        public readonly KeyCode[] Keys;
-
-        public DefaultKeybindingAttribute(params KeyCode[] keys)
-        {
-            Keys = keys;
-        }
+        public readonly KeyCode[] Keys = keys;
     }
 
     public class Settings : IEquatable<Settings>, ICloneable, ITilingServiceSettings
@@ -65,17 +61,17 @@ namespace FancyWM.Models
         public Color CustomAccentColor { get; set; } = Colors.Blue;
 
         [JsonConverter(typeof(Converters.KeybindingConverter))]
-        public KeybindingDictionary Keybindings { get; set; } = new KeybindingDictionary();
+        public KeybindingDictionary Keybindings { get; set; } = [];
 
-        public List<string> ProcessIgnoreList { get; set; } = new List<string>
-        {
+        public List<string> ProcessIgnoreList { get; set; } =
+        [
             "Taskmgr"
-        };
+        ];
 
-        public List<string> ClassIgnoreList { get; set; } = new List<string>
-        {
+        public List<string> ClassIgnoreList { get; set; } =
+        [
             "OperationStatusWindow"
-        };
+        ];
 
         public bool RemindToRateReview { get; set; } = true;
 
@@ -104,27 +100,6 @@ namespace FancyWM.Models
                    PanelHeight == settings.PanelHeight &&
                    PanelFontSize == settings.PanelFontSize &&
                    ShowFocusDuringAction == settings.ShowFocusDuringAction;
-        }
-
-        private bool Equals(IDictionary<BindableAction, IReadOnlySet<KeyCode>?> left, IDictionary<BindableAction, IReadOnlySet<KeyCode>?> right)
-        {
-            if (ReferenceEquals(left, right))
-                return true;
-
-            if (!left.Keys.SequenceEqual(right.Keys))
-                return false;
-
-            foreach (var key in left.Keys)
-            {
-                if (left[key] == null)
-                    if (right[key] != null)
-                        return false;
-                if (right[key] == null)
-                    return false;
-                if (!left[key]!.SetEquals(right[key]!))
-                    return false;
-            }
-            return true;
         }
 
         public override int GetHashCode()

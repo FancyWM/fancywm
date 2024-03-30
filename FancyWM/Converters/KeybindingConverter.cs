@@ -11,7 +11,7 @@ namespace FancyWM.Converters
 {
     internal class KeybindingModel
     {
-        public List<string> Keys { get; set; }
+        public required List<string> Keys { get; set; }
         public bool IsDirectMode { get; set; }
     }
 
@@ -33,13 +33,13 @@ namespace FancyWM.Converters
         {
             try
             {
-                return ReadLatest(ref reader, typeToConvert, options);
+                return ReadLatest(ref reader, options);
             }
             catch (Exception ex)
             {
                 try
                 {
-                    return Read2dot3dot5Compatible(ref reader, typeToConvert, options);
+                    return Read2dot3dot5Compatible(ref reader, options);
                 }
                 catch (Exception exCompat)
                 {
@@ -50,7 +50,7 @@ namespace FancyWM.Converters
 
         public override void Write(Utf8JsonWriter writer, KeybindingDictionary value, JsonSerializerOptions options)
         {
-            var dict = new Dictionary<string, object>();
+            var dict = new Dictionary<string, object?>();
             foreach (var (action, keybinding) in value)
             {
                 if (keybinding == null)
@@ -62,22 +62,17 @@ namespace FancyWM.Converters
                 var keys = keybinding.Keys.Select(x => x.ToString()).ToArray();
                 dict.Add(action.ToString(), new
                 {
-                    IsDirectMode = keybinding.IsDirectMode,
+                    keybinding.IsDirectMode,
                     Keys = keys,
                 });
             };
             JsonSerializer.Serialize(writer, dict, options);
         }
 
-        private KeybindingDictionary ReadLatest(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        private KeybindingDictionary ReadLatest(ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
             var defaultDict = new KeybindingDictionary(m_useDefaults);
-            var dict = JsonSerializer.Deserialize<IDictionary<string, KeybindingModel?>>(ref reader, options);
-            if (dict == null)
-            {
-                throw new InvalidOperationException();
-            }
-
+            var dict = JsonSerializer.Deserialize<IDictionary<string, KeybindingModel?>>(ref reader, options) ?? throw new InvalidOperationException();
             foreach (var (keyName, keyBinds) in dict)
             {
                 try
@@ -95,16 +90,10 @@ namespace FancyWM.Converters
             return defaultDict;
         }
 
-        private KeybindingDictionary Read2dot3dot5Compatible(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        private KeybindingDictionary Read2dot3dot5Compatible(ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
             var defaultDict = new KeybindingDictionary(m_useDefaults);
-            var dict = JsonSerializer.Deserialize<IDictionary<string, string[]>>(ref reader, options);
-
-            if (dict == null)
-            {
-                throw new InvalidOperationException();
-            }
-
+            var dict = JsonSerializer.Deserialize<IDictionary<string, string[]>>(ref reader, options) ?? throw new InvalidOperationException();
             foreach (var (keyName, keyStrings) in dict)
             {
                 try

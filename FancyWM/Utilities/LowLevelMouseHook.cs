@@ -16,22 +16,13 @@ namespace FancyWM.Utilities
             Middle,
         }
 
-        public struct ButtonStateChangedEventArgs
+        public struct ButtonStateChangedEventArgs(LowLevelMouseHook.MouseButton button, bool isPressed, int ptX, int ptY)
         {
-            public readonly MouseButton Button;
-            public readonly bool IsPressed;
-            public bool Handled;
-            public readonly int X;
-            public readonly int Y;
-
-            public ButtonStateChangedEventArgs(MouseButton button, bool isPressed, int ptX, int ptY)
-            {
-                Button = button;
-                IsPressed = isPressed;
-                Handled = false;
-                X = ptX;
-                Y = ptY;
-            }
+            public readonly MouseButton Button = button;
+            public readonly bool IsPressed = isPressed;
+            public bool Handled = false;
+            public readonly int X = ptX;
+            public readonly int Y = ptY;
         }
 
         public delegate void ButtonStateChangedEventHandler(object? sender, ref ButtonStateChangedEventArgs e);
@@ -60,8 +51,8 @@ namespace FancyWM.Utilities
 
         private void HookThreadMessageLoop(object? obj)
         {
-            // Message queues are lazily created so we forcec the creation of one by asking for its status
-            PInvoke.GetQueueStatus(GetQueueStatus_flags.QS_ALLEVENTS);
+            // Message queues are lazily created so we force the creation of one by asking for its status
+            _ = PInvoke.GetQueueStatus(GetQueueStatus_flags.QS_ALLEVENTS);
             m_hookThreadId = PInvoke.GetCurrentThreadId();
 
             HINSTANCE hInstance = new(PInvoke.GetModuleHandle(new PCWSTR()));
@@ -118,7 +109,7 @@ namespace FancyWM.Utilities
                 // Update the timestamp
                 m_lastActiveTimestamp = DateTime.UtcNow;
 
-                ButtonStateChangedEventArgs? e = null;
+                ButtonStateChangedEventArgs? e;
                 switch (wParam.Value)
                 {
                     case Constants.WM_LBUTTONDOWN:

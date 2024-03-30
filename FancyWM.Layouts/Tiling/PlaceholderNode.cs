@@ -6,7 +6,7 @@ namespace FancyWM.Layouts.Tiling
     {
         public override TilingNodeType Type => TilingNodeType.Placeholder;
 
-        public override IEnumerable<WindowNode> Windows => new WindowNode[0];
+        public override IEnumerable<WindowNode> Windows => [];
 
         public override IEnumerable<TilingNode> Nodes => new[] { this };
 

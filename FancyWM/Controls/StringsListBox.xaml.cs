@@ -40,7 +40,7 @@ namespace FancyWM.Controls
 
         private void OnClearAllClick(object sender, RoutedEventArgs e)
         {
-            ItemsSource = Array.Empty<string>();
+            ItemsSource = [];
             ItemsBox.Children.Clear();
         }
 

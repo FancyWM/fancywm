@@ -14,7 +14,7 @@ namespace FancyWM.Tests.Utilities
         [TestMethod]
         public void TestErrorCodeUnknown()
         {
-            Assert.AreEqual("EUNK", ErrorEncoder.Default.GetErrorCodeString(new Exception()));
+            Assert.AreEqual("EUNK", ErrorEncoder.GetErrorCodeString(new Exception()));
         }
 
         [TestMethod]
@@ -26,7 +26,7 @@ namespace FancyWM.Tests.Utilities
             }
             catch (Exception e)
             {
-                Assert.AreEqual($"EET/EET/TECK/{GetSourceLine(e)}", ErrorEncoder.Default.GetErrorCodeString(e));
+                Assert.AreEqual($"EET/EET/TECK/{GetSourceLine(e)}", ErrorEncoder.GetErrorCodeString(e));
             }
         }
 

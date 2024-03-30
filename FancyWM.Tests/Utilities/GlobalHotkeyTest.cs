@@ -15,12 +15,12 @@ namespace FancyWM.Utilities.Tests
         [TestMethod]
         public async Task TestRegisterUnregister()
         {
-            await Applications.WithAppContextAsync(async () =>
-            {
+            await Applications.WithAppContextAsync(() => {
                 var hwnd = new WindowInteropHelper(Application.Current.MainWindow).EnsureHandle();
                 var ghk = new GlobalHotkey(hwnd, DllImports.RegisterHotKey_fsModifiersFlags.MOD_ALT | DllImports.RegisterHotKey_fsModifiersFlags.MOD_CONTROL, KeyCode.Home);
                 ghk.Register();
                 ghk.Unregiser();
+                return Task.CompletedTask;
             });
         }
     }

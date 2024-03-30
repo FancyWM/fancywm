@@ -35,7 +35,7 @@ namespace FancyWM.Pages.Settings
             _ = Launcher.LaunchUriAsync(e.Uri);
         }
 
-        private string GetVersionString()
+        private static string GetVersionString()
         {
             try
             {
@@ -52,7 +52,7 @@ namespace FancyWM.Pages.Settings
 
         private async void CreateAhkScriptClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog
+            SaveFileDialog saveFileDialog = new()
             {
                 AddExtension = true,
                 CheckFileExists = false,

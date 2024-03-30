@@ -43,7 +43,7 @@ namespace FancyWM.Utilities
         /// Buffer capacity. Must be positive.
         /// </param>
         public CircularBuffer(int capacity)
-            : this(capacity, new T[] { })
+            : this(capacity, [])
         {
         }
 
@@ -66,10 +66,7 @@ namespace FancyWM.Utilities
                 throw new ArgumentException(
                     "Circular buffer cannot have negative or zero capacity.", nameof(capacity));
             }
-            if (items == null)
-            {
-                throw new ArgumentNullException(nameof(items));
-            }
+            ArgumentNullException.ThrowIfNull(items);
             if (items.Length > capacity)
             {
                 throw new ArgumentException(
@@ -238,7 +235,7 @@ namespace FancyWM.Utilities
         {
             ThrowIfEmpty("Cannot take elements from an empty buffer.");
             Decrement(ref _end);
-            _buffer[_end] = default(T);
+            _buffer[_end] = default!;
             --_size;
         }
 
@@ -249,7 +246,7 @@ namespace FancyWM.Utilities
         public void PopFront()
         {
             ThrowIfEmpty("Cannot take elements from an empty buffer.");
-            _buffer[_start] = default(T);
+            _buffer[_start] = default!;
             Increment(ref _start);
             --_size;
         }
@@ -287,7 +284,7 @@ namespace FancyWM.Utilities
         /// <returns>An IList with 2 segments corresponding to the buffer content.</returns>
         public IList<ArraySegment<T>> ToArraySegments()
         {
-            return new[] { ArrayOne(), ArrayTwo() };
+            return [ArrayOne(), ArrayTwo()];
         }
 
         #region IEnumerable<T> implementation
@@ -376,7 +373,7 @@ namespace FancyWM.Utilities
         {
             if (IsEmpty)
             {
-                return new ArraySegment<T>(new T[0]);
+                return new ArraySegment<T>([]);
             }
             else if (_start < _end)
             {
@@ -392,7 +389,7 @@ namespace FancyWM.Utilities
         {
             if (IsEmpty)
             {
-                return new ArraySegment<T>(new T[0]);
+                return new ArraySegment<T>([]);
             }
             else if (_start < _end)
             {

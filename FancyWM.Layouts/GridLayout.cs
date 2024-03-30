@@ -6,14 +6,9 @@ using WinMan;
 
 namespace FancyWM.Layouts
 {
-    public class GridLayout : ILayoutFunction
+    public class GridLayout(int spacing) : ILayoutFunction
     {
-        public int Spacing { get; }
-
-        public GridLayout(int spacing)
-        {
-            Spacing = spacing;
-        }
+        public int Spacing { get; } = spacing;
 
         public IReadOnlyList<Rectangle> Execute(Rectangle availableArea, IEnumerable<Constraints> constraints)
         {
@@ -25,7 +20,7 @@ namespace FancyWM.Layouts
             var w = (availableArea.Width - Spacing * (root + 1)) / root;
             var h = (availableArea.Height - Spacing * (root + 1)) / root;
 
-            List<Rectangle> rects = new List<Rectangle>();
+            List<Rectangle> rects = [];
             for (int i = 0; i < w; i++)
             {
                 for (int j = 0; j < h; j++)

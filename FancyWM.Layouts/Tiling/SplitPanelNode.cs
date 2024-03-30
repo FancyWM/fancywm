@@ -16,7 +16,7 @@ namespace FancyWM.Layouts.Tiling
 
         public PanelOrientation Orientation { get; set; }
 
-        private List<TilingNode> m_children = new List<TilingNode>();
+        private List<TilingNode> m_children = [];
 
         private Flex m_constraints;
 
@@ -138,7 +138,7 @@ namespace FancyWM.Layouts.Tiling
 
                 if (child is WindowNode)
                 {
-                    RectangleF padding = new RectangleF(Spacing / 2, Spacing / 2, Spacing / 2, Spacing / 2);
+                    RectangleF padding = new(Spacing / 2, Spacing / 2, Spacing / 2, Spacing / 2);
                     childRect = childRect.Pad(padding);
                 }
                 child.Arrange(childRect);

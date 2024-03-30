@@ -6,28 +6,18 @@ using WinMan;
 
 namespace FancyWM.Layouts.Tiling
 {
-    public class WindowNode : TilingNode
+    public class WindowNode(IWindow window) : TilingNode
     {
         public override TilingNodeType Type => TilingNodeType.Window;
 
-        public IWindow WindowReference { get; private set; }
+        public IWindow WindowReference { get; private set; } = window;
 
-        public override IEnumerable<WindowNode> Windows => new[] { this };
+        public override IEnumerable<WindowNode> Windows => [this];
 
         public override IEnumerable<TilingNode> Nodes => new[] { this };
 
-        public WindowNode(IWindow window)
-        {
-            WindowReference = window;
-        }
-
         internal override void ArrangeCore(RectangleF rectangle)
         {
-        }
-
-        private static string Truncate(string value, int maxChars)
-        {
-            return value.Length <= maxChars ? value : value.Substring(0, maxChars) + (char)0x2026;
         }
 
         internal override void MeasureCore()

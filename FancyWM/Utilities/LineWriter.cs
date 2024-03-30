@@ -5,21 +5,15 @@ using System.Text;
 
 namespace FancyWM.Utilities
 {
-    class LineWriter : TextWriter
+    class LineWriter(ICollection<string> outputCollection, char newLineCharacter) : TextWriter
     {
-        private readonly StringBuilder m_line = new StringBuilder();
+        private readonly StringBuilder m_line = new();
 
-        public ICollection<string> OutputCollection { get; }
+        public ICollection<string> OutputCollection { get; } = outputCollection ?? throw new ArgumentNullException(nameof(outputCollection));
 
-        public char NewLineCharacter { get; }
+        public char NewLineCharacter { get; } = newLineCharacter;
 
         public override Encoding Encoding => Encoding.Default;
-
-        public LineWriter(ICollection<string> outputCollection, char newLineCharacter)
-        {
-            OutputCollection = outputCollection ?? throw new ArgumentNullException(nameof(outputCollection));
-            NewLineCharacter = newLineCharacter;
-        }
 
         public override void Write(char value)
         {

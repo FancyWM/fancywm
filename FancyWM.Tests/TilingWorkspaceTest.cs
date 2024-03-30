@@ -89,7 +89,7 @@ namespace FancyWM.Tests
             var desktop = m_desktopFactory.CreateVirtualDesktop();
             workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
             var explorer = m_windowFactory.CreateExplorerWindow();
-            var node = workspace.RegisterWindow(explorer);
+            workspace.RegisterWindow(explorer);
 
             Assert.IsNotNull(workspace.FindWindow(explorer));
         }
@@ -228,7 +228,7 @@ namespace FancyWM.Tests
             workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
 
             var explorer = m_windowFactory.CreateExplorerWindow();
-            var node = workspace.RegisterWindow(explorer);
+            workspace.RegisterWindow(explorer);
 
             Assert.AreEqual(workspace.GetOriginalPosition(explorer), explorer.Position);
         }
@@ -279,7 +279,7 @@ namespace FancyWM.Tests
             workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
 
             var explorer = m_windowFactory.CreateExplorerWindow();
-            var node = workspace.RegisterWindow(explorer);
+            workspace.RegisterWindow(explorer);
 
             Assert.IsTrue(workspace.HasWindow(explorer));
         }

@@ -7,8 +7,8 @@ namespace FancyWM.Layouts
 {
     public class Partition<E> : IReadOnlyList<(double weight, E value)>, IEnumerable<(double weight, E value)>
     {
-        private List<double> m_weights = new List<double>();
-        private List<E> m_values = new List<E>();
+        private readonly List<double> m_weights = [];
+        private readonly List<E> m_values = [];
 
         public Partition()
         {
@@ -78,7 +78,7 @@ namespace FancyWM.Layouts
         {
             if (weight > 1.0 || weight < 0.0)
             {
-                throw new ArgumentException(nameof(weight));
+                throw new ArgumentException("Invalid weight", nameof(weight));
             }
 
             var value = m_values[index];

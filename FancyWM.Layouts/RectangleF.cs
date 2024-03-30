@@ -4,16 +4,16 @@ using WinMan;
 
 namespace FancyWM.Layouts
 {
-    public struct RectangleF : IEquatable<RectangleF>
+    public readonly struct RectangleF : IEquatable<RectangleF>
     {
-        public static RectangleF Empty => new RectangleF();
+        public static RectangleF Empty => new();
 
         public double Left { get; }
         public double Top { get; }
         public double Right { get; }
         public double Bottom { get; }
-        public double Width => Right - Left;
-        public double Height => Bottom - Top;
+        public readonly double Width => Right - Left;
+        public readonly double Height => Bottom - Top;
 
         public double Area => Width * Height;
 
@@ -38,12 +38,12 @@ namespace FancyWM.Layouts
             Bottom = rectangle.Bottom;
         }
 
-        public Rectangle ToRectangle()
+        public readonly Rectangle ToRectangle()
         {
             return new Rectangle((int)Left, (int)Top, (int)Right, (int)Bottom);
         }
 
-        public bool Equals(RectangleF other)
+        public readonly bool Equals(RectangleF other)
         {
             return Left == other.Left
                 && Top == other.Top
@@ -51,7 +51,7 @@ namespace FancyWM.Layouts
                 && Bottom == other.Bottom;
         }
 
-        public override bool Equals(object? obj)
+        public override readonly bool Equals(object? obj)
         {
             return base.Equals(obj);
         }
@@ -65,7 +65,7 @@ namespace FancyWM.Layouts
             return !lhs.Equals(rhs);
         }
 
-        public RectangleF Pad(RectangleF padding)
+        public readonly RectangleF Pad(RectangleF padding)
         {
             return new RectangleF(
                     left: Left + padding.Left,
@@ -74,14 +74,9 @@ namespace FancyWM.Layouts
                     bottom: Bottom - padding.Bottom);
         }
 
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
-            int hashCode = -1819631549;
-            hashCode = hashCode * -1521134295 + Left.GetHashCode();
-            hashCode = hashCode * -1521134295 + Top.GetHashCode();
-            hashCode = hashCode * -1521134295 + Right.GetHashCode();
-            hashCode = hashCode * -1521134295 + Bottom.GetHashCode();
-            return hashCode;
+            return HashCode.Combine(Left, Top, Right, Bottom);
         }
 
         public override string ToString()

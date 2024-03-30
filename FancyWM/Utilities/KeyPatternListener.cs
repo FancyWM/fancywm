@@ -6,14 +6,9 @@ using System.Windows.Input;
 
 namespace FancyWM.Utilities
 {
-    internal class KeyPatternChangedEventArgs : EventArgs
+    internal class KeyPatternChangedEventArgs(IReadOnlySet<KeyCode> keys) : EventArgs
     {
-        public IReadOnlySet<KeyCode> Keys { get; }
-
-        public KeyPatternChangedEventArgs(IReadOnlySet<KeyCode> keys)
-        {
-            Keys = keys ?? throw new ArgumentNullException(nameof(keys));
-        }
+        public IReadOnlySet<KeyCode> Keys { get; } = keys ?? throw new ArgumentNullException(nameof(keys));
     }
 
     internal delegate void KeyPatternChangedEventHandler(object sender, KeyPatternChangedEventArgs e);
@@ -37,7 +32,7 @@ namespace FancyWM.Utilities
 
         public UIElement EventSource { get; }
 
-        private readonly HashSet<KeyCode> m_pressedKeys = new HashSet<KeyCode>();
+        private readonly HashSet<KeyCode> m_pressedKeys = [];
 
         public KeyPatternListener(UIElement eventSource)
         {

@@ -7,16 +7,10 @@ using FancyWM.Utilities;
 
 namespace FancyWM.Models
 {
-    public class Keybinding : IEquatable<Keybinding>
+    public class Keybinding(IReadOnlySet<KeyCode> keys, bool isDirectMode) : IEquatable<Keybinding>
     {
-        public IReadOnlySet<KeyCode> Keys { get; }
-        public bool IsDirectMode { get; }
-
-        public Keybinding(IReadOnlySet<KeyCode> keys, bool isDirectMode)
-        {
-            Keys = keys ?? throw new ArgumentNullException(nameof(keys));
-            IsDirectMode = isDirectMode;
-        }
+        public IReadOnlySet<KeyCode> Keys { get; } = keys ?? throw new ArgumentNullException(nameof(keys));
+        public bool IsDirectMode { get; } = isDirectMode;
 
         public bool Equals(Keybinding? other)
         {

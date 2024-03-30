@@ -10,12 +10,7 @@ namespace FancyWM.Converters
     {
         public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var colorCode = reader.GetString();
-            if (colorCode == null)
-            {
-                throw new InvalidOperationException();
-            }
-
+            var colorCode = reader.GetString() ?? throw new InvalidOperationException();
             if (!int.TryParse(colorCode.Replace("#", ""), NumberStyles.HexNumber, null, out int rgba))
             {
                 throw new FormatException("The numeric part of the color value is invalid!");

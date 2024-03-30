@@ -9,18 +9,11 @@ namespace FancyWM.Utilities
 {
     internal sealed class LowLevelKeyboardHook : IDisposable
     {
-        public struct KeyStateChangedEventArgs
+        public struct KeyStateChangedEventArgs(KeyCode keyCode, bool isPressed)
         {
-            public readonly KeyCode KeyCode;
-            public readonly bool IsPressed;
-            public bool Handled;
-
-            public KeyStateChangedEventArgs(KeyCode keyCode, bool isPressed)
-            {
-                KeyCode = keyCode;
-                IsPressed = isPressed;
-                Handled = false;
-            }
+            public readonly KeyCode KeyCode = keyCode;
+            public readonly bool IsPressed = isPressed;
+            public bool Handled = false;
         }
 
         public delegate void KeyStateChangedEventHandler(object? sender, ref KeyStateChangedEventArgs e);

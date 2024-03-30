@@ -6,8 +6,8 @@ namespace FancyWM.ViewModels
     public class TilingOverlayViewModel : ViewModelBase
     {
         private Visibility m_overlayVisibility;
-        private ObservableCollection<TilingPanelViewModel> m_panelElements = new();
-        private ObservableCollection<TilingWindowViewModel> m_windowElements = new();
+        private ObservableCollection<TilingPanelViewModel> m_panelElements = [];
+        private ObservableCollection<TilingWindowViewModel> m_windowElements = [];
 
         public Visibility OverlayVisibility { get => m_overlayVisibility; set => SetField(ref m_overlayVisibility, value); }
 

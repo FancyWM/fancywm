@@ -118,7 +118,7 @@ namespace FancyWM
 
                 snapshot = tree.Root!.Nodes.Skip(1).ToList();
                 var focusedNode = m_backend.GetFocus(desktop);
-                var focusedPath = (IReadOnlyCollection<TilingNode>?)focusedNode?.PathToRoot?.ToList() ?? Array.Empty<TilingNode>();
+                var focusedPath = (IReadOnlyCollection<TilingNode>?)focusedNode?.PathToRoot?.ToList() ?? [];
 
                 m_gui.UpdateOverlay(snapshot, focusedPath);
 
@@ -182,7 +182,7 @@ namespace FancyWM
             }
             else
             {
-                transitionGroup.PerformTransition(targets);
+                TransitionTargetGroup.PerformTransition(targets);
             }
         }
 
@@ -551,7 +551,7 @@ namespace FancyWM
                     switch (intent.Type)
                     {
                         case GroupWithIntent.GroupType.HorizontalPanel:
-                            if (!CanSplit(vertical: false, targetNode))
+                            if (!CanSplit(targetNode))
                             {
                                 intent.Cancel();
                                 PlacementFailed?.Invoke(this, new TilingFailedEventArgs(TilingError.NestingInStackPanel, targetNode.WindowReference));
@@ -559,7 +559,7 @@ namespace FancyWM
                             }
                             break;
                         case GroupWithIntent.GroupType.VerticalPanel:
-                            if (!CanSplit(vertical: true, targetNode))
+                            if (!CanSplit(targetNode))
                             {
                                 intent.Cancel();
                                 PlacementFailed?.Invoke(this, new TilingFailedEventArgs(TilingError.NestingInStackPanel, targetNode.WindowReference));
@@ -711,7 +711,7 @@ namespace FancyWM
             App.Current.AppState.Settings.SaveAsync(x =>
             {
                 var x2 = x.Clone();
-                x2.ProcessIgnoreList = x2.ProcessIgnoreList.Append(e.WindowReference.GetCachedProcessName()).ToList();
+                x2.ProcessIgnoreList = [.. x2.ProcessIgnoreList, e.WindowReference.GetCachedProcessName()];
                 return x2;
             });
         }
@@ -720,7 +720,7 @@ namespace FancyWM
             App.Current.AppState.Settings.SaveAsync(x =>
             {
                 var x2 = x.Clone();
-                x2.ClassIgnoreList = x2.ClassIgnoreList.Append(((WinMan.Windows.Win32Window)e.WindowReference).ClassName).ToList();
+                x2.ClassIgnoreList = [.. x2.ClassIgnoreList, ((WinMan.Windows.Win32Window)e.WindowReference).ClassName];
                 return x2;
             });
         }
@@ -845,7 +845,7 @@ namespace FancyWM
             }
         }
 
-        private async void OnWindowLostFocus(object? sender, WindowFocusChangedEventArgs e)
+        private void OnWindowLostFocus(object? sender, WindowFocusChangedEventArgs e)
         {
             // This delay is needed to handle the case where the previously focused window
             // loses focus because another window was just created and the OnWindowAdded event
@@ -868,7 +868,7 @@ namespace FancyWM
             m_currentInteraction = UserInteraction.None;
         }
 
-        private async void OnWindowAdded(object? sender, WindowChangedEventArgs e)
+        private void OnWindowAdded(object? sender, WindowChangedEventArgs e)
         {
             m_logger.Debug("Window {Handle}={ProcessName} added to workspace", e.Source.Handle, e.Source.GetCachedProcessName());
             try
@@ -1350,7 +1350,7 @@ namespace FancyWM
 
         private bool IsSwapModifierPressed()
         {
-            bool GetState() => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+            static bool GetState() => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
             if (m_dispatcher.CheckAccess())
             {
                 return GetState();

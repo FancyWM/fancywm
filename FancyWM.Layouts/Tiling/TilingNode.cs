@@ -137,19 +137,14 @@ namespace FancyWM.Layouts.Tiling
 
         public TilingNode? GetAdjacentNode(TilingDirection direction)
         {
-            switch (direction)
+            return direction switch
             {
-                case TilingDirection.Down:
-                    return FindAdjacentY(direction: 1);
-                case TilingDirection.Up:
-                    return FindAdjacentY(direction: -1);
-                case TilingDirection.Left:
-                    return FindAdjacentX(direction: -1);
-                case TilingDirection.Right:
-                    return FindAdjacentX(direction: 1);
-                default:
-                    throw new ArgumentException(nameof(direction));
-            }
+                TilingDirection.Down => FindAdjacentY(direction: 1),
+                TilingDirection.Up => FindAdjacentY(direction: -1),
+                TilingDirection.Left => FindAdjacentX(direction: -1),
+                TilingDirection.Right => FindAdjacentX(direction: 1),
+                _ => throw new ArgumentException(null, nameof(direction)),
+            };
         }
 
         public WindowNode? GetAdjacentWindow(TilingDirection direction)

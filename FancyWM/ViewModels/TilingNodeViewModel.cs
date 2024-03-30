@@ -5,13 +5,13 @@ using FancyWM.Utilities;
 
 using WinMan;
 using FancyWM.Layouts.Tiling;
+using System.Windows.Media.Imaging;
 
 namespace FancyWM.ViewModels
 {
     public abstract class TilingNodeViewModel : ViewModelBase
     {
         private TilingNode? m_node;
-        private string? m_caption;
         private bool m_hasFocus;
         private Rectangle m_windowBounds;
         private ICommand? m_primaryActionCommand;
@@ -50,7 +50,9 @@ namespace FancyWM.ViewModels
 
         public ICommand? CloseCommand { get => m_closeActionCommand; set => SetField(ref m_closeActionCommand, value); }
 
+#pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
         public override void Dispose()
+#pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
         {
             base.Dispose();
             HorizontalSplitActionPressed = null;
@@ -62,7 +64,7 @@ namespace FancyWM.ViewModels
             CloseCommand = null;
         }
 
-        private ImageSource? GetCachedImageSource()
+        private BitmapSource? GetCachedImageSource()
         {
             if (m_node is not WindowNode windowNode)
             {

@@ -75,9 +75,9 @@ namespace FancyWM.Utilities
             }
         }
 
-        private bool IsMoveModifierPressed()
+        private static bool IsMoveModifierPressed()
         {
-            bool GetState() => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+            static bool GetState() => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
             if (App.Current.Dispatcher.CheckAccess())
             {
                 return GetState();
@@ -88,9 +88,9 @@ namespace FancyWM.Utilities
             }
         }
 
-        private bool IsMoveActivateModifierPressed()
+        private static bool IsMoveActivateModifierPressed()
         {
-            bool GetState() => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            static bool GetState() => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
             if (App.Current.Dispatcher.CheckAccess())
             {
                 return GetState();

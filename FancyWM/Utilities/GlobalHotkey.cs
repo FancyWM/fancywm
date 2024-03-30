@@ -18,12 +18,12 @@ namespace FancyWM.Utilities
 
         private static int s_id = 1;
 
-        private RegisterHotKey_fsModifiersFlags _modifier;
-        private KeyCode _key;
-        private IntPtr _hWnd;
-        private HwndSource _hWndSource;
-        private HwndSourceHook _hWndSourceHook;
-        private int _id;
+        private readonly RegisterHotKey_fsModifiersFlags _modifier;
+        private readonly KeyCode _key;
+        private readonly IntPtr _hWnd;
+        private readonly HwndSource _hWndSource;
+        private readonly HwndSourceHook _hWndSourceHook;
+        private readonly int _id;
         private bool _isRegistered;
         private bool _isDisposed;
 

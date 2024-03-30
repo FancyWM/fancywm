@@ -62,17 +62,13 @@ namespace FancyWM.Tests.Converters
 
         private static string WriteString(KeybindingDictionary keybindings)
         {
-            using (MemoryStream stream = new())
-            {
-                var writer = new Utf8JsonWriter(stream);
-                new KeybindingConverter(useDefaults: false).Write(writer, keybindings, new JsonSerializerOptions());
-                writer.Flush();
-                stream.Position = 0;
-                using (StreamReader reader = new(stream))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
+            using MemoryStream stream = new();
+            var writer = new Utf8JsonWriter(stream);
+            new KeybindingConverter(useDefaults: false).Write(writer, keybindings, new JsonSerializerOptions());
+            writer.Flush();
+            stream.Position = 0;
+            using StreamReader reader = new(stream);
+            return reader.ReadToEnd();
         }
     }
 }

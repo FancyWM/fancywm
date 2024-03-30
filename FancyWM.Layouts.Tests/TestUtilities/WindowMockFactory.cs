@@ -8,7 +8,7 @@ namespace FancyWM.Tests.TestUtilities
 {
     internal class WindowMockFactory
     {
-        public IWindow CreateDiscordWindow()
+        public static IWindow CreateDiscordWindow()
         {
             var mock = CreateBaseMock();
             mock.SetupGet(x => x.Title).Returns("Discord");
@@ -17,7 +17,7 @@ namespace FancyWM.Tests.TestUtilities
             return mock.Object;
         }
 
-        public IWindow CreateExplorerWindow()
+        public static IWindow CreateExplorerWindow()
         {
             var mock = CreateBaseMock();
             mock.SetupGet(x => x.Title).Returns("This PC");
@@ -26,7 +26,7 @@ namespace FancyWM.Tests.TestUtilities
             return mock.Object;
         }
 
-        public IWindow CreateNotepadWindow()
+        public static IWindow CreateNotepadWindow()
         {
             var mock = CreateBaseMock();
             mock.SetupGet(x => x.Title).Returns("Untitled - Notepad");
@@ -35,7 +35,7 @@ namespace FancyWM.Tests.TestUtilities
             return mock.Object;
         }
 
-        private Mock<IWindow> CreateBaseMock()
+        private static Mock<IWindow> CreateBaseMock()
         {
             var mock = new Mock<IWindow>();
             mock.SetupGet(x => x.CanClose).Returns(true);

@@ -105,7 +105,7 @@ namespace FancyWM
             return path;
         }
 
-        internal void Sponsor()
+        internal static void Sponsor()
         {
             Process.Start(new ProcessStartInfo
             {
@@ -140,7 +140,7 @@ namespace FancyWM
             }
         }
 
-        private bool DidExplorerJustCrash()
+        private static bool DidExplorerJustCrash()
         {
             if (DllImports.PInvoke.GetShellWindow().Value == 0)
             {
@@ -219,7 +219,7 @@ namespace FancyWM
         {
             void CloseAppWindows()
             {
-                List<Exception> exceptions = new();
+                List<Exception> exceptions = [];
                 foreach (var window in Windows.Cast<Window>())
                 {
                     try
@@ -265,7 +265,7 @@ namespace FancyWM
             }
         }
 
-        private Task<bool?> ShowDialogOnBackgroundThread(Func<Window> windowFactory)
+        private static Task<bool?> ShowDialogOnBackgroundThread(Func<Window> windowFactory)
         {
             TaskCompletionSource<bool?> tcs = new();
             Thread thread = new(() =>

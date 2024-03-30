@@ -11,13 +11,13 @@ namespace FancyWM.Models
         public KeyCode KeyB { get; }
         public string Description { get; }
 
-        public static IReadOnlyList<ActivationHotkey> AllowedHotkeys { get; } = new ActivationHotkey[]
-        {
+        public static IReadOnlyList<ActivationHotkey> AllowedHotkeys { get; } =
+        [
             new(KeyCode.LeftShift, KeyCode.LWin, "⇧ + ⊞"),
             new(KeyCode.LeftCtrl, KeyCode.LWin, "Ctrl + ⊞"),
             new(KeyCode.LeftAlt, KeyCode.LWin, "Alt + ⊞"),
             new(KeyCode.None, KeyCode.None, "Disabled"),
-        };
+        ];
 
         public static ActivationHotkey Default => AllowedHotkeys[0];
 

@@ -10,10 +10,10 @@ namespace FancyWM.Utilities
     {
         public IWindow Window => m_window;
 
-        private Win32Window m_window;
-        private Rectangle m_originalRect;
-        private int m_xOffset;
-        private int m_yOffset;
+        private readonly Win32Window m_window;
+        private readonly Rectangle m_originalRect;
+        private readonly int m_xOffset;
+        private readonly int m_yOffset;
 
         public WindowDragger(IWindow window)
         {

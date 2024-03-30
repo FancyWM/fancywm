@@ -6,7 +6,7 @@ namespace FancyWM.ViewModels
 {
     public class TilingPanelViewModel : TilingNodeViewModel
     {
-        private ObservableCollection<TilingNodeViewModel> m_childNodes = new();
+        private ObservableCollection<TilingNodeViewModel> m_childNodes = [];
         private Rectangle m_bounds;
         private bool m_isHeaderObscured;
         private bool m_isMoving;

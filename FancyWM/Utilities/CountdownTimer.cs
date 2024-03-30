@@ -11,7 +11,7 @@ namespace FancyWM.Utilities
 
         public bool IsDone => m_tcs?.Task.IsCompleted != false;
 
-        private readonly Stopwatch m_stopwatch = new Stopwatch();
+        private readonly Stopwatch m_stopwatch = new();
         private readonly Dispatcher m_dispatcher;
 
         private long m_endsAtTime;

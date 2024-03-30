@@ -33,7 +33,7 @@ namespace FancyWM.Pages.Settings
             _ = Launcher.LaunchUriAsync(e.Uri);
         }
 
-        private string GetVersionString()
+        private static string GetVersionString()
         {
             try
             {

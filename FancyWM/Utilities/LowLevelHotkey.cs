@@ -37,10 +37,10 @@ namespace FancyWM.Utilities
             {
                 if (m_pressedModifiers.All(x => x) && e.KeyCode == Key)
                 {
-                    Dispatcher.BeginInvoke((Action)(() =>
+                    Dispatcher.BeginInvoke(() =>
                     {
                         Pressed?.Invoke(this, new EventArgs());
-                    }));
+                    });
                     return true;
                 }
                 return false;

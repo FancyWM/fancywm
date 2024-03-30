@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Principal;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -18,19 +19,15 @@ using Serilog;
 
 namespace FancyWM.ViewModels
 {
-    public sealed class KeybindingGroup
-    {
-        public string GroupKey { get; set; }
-        public IList<KeybindingViewModel> Keybindings { get; set; }
-    }
+    public record class KeybindingGroup(string GroupKey, IList<KeybindingViewModel> Keybindings);
 
     public sealed class SettingsViewModel : ViewModelBase
     {
-        private static readonly char[] AsciiWhitespaceChars = new char[] { ' ', '\t', '\r', '\v', '\f', '\n' };
+        private static readonly char[] AsciiWhitespaceChars = [' ', '\t', '\r', '\v', '\f', '\n'];
 
         public IObservableFileEntity<Settings> Model { get; }
 
-        public ActivationHotkey SelectedActivationHotkey { get => m_activationHotkey; set => SetField(ref m_activationHotkey, value); }
+        public ActivationHotkey? SelectedActivationHotkey { get => m_activationHotkey; set => SetField(ref m_activationHotkey, value); }
 
         public ObservableCollection<ActivationHotkey> ActivationHotkeyOptions { get; }
             = new ObservableCollection<ActivationHotkey>(ActivationHotkey.AllowedHotkeys);
@@ -80,7 +77,7 @@ namespace FancyWM.ViewModels
             {
                 if (value)
                 {
-                    File.WriteAllBytes("administrator-mode", Array.Empty<byte>());
+                    File.WriteAllBytes("administrator-mode", []);
                 }
                 else
                 {
@@ -90,7 +87,7 @@ namespace FancyWM.ViewModels
             }
         }
 
-        public bool IsAdministrator => (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
+        public static bool IsAdministrator => (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
                       .IsInRole(WindowsBuiltInRole.Administrator);
 
         public bool OverrideAccentColor { get => m_customAccentColor; set => SetField(ref m_customAccentColor, value); }
@@ -165,9 +162,9 @@ namespace FancyWM.ViewModels
         [DerivedProperty(nameof(Keybindings))]
         public IList<KeybindingGroup>? KeybindingGroups => CreateKeybindingGroups(m_keybindings!);
 
-        public IList<string> ProcessIgnoreList { get => m_processIgnoreList; set => SetField(ref m_processIgnoreList, value); }
+        public IList<string>? ProcessIgnoreList { get => m_processIgnoreList; set => SetField(ref m_processIgnoreList, value); }
 
-        public IList<string> ClassIgnoreList { get => m_classIgnoreList; set => SetField(ref m_classIgnoreList, value); }
+        public IList<string>? ClassIgnoreList { get => m_classIgnoreList; set => SetField(ref m_classIgnoreList, value); }
 
         public bool MultiMonitorSupport { get => m_multiMonitorSupport; set => SetField(ref m_multiMonitorSupport, value); }
 
@@ -190,9 +187,9 @@ namespace FancyWM.ViewModels
         private int m_panelHeight;
         private int m_panelFontSize;
         private int m_windowPadding;
-        private ActivationHotkey m_activationHotkey;
-        private IList<string> m_processIgnoreList;
-        private IList<string> m_classIgnoreList;
+        private ActivationHotkey? m_activationHotkey;
+        private IList<string>? m_processIgnoreList;
+        private IList<string>? m_classIgnoreList;
         private bool m_multiMonitorSupport;
         private bool m_showContextHints;
         private bool m_soundOnFailure;
@@ -277,9 +274,8 @@ namespace FancyWM.ViewModels
                     }
                 }
 
-                bool isValid = vm.IsDirectMode && vm.Pattern != null
-                    ? KeyCodeHelper.CanMapToValidModifiersAndKeyCode(vm.Pattern)
-                    : true;
+                bool isValid = !vm.IsDirectMode || vm.Pattern == null
+                    || KeyCodeHelper.CanMapToValidModifiersAndKeyCode(vm.Pattern);
 
                 if (!isValid)
                 {
@@ -318,7 +314,7 @@ namespace FancyWM.ViewModels
                 m_logger.Debug($"{nameof(SettingsViewModel)} is overwriting existing Settings");
 
                 x = x.Clone();
-                x.ActivationHotkey = SelectedActivationHotkey;
+                x.ActivationHotkey = SelectedActivationHotkey!;
                 x.ShowStartupWindow = ShowStartupWindow;
                 x.NotifyVirtualDesktopServiceIncompatibility = NotifyVirtualDesktopServiceIncompatibility;
                 x.AllocateNewPanelSpace = AllocateNewPanelSpace;
@@ -333,8 +329,8 @@ namespace FancyWM.ViewModels
                 x.PanelHeight = PanelHeight;
                 x.PanelFontSize = PanelFontSize;
                 x.ShowContextHints = ShowContextHints;
-                x.ProcessIgnoreList = ProcessIgnoreList.ToList();
-                x.ClassIgnoreList = ClassIgnoreList.ToList();
+                x.ProcessIgnoreList = [.. ProcessIgnoreList!];
+                x.ClassIgnoreList = [.. ClassIgnoreList!];
                 x.MultiMonitorSupport = MultiMonitorSupport;
                 x.SoundOnFailure = SoundOnFailure;
                 x.ShowFocusDuringAction = ShowFocusDuringAction;
@@ -343,7 +339,7 @@ namespace FancyWM.ViewModels
             });
         }
 
-        private static IList<KeybindingGroup> CreateKeybindingGroups(IList<KeybindingViewModel> keybindings)
+        private static List<KeybindingGroup> CreateKeybindingGroups(IList<KeybindingViewModel> keybindings)
         {
             var buckets = new[]
             {
@@ -428,17 +424,15 @@ namespace FancyWM.ViewModels
                 })
             };
 
-            var missing = Enum.GetValues(typeof(BindableAction)).OfType<BindableAction>().Except(buckets.SelectMany(x => x.Item2));
-            Debug.Assert(missing.Count() == 0);
+            List<BindableAction> missing = [..Enum.GetValues(typeof(BindableAction)).OfType<BindableAction>().Except(buckets.SelectMany(x => x.Item2))];
+            Debug.Assert(missing.Count == 0);
 
             return buckets.Select((bucket) =>
             {
                 var (group, actions) = bucket;
-                return new KeybindingGroup
-                {
-                    GroupKey = group,
-                    Keybindings = keybindings.Where(x => actions.Contains(x.Action)).ToList(),
-                };
+                return new KeybindingGroup(
+                    GroupKey: group, 
+                    Keybindings: keybindings.Where(x => actions.Contains(x.Action)).ToList());
             }).ToList();
         }
     }

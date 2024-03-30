@@ -16,7 +16,7 @@ namespace FancyWM.Layouts.Tiling
                 {
                     m_root.Desktop = null;
                 }
-                m_wnd2Node = new Dictionary<IWindow, WindowNode>();
+                m_wnd2Node = [];
 
                 m_root = value;
                 if (m_root != null)
@@ -34,7 +34,7 @@ namespace FancyWM.Layouts.Tiling
         public Rectangle WorkArea { get; set; }
 
         private PanelNode? m_root;
-        private Dictionary<IWindow, WindowNode> m_wnd2Node = new Dictionary<IWindow, WindowNode>();
+        private Dictionary<IWindow, WindowNode> m_wnd2Node = [];
 
         public WindowNode? FindNode(IWindow window)
         {
@@ -65,19 +65,10 @@ namespace FancyWM.Layouts.Tiling
 
         public static void SwapReferences(TilingNode nodeA, TilingNode nodeB)
         {
-            var parentA = nodeA.Parent;
-            if (parentA == null)
-            {
-                throw new InvalidOperationException($"Parent of {nameof(nodeA)} is null!");
-            }
-
+            var parentA = nodeA.Parent ?? throw new InvalidOperationException($"Parent of {nameof(nodeA)} is null!");
             var indexA = parentA.IndexOf(nodeA);
 
-            var parentB = nodeB.Parent;
-            if (parentB == null)
-            {
-                throw new InvalidOperationException($"Parent of {nameof(nodeB)} is null!");
-            }
+            var parentB = nodeB.Parent ?? throw new InvalidOperationException($"Parent of {nameof(nodeB)} is null!");
             var indexB = parentB.IndexOf(nodeB);
 
             parentA.SetReference(indexA, nodeB);

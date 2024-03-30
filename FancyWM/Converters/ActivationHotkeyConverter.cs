@@ -11,14 +11,8 @@ namespace FancyWM.Converters
     {
         public override ActivationHotkey Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            string? str = reader.GetString();
-            if (str == null)
-                throw new FormatException();
-
-            var hotkey = ActivationHotkey.AllowedHotkeys.FirstOrDefault(x => $"{x.KeyA}_{x.KeyB}" == str);
-            if (hotkey == null)
-                hotkey = ActivationHotkey.AllowedHotkeys[0];
-
+            string? str = reader.GetString() ?? throw new FormatException();
+            var hotkey = ActivationHotkey.AllowedHotkeys.FirstOrDefault(x => $"{x.KeyA}_{x.KeyB}" == str) ?? ActivationHotkey.AllowedHotkeys[0];
             return hotkey;
         }
 

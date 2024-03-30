@@ -35,14 +35,9 @@ namespace FancyWM.Utilities
         }
     }
 
-    internal class ByProcessNameMatcher : IWindowMatcher
+    internal class ByProcessNameMatcher(string processName) : IWindowMatcher
     {
-        public string ProcessName { get; }
-
-        public ByProcessNameMatcher(string processName)
-        {
-            ProcessName = processName;
-        }
+        public string ProcessName { get; } = processName;
 
         public bool Matches(IWindow window)
         {
@@ -50,14 +45,9 @@ namespace FancyWM.Utilities
         }
     }
 
-    internal class ByClassNameMatcher : IWindowMatcher
+    internal class ByClassNameMatcher(string className) : IWindowMatcher
     {
-        public string ClassName { get; }
-
-        public ByClassNameMatcher(string className)
-        {
-            ClassName = className;
-        }
+        public string ClassName { get; } = className;
 
         public bool Matches(IWindow window)
         {

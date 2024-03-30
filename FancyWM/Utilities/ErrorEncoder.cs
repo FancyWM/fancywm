@@ -10,7 +10,7 @@ namespace FancyWM.Utilities
     {
         public static ErrorEncoder Default { get; } = new ErrorEncoder();
 
-        public string GetErrorCodeString(Exception exception)
+        public static string GetErrorCodeString(Exception exception)
         {
             try
             {

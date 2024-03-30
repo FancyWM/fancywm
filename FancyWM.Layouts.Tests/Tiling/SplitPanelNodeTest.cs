@@ -20,8 +20,6 @@ namespace FancyWM.Layouts.Tests.Tiling
         private const int MediumWorkAreaHeight = 1080;
         private static readonly Rectangle MediumWorkArea = new(0, 0, MediumWorkAreaWidth, MediumWorkAreaHeight);
 
-        private readonly WindowMockFactory m_mockFactory = new();
-
         [TestMethod]
         public void TestOneWindow()
         {
@@ -31,7 +29,7 @@ namespace FancyWM.Layouts.Tests.Tiling
                 WorkArea = MediumWorkArea,
             };
 
-            var nodepadNode = new WindowNode(m_mockFactory.CreateNotepadWindow());
+            var nodepadNode = new WindowNode(WindowMockFactory.CreateNotepadWindow());
             desktop.Root.Attach(nodepadNode);
             desktop.Measure();
             desktop.Arrange();
@@ -48,11 +46,11 @@ namespace FancyWM.Layouts.Tests.Tiling
                 WorkArea = MediumWorkArea,
             };
 
-            var nodepadNode = new WindowNode(m_mockFactory.CreateNotepadWindow());
+            var nodepadNode = new WindowNode(WindowMockFactory.CreateNotepadWindow());
             desktop.Root.Attach(nodepadNode);
             desktop.Measure();
             desktop.Arrange();
-            var explorerNode = new WindowNode(m_mockFactory.CreateExplorerWindow());
+            var explorerNode = new WindowNode(WindowMockFactory.CreateExplorerWindow());
             desktop.Root.Attach(explorerNode);
             desktop.Measure();
             desktop.Arrange();
@@ -71,15 +69,15 @@ namespace FancyWM.Layouts.Tests.Tiling
                 WorkArea = MediumWorkArea,
             };
 
-            var nodepadNode = new WindowNode(m_mockFactory.CreateNotepadWindow());
+            var nodepadNode = new WindowNode(WindowMockFactory.CreateNotepadWindow());
             desktop.Root.Attach(nodepadNode);
             desktop.Measure();
             desktop.Arrange();
-            var nodepadNode2 = new WindowNode(m_mockFactory.CreateNotepadWindow());
+            var nodepadNode2 = new WindowNode(WindowMockFactory.CreateNotepadWindow());
             desktop.Root.Attach(nodepadNode2);
             desktop.Measure();
             desktop.Arrange();
-            var explorerNode = new WindowNode(m_mockFactory.CreateExplorerWindow());
+            var explorerNode = new WindowNode(WindowMockFactory.CreateExplorerWindow());
             desktop.Root.Attach(explorerNode);
             desktop.Measure();
             desktop.Arrange();
@@ -98,19 +96,19 @@ namespace FancyWM.Layouts.Tests.Tiling
                 WorkArea = MediumWorkArea,
             };
 
-            var nodepadNode = new WindowNode(m_mockFactory.CreateNotepadWindow());
+            var nodepadNode = new WindowNode(WindowMockFactory.CreateNotepadWindow());
             desktop.Root.Attach(nodepadNode);
             desktop.Measure();
             desktop.Arrange();
-            var nodepadNode2 = new WindowNode(m_mockFactory.CreateNotepadWindow());
+            var nodepadNode2 = new WindowNode(WindowMockFactory.CreateNotepadWindow());
             desktop.Root.Attach(nodepadNode2);
             desktop.Measure();
             desktop.Arrange();
-            var explorerNode = new WindowNode(m_mockFactory.CreateExplorerWindow());
+            var explorerNode = new WindowNode(WindowMockFactory.CreateExplorerWindow());
             desktop.Root.Attach(explorerNode);
             desktop.Measure();
             desktop.Arrange();
-            var discordNode = new WindowNode(m_mockFactory.CreateDiscordWindow());
+            var discordNode = new WindowNode(WindowMockFactory.CreateDiscordWindow());
             desktop.Root.Attach(discordNode);
             desktop.Measure();
             desktop.Arrange();
@@ -125,17 +123,17 @@ namespace FancyWM.Layouts.Tests.Tiling
                 WorkArea = MediumWorkArea,
             };
 
-            var explorerNode = new WindowNode(m_mockFactory.CreateExplorerWindow());
+            var explorerNode = new WindowNode(WindowMockFactory.CreateExplorerWindow());
             desktop.Root.Attach(explorerNode);
             desktop.Measure();
             desktop.Arrange();
-            var discordNode = new WindowNode(m_mockFactory.CreateDiscordWindow());
+            var discordNode = new WindowNode(WindowMockFactory.CreateDiscordWindow());
             desktop.Root.Attach(discordNode);
             desktop.Measure();
             desktop.Arrange();
             Assert.ThrowsException<UnsatisfiableFlexConstraintsException>(() =>
             {
-                var discordNode2 = new WindowNode(m_mockFactory.CreateDiscordWindow());
+                var discordNode2 = new WindowNode(WindowMockFactory.CreateDiscordWindow());
                 desktop.Root.Attach(discordNode2);
                 desktop.Measure();
                 desktop.Arrange();
@@ -151,20 +149,20 @@ namespace FancyWM.Layouts.Tests.Tiling
                 WorkArea = MediumWorkArea,
             };
 
-            var explorerNode = new WindowNode(m_mockFactory.CreateExplorerWindow());
+            var explorerNode = new WindowNode(WindowMockFactory.CreateExplorerWindow());
             desktop.Root.Attach(explorerNode);
             desktop.Measure();
             desktop.Arrange();
-            var explorerNode2 = new WindowNode(m_mockFactory.CreateExplorerWindow());
+            var explorerNode2 = new WindowNode(WindowMockFactory.CreateExplorerWindow());
             desktop.Root.Attach(explorerNode2);
             desktop.Measure();
             desktop.Arrange();
-            var discordNode = new WindowNode(m_mockFactory.CreateDiscordWindow());
+            var discordNode = new WindowNode(WindowMockFactory.CreateDiscordWindow());
             desktop.Root.Attach(discordNode);
             desktop.Measure();
             desktop.Arrange();
             // Replace with larger window to simulate the window growing after it was added
-            desktop.Root.SetReference(1, new WindowNode(m_mockFactory.CreateDiscordWindow()));
+            desktop.Root.SetReference(1, new WindowNode(WindowMockFactory.CreateDiscordWindow()));
             Assert.ThrowsException<UnsatisfiableFlexConstraintsException>(() =>
             {
                 desktop.Measure();

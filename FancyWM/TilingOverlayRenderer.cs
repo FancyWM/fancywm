@@ -54,7 +54,6 @@ namespace FancyWM
             {
                 if (m_intentSourceWindow != value)
                 {
-                    OnSetIntentSourceWindow(oldValue: m_intentSourceWindow, newValue: value);
                     m_intentSourceWindow = value;
                 }
             }
@@ -66,17 +65,19 @@ namespace FancyWM
         private readonly DelegateCommand<TilingNodeViewModel> m_panelItemCloseActionCommand;
         private readonly IDisplay m_display;
         private bool m_isOverlayInit = false;
-        private TilingOverlayViewModel m_viewModel = new();
+        private readonly TilingOverlayViewModel m_viewModel = new();
 
-        private IReadOnlyCollection<TilingNode> m_previousSnapshot = Array.Empty<TilingNode>();
-        private IDictionary<TilingNode, TilingNodeViewModel> m_nodeViewModels = new Dictionary<TilingNode, TilingNodeViewModel>();
+        private IReadOnlyCollection<TilingNode> m_previousSnapshot = [];
+        private readonly Dictionary<TilingNode, TilingNodeViewModel> m_nodeViewModels = [];
         private IReadOnlySet<IWindow> m_previewWindows = new HashSet<IWindow>();
         private IWindow? m_intentSourceWindow;
 
         public TilingOverlayRenderer(IDisplay display, Func<IntPtr> overlayAnchorSource)
         {
-            m_overlay = new OverlayHost(display);
-            m_overlay.AnchorSource = overlayAnchorSource;
+            m_overlay = new OverlayHost(display)
+            {
+                AnchorSource = overlayAnchorSource
+            };
             m_overlay.Show();
 
             m_panelItemPrimaryActionCommand = new DelegateCommand<TilingNodeViewModel>(OnOverlayPanelItemClick);
@@ -158,7 +159,7 @@ namespace FancyWM
 
             foreach (var persistedNode in persistList.Concat(addList))
             {
-                var vm = GetViewModel(persistedNode, focusedPath);
+                var vm = GetViewModel(persistedNode);
                 switch (vm)
                 {
                     case TilingPanelViewModel panelViewModel:
@@ -173,7 +174,7 @@ namespace FancyWM
             }
         }
 
-        private TilingNodeViewModel? GetViewModel(TilingNode node, IEnumerable<TilingNode> focusedPath)
+        private TilingNodeViewModel? GetViewModel(TilingNode node)
         {
             if (m_nodeViewModels.TryGetValue(node, out var vm))
             {
@@ -291,28 +292,6 @@ namespace FancyWM
             }
         }
 
-        private void OnSetIntentSourceWindow(IWindow? oldValue, IWindow? newValue)
-        {
-            //if (m_nodeViewModels.FirstOrDefault(x => x.Key is WindowNode window && window.WindowReference == oldValue) is WindowNode oldVm)
-            //{
-            //    oldVm.IsIntentSource = true;
-            //}
-
-            //foreach (var oldVm in m_nodeViewModels.Where(x => x.Key is WindowNode window && oldValue.Contains(window.WindowReference))
-            //    .Select(x => x.Value)
-            //    .OfType<TilingWindowViewModel>())
-            //{
-            //    oldVm.IsPreviewVisible = false;
-            //}
-            //foreach (var newVm in m_nodeViewModels.Where(x => x.Key is WindowNode window && newValue.Contains(window.WindowReference))
-            //    .Select(x => x.Value)
-            //    .OfType<TilingWindowViewModel>())
-            //{
-            //    newVm.IsPreviewVisible = true;
-            //}
-        }
-
-
         private void UpdateViewModel(TilingWindowViewModel vm, WindowNode node, IEnumerable<TilingNode> focusedPath)
         {
             vm.Node = node;
@@ -342,12 +321,12 @@ namespace FancyWM
 
             vm.IsHeaderVisible = !IsObscured(node, focusedPath);
 
-            if (HaveChildrenChanged(vm, node, focusedPath))
+            if (HaveChildrenChanged(vm, node))
             {
                 vm.ChildNodes.Clear();
                 foreach (var child in node.Children)
                 {
-                    var childViewModel = GetViewModel(child, focusedPath);
+                    var childViewModel = GetViewModel(child);
                     if (childViewModel == null)
                     {
                         continue;
@@ -357,7 +336,7 @@ namespace FancyWM
             }
         }
 
-        private bool HaveChildrenChanged(TilingPanelViewModel vm, PanelNode node, IEnumerable<TilingNode> focusedPath)
+        private bool HaveChildrenChanged(TilingPanelViewModel vm, PanelNode node)
         {
             if (vm.ChildNodes.Count != node.Children.Count)
             {
@@ -366,7 +345,7 @@ namespace FancyWM
             int i = 0;
             foreach (var child in node.Children)
             {
-                var childViewModel = GetViewModel(child, focusedPath);
+                var childViewModel = GetViewModel(child);
                 if (childViewModel == null)
                 {
                     continue;
@@ -380,7 +359,7 @@ namespace FancyWM
             return false;
         }
 
-        private bool IsObscured(PanelNode node, IEnumerable<TilingNode> focusedPath)
+        private static bool IsObscured(PanelNode node, IEnumerable<TilingNode> focusedPath)
         {
             if (focusedPath.Contains(node))
                 return false;
@@ -442,10 +421,12 @@ namespace FancyWM
                 vm.Value.Dispose();
             }
             m_nodeViewModels.Clear();
-            m_previousSnapshot = Array.Empty<TilingNode>();
+            m_previousSnapshot = [];
         }
 
+#pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
         public void Dispose()
+#pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
         {
             if (m_overlay.Content != null)
             {

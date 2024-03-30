@@ -7,14 +7,9 @@ namespace FancyWM.Utilities
 {
     internal static class Collections
     {
-        private class SequenceComparer<T> : IEqualityComparer<IEnumerable<T>?>
+        private class SequenceComparer<T>(IEqualityComparer<T> comparer) : IEqualityComparer<IEnumerable<T>?>
         {
-            public IEqualityComparer<T> Comparer { get; }
-
-            public SequenceComparer(IEqualityComparer<T> comparer)
-            {
-                Comparer = comparer;
-            }
+            public IEqualityComparer<T> Comparer { get; } = comparer;
 
             public bool Equals([AllowNull] IEnumerable<T> x, [AllowNull] IEnumerable<T> y)
             {

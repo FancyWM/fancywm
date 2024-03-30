@@ -5,17 +5,10 @@ using WinMan;
 
 namespace FancyWM.Utilities
 {
-    internal class TransitionTarget
+    internal class TransitionTarget(IWindow window, Rectangle originalPosition, Rectangle computedPosition)
     {
-        public IWindow Window { get; set; }
-        public Rectangle OriginalPosition { get; set; }
-        public Rectangle ComputedPosition { get; set; }
-
-        public TransitionTarget(IWindow window, Rectangle originalPosition, Rectangle computedPosition)
-        {
-            Window = window ?? throw new ArgumentNullException(nameof(window));
-            OriginalPosition = originalPosition;
-            ComputedPosition = computedPosition;
-        }
+        public IWindow Window { get; set; } = window ?? throw new ArgumentNullException(nameof(window));
+        public Rectangle OriginalPosition { get; set; } = originalPosition;
+        public Rectangle ComputedPosition { get; set; } = computedPosition;
     }
 }

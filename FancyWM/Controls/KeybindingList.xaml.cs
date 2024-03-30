@@ -15,15 +15,10 @@ namespace FancyWM.Controls
     /// </summary>
     public partial class KeybindingList : UserControl
     {
-        public class GridElement
-        {
-            public KeybindingViewModel Element { get; set; }
-            public int RowIndex { get; set; }
-            public int ColumnIndex { get; set; }
-        }
+        public record class GridElement(KeybindingViewModel Element, int RowIndex, int ColumnIndex);
 
-        private static readonly BindableAction[] Ordering = new BindableAction[]
-        {
+        private static readonly BindableAction[] Ordering =
+        [
             BindableAction.CreateHorizontalPanel,
             BindableAction.CreateVerticalPanel,
             BindableAction.CreateStackPanel,
@@ -60,7 +55,7 @@ namespace FancyWM.Controls
             BindableAction.ToggleFloatingMode,
             BindableAction.ToggleManager,
             BindableAction.Cancel,
-        };
+        ];
 
         public static readonly DependencyProperty KeybindingsProperty = DependencyProperty.Register(
             nameof(Keybindings),
@@ -95,22 +90,20 @@ namespace FancyWM.Controls
         {
             DataContext = new
             {
-                Keybindings = CreateGrid(KeybindingViewModel.FromDictionary(Keybindings).OrderBy(x => Ordering.IndexOf(x.Action)).ToList()).ToList(),
+                Keybindings = CreateGrid([.. KeybindingViewModel.FromDictionary(Keybindings).OrderBy(x => Ordering.IndexOf(x.Action))]),
             };
         }
 
-        private static IList<GridElement> CreateGrid(IList<KeybindingViewModel> list)
+        private static List<GridElement> CreateGrid(IList<KeybindingViewModel> list)
         {
             var grid = new List<GridElement>();
             for (int i = 0; i < list.Count; i++)
             {
                 var halfCount = (list.Count + 1) / 2;
-                grid.Add(new GridElement
-                {
-                    Element = list[i],
-                    RowIndex = i % halfCount,
-                    ColumnIndex = i >= halfCount ? 1 : 0,
-                });
+                grid.Add(new GridElement(
+                    Element: list[i],
+                    RowIndex: i % halfCount,
+                    ColumnIndex: i >= halfCount ? 1 : 0));
             }
             return grid;
         }

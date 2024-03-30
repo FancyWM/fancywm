@@ -9,12 +9,9 @@ namespace FancyWM.Pages.Settings
     /// </summary>
     public partial class RulesPage : UserControl
     {
-        private readonly SettingsViewModel m_viewModel;
-
         public RulesPage(SettingsViewModel viewModel)
         {
             InitializeComponent();
-            m_viewModel = viewModel;
             DataContext = viewModel;
         }
     }

@@ -6,7 +6,7 @@ namespace FancyWM.Tests.TestUtilities
     {
         public static void DoEvents()
         {
-            DispatcherFrame frame = new DispatcherFrame();
+            DispatcherFrame frame = new();
             Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background,
                 new DispatcherOperationCallback(ExitFrame), frame);
             Dispatcher.PushFrame(frame);

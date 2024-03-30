@@ -9,14 +9,9 @@ namespace FancyWM.Utilities
 
     internal static class EasingFunction
     {
-        private class LambdaEasingFunction : IEasingFunction
+        private class LambdaEasingFunction(Func<double, double> func) : IEasingFunction
         {
-            Func<double, double> m_func;
-
-            public LambdaEasingFunction(Func<double, double> func)
-            {
-                m_func = func;
-            }
+            readonly Func<double, double> m_func = func;
 
             public double Evaluate(double x)
             {
@@ -58,20 +53,12 @@ namespace FancyWM.Utilities
         });
     }
 
-    internal class CubicBezierCurve : IEasingFunction
+    internal class CubicBezierCurve(double p0, double p1, double p2, double p3) : IEasingFunction
     {
-        public double P0 { get; }
-        public double P1 { get; }
-        public double P2 { get; }
-        public double P3 { get; }
-
-        public CubicBezierCurve(double p0, double p1, double p2, double p3)
-        {
-            P0 = p0;
-            P1 = p1;
-            P2 = p2;
-            P3 = p3;
-        }
+        public double P0 { get; } = p0;
+        public double P1 { get; } = p1;
+        public double P2 { get; } = p2;
+        public double P3 { get; } = p3;
 
         public double Evaluate(double x)
         {

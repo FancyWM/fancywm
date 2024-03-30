@@ -41,7 +41,7 @@ namespace FancyWM.ViewModels
         private Visibility m_actionsVisibility = Visibility.Hidden;
         private RevealState m_actionsRevealState = RevealState.Hidden;
         private double m_revealHighlightOpacity = 0;
-        private double m_revealHighlightRadius = 64;
+        private readonly double m_revealHighlightRadius = 64;
         private bool m_isMoving = false;
         private bool m_isPreviewVisible = false;
         private bool m_isActionActive = false;

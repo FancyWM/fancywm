@@ -36,10 +36,12 @@ namespace FancyWM
 
         public TilingFailedException(string? message, TilingError reason = TilingError.Failed) : base(message)
         {
+            FailReason = reason;
         }
 
         public TilingFailedException(string? message, Exception? innerException, TilingError reason = TilingError.Failed) : base(message, innerException)
         {
+            FailReason = reason;
         }
     }
 
@@ -53,14 +55,13 @@ namespace FancyWM
 
     internal class DesktopState
     {
-        public IVirtualDesktop VirtualDesktop { get; init; }
-        public DesktopTree DesktopTree { get; init; }
+        public required DesktopTree DesktopTree { get; init; }
         public TilingNode? FocusedNode { get; set; }
     }
 
     internal class TilingWorkspaceState
     {
-        private readonly Dictionary<IVirtualDesktop, DesktopState> m_states = new();
+        private readonly Dictionary<IVirtualDesktop, DesktopState> m_states = [];
 
         public IEnumerable<IVirtualDesktop> Desktops => m_states.Keys;
         public IEnumerable<DesktopState> States => m_states.Values;
@@ -108,7 +109,7 @@ namespace FancyWM
     internal class TilingWorkspace
     {
         private readonly TilingWorkspaceState m_states = new();
-        private readonly Dictionary<IWindow, Rectangle> m_originalPositions = new();
+        private readonly Dictionary<IWindow, Rectangle> m_originalPositions = [];
 
         public IEnumerable<DesktopTree> Trees => m_states.States.Select(x => x.DesktopTree);
 
@@ -138,12 +139,7 @@ namespace FancyWM
 
         public WindowNode RegisterWindow(IWindow window)
         {
-            var state = m_states.FindByVdm(window);
-            if (state == null)
-            {
-                throw new InvalidWindowReferenceException(window.Handle);
-            }
-
+            var state = m_states.FindByVdm(window) ?? throw new InvalidWindowReferenceException(window.Handle);
             var focusedNode = state.FocusedNode;
 
             PanelNode parent = focusedNode is WindowNode focusedWindow
@@ -158,13 +154,7 @@ namespace FancyWM
             if (m_states.FindByTree(window) != null)
                 throw new WindowAlreadyRegisteredException();
 
-            var state = m_states.FindByVdm(window);
-            if (state == null)
-            {
-                throw new InvalidWindowReferenceException(window.Handle);
-            }
-
-            WindowNode newNode = new WindowNode(window);
+            WindowNode newNode = new(window);
             // Try to fit in the same panel as the target
             if (parent is StackPanelNode || CanFitLossy(parent, window))
             {
@@ -205,7 +195,7 @@ namespace FancyWM
             return newNode;
         }
 
-        private bool CanFitLossy(PanelNode parent, IWindow window)
+        private static bool CanFitLossy(PanelNode parent, IWindow window)
         {
             if (parent.ComputedRectangle == default)
             {
@@ -221,7 +211,7 @@ namespace FancyWM
             return true;
         }
 
-        private bool CanFitLossy(PanelNode parent, Point minSize)
+        private static bool CanFitLossy(PanelNode parent, Point minSize)
         {
             if (parent.ComputedRectangle == default)
             {
@@ -239,12 +229,7 @@ namespace FancyWM
 
         public void UnregisterWindow(IWindow window)
         {
-            var state = m_states.FindByTree(window);
-            if (state == null)
-            {
-                throw new ArgumentException(null, nameof(window));
-            }
-
+            var state = m_states.FindByTree(window) ?? throw new ArgumentException(null, nameof(window));
             if (state.FocusedNode is WindowNode node && node.WindowReference == window)
             {
                 state.FocusedNode = null;
@@ -304,11 +289,7 @@ namespace FancyWM
             var nodeAtPoint = node.Desktop.Root!.Windows
                 .Where(x => x != node)
                 .Concat(node.Desktop.Root.Nodes.Where(x => x.Type == TilingNodeType.Placeholder))
-                .FirstOrDefault(x => x.ComputedRectangle.Contains(pt));
-
-            if (nodeAtPoint == null)
-            {
-                nodeAtPoint = node.Desktop.Root!.Nodes
+                .FirstOrDefault(x => x.ComputedRectangle.Contains(pt)) ?? node.Desktop.Root!.Nodes
                     .OfType<PanelNode>()
                     .Where(x => x != node)
                     .FirstOrDefault(x => Rectangle.OffsetAndSize(
@@ -316,8 +297,6 @@ namespace FancyWM
                         x.ComputedRectangle.Top - x.Padding.Top,
                         x.ComputedRectangle.Width + x.Padding.Left + x.Padding.Right,
                         x.Padding.Top).Contains(pt));
-            }
-
             if (nodeAtPoint == null || nodeAtPoint.Parent == null)
                 return;
 
@@ -355,7 +334,7 @@ namespace FancyWM
                             oldParent.Cleanup(collapse: AutoCollapse);
                             node.Parent.RemovePlaceholders();
                         }
-                        catch (UnsatisfiableFlexConstraintsException e)
+                        catch (UnsatisfiableFlexConstraintsException)
                         {
                             throw new TilingFailedException(TilingError.TargetCannotFit);
                         }
@@ -374,7 +353,7 @@ namespace FancyWM
                                 node.Parent.Move(nodeIndex, targetIndex);
                             }
                         }
-                        catch (UnsatisfiableFlexConstraintsException e)
+                        catch (UnsatisfiableFlexConstraintsException)
                         {
                             throw new TilingFailedException(TilingError.Failed);
                         }
@@ -386,7 +365,7 @@ namespace FancyWM
                     {
                         node.Swap(nodeAtPoint);
                     }
-                    catch (UnsatisfiableFlexConstraintsException e)
+                    catch (UnsatisfiableFlexConstraintsException)
                     {
                         throw new TilingFailedException(TilingError.Failed);
                     }
@@ -394,7 +373,7 @@ namespace FancyWM
             }
         }
 
-        private int FindInsertionIndex(TilingNode nodeAtPoint, Point pt)
+        private static int FindInsertionIndex(TilingNode nodeAtPoint, Point pt)
         {
             Debug.Assert(nodeAtPoint.Parent != null);
             var insertionIndex = nodeAtPoint.Parent!.IndexOf(nodeAtPoint);
@@ -551,7 +530,7 @@ namespace FancyWM
             return newParentClone.ComputedRectangle.Contains(pt);
         }
 
-        private Rectangle TransferSize(Rectangle a, Rectangle b)
+        private static Rectangle TransferSize(Rectangle a, Rectangle b)
         {
             var newCenter = b.Center;
             var width = a.Width;
@@ -562,23 +541,14 @@ namespace FancyWM
 
         public void MoveWindow(IWindow window, Point pt, bool allowNesting)
         {
-            var state = m_states.FindByTree(window);
-            if (state == null)
-                throw new ArgumentException($"Window must be registered with the backend!", nameof(window));
-
-            var sourceNode = state.DesktopTree.FindNode(window);
-            if (sourceNode == null)
-                throw new ArgumentException($"Window must be registered with the backend!", nameof(window));
-
+            var state = m_states.FindByTree(window) ?? throw new ArgumentException($"Window must be registered with the backend!", nameof(window));
+            var sourceNode = state.DesktopTree.FindNode(window) ?? throw new ArgumentException($"Window must be registered with the backend!", nameof(window));
             MoveNode(sourceNode, pt, allowNesting);
         }
 
         public void ResizeWindow(IWindow window, Rectangle newPosition, Rectangle oldPosition)
         {
-            var state = m_states.FindByTree(window);
-            if (state == null)
-                throw new ArgumentException($"Window must be registered with the backend!", nameof(window));
-
+            var state = m_states.FindByTree(window) ?? throw new ArgumentException($"Window must be registered with the backend!", nameof(window));
             var node = state.DesktopTree.FindNode(window);
             if (node != null)
             {
@@ -632,27 +602,15 @@ namespace FancyWM
 
         public WindowNode GetFocusAdjacentWindow(IVirtualDesktop currentDesktop, TilingDirection direction)
         {
-            var focusedNode = GetFocus(currentDesktop);
-            if (focusedNode == null)
-                throw new TilingFailedException(TilingError.MissingTarget);
-
-            WindowNode? adjacentWindow = focusedNode.GetAdjacentWindow(direction);
-            if (adjacentWindow == null)
-                throw new TilingFailedException(TilingError.MissingAdjacentWindow);
-
+            var focusedNode = GetFocus(currentDesktop) ?? throw new TilingFailedException(TilingError.MissingTarget);
+            WindowNode? adjacentWindow = focusedNode.GetAdjacentWindow(direction) ?? throw new TilingFailedException(TilingError.MissingAdjacentWindow);
             return adjacentWindow;
         }
 
         public (TilingNode, WindowNode) GetFocusAndAdjacentWindow(IVirtualDesktop currentDesktop, TilingDirection direction)
         {
-            var focusedNode = GetFocus(currentDesktop);
-            if (focusedNode == null)
-                throw new TilingFailedException(TilingError.MissingTarget);
-
-            WindowNode? adjacentWindow = focusedNode.GetAdjacentWindow(direction);
-            if (adjacentWindow == null)
-                throw new TilingFailedException(TilingError.MissingAdjacentWindow);
-
+            var focusedNode = GetFocus(currentDesktop) ?? throw new TilingFailedException(TilingError.MissingTarget);
+            WindowNode? adjacentWindow = focusedNode.GetAdjacentWindow(direction) ?? throw new TilingFailedException(TilingError.MissingAdjacentWindow);
             return (focusedNode, adjacentWindow);
         }
 
@@ -666,10 +624,7 @@ namespace FancyWM
 
         public void SetFocus(IWindow window)
         {
-            var state = m_states.FindByTree(window);
-            if (state == null)
-                throw new ArgumentException("Window not registered with backend!");
-
+            var state = m_states.FindByTree(window) ?? throw new ArgumentException("Window not registered with backend!");
             var node = state.DesktopTree.FindNode(window);
             Debug.Assert(node != null);
 
@@ -748,10 +703,7 @@ namespace FancyWM
                 throw new TilingFailedException(TilingError.PullsBeyondTopLevelPanel);
 
             // First grandparent that we can fit in
-            var grandparent = node.Parent.PathToRoot.Skip(1).OfType<PanelNode>().FirstOrDefault(x => CanFit(x, node));
-            if (grandparent == null)
-                throw new TilingFailedException(TilingError.TargetCannotFit);
-
+            var grandparent = node.Parent.PathToRoot.Skip(1).OfType<PanelNode>().FirstOrDefault(x => CanFit(x, node)) ?? throw new TilingFailedException(TilingError.TargetCannotFit);
             var oldParent = node.Parent;
             var index = grandparent.IndexOf(node.Parent);
 

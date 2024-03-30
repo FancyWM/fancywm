@@ -26,7 +26,7 @@ namespace FancyWM.Utilities
                         return bytes;
 
                     default:
-                        throw new ArgumentException();
+                        throw new ArgumentException($"cds.dwData is {cds.dwData}", nameof(lParam));
                 }
             }
         }
@@ -37,10 +37,12 @@ namespace FancyWM.Utilities
             {
                 fixed (byte* ptr = bytes)
                 {
-                    COPYDATASTRUCT cds = new COPYDATASTRUCT();
-                    cds.dwData = 0;
-                    cds.cbData = (uint)bytes.Length;
-                    cds.lpData = ptr;
+                    COPYDATASTRUCT cds = new()
+                    {
+                        dwData = 0,
+                        cbData = (uint)bytes.Length,
+                        lpData = ptr
+                    };
                     nuint result;
                     var ret = PInvoke.SendMessageTimeout(new(hwnd), Constants.WM_COPYDATA, new(0), (LPARAM)(nint)(&cds), SendMessageTimeout_fuFlags.SMTO_NORMAL, 3000, &result);
                     if (ret == 0)

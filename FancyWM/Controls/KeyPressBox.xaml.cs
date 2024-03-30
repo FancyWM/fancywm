@@ -42,7 +42,7 @@ namespace FancyWM.Controls
 
         private const string EmptyPlaceholder = "<None>";
 
-        private KeyPatternListener m_patternListener;
+        private readonly KeyPatternListener m_patternListener;
 
         public KeyPressBox()
         {
@@ -99,7 +99,7 @@ namespace FancyWM.Controls
             }
         }
 
-        private string FormatPattern(string pattern)
+        private static string FormatPattern(string pattern)
         {
             return pattern.Split(',')
                 .Select(Enum.Parse<KeyCode>)

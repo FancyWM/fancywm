@@ -15,8 +15,8 @@ namespace FancyWM.Utilities
 
         public IReadOnlySet<KeyCode>? Pattern { get; private set; }
 
-        private readonly HashSet<KeyCode> m_pressedKeys = new HashSet<KeyCode>();
-        private readonly HashSet<KeyCode> m_pressedKeyCodes = new HashSet<KeyCode>();
+        private readonly HashSet<KeyCode> m_pressedKeys = [];
+        private readonly HashSet<KeyCode> m_pressedKeyCodes = [];
 
         public event KeyPatternChangedEventHandler? PatternChanged;
 

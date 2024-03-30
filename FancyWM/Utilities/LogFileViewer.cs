@@ -11,17 +11,11 @@ namespace FancyWM.Utilities
         void Open();
     }
 
-    class LogFileViewer : ILogFileViewer
+    class LogFileViewer(string fileName, ICollection<string> textContent) : ILogFileViewer
     {
-        private readonly string m_fileName;
+        private readonly string m_fileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
 
-        public ICollection<string> TextContent { get; }
-
-        public LogFileViewer(string fileName, ICollection<string> textContent)
-        {
-            m_fileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
-            TextContent = textContent ?? throw new ArgumentNullException(nameof(textContent));
-        }
+        public ICollection<string> TextContent { get; } = textContent ?? throw new ArgumentNullException(nameof(textContent));
 
         public void Open()
         {

@@ -66,8 +66,6 @@ namespace FancyWM.Windows
             set => SetValue(IsRestartEnabledProperty, value);
         }
 
-        private bool m_reported = false;
-
         public ErrorMessageBox()
         {
             InitializeComponent();

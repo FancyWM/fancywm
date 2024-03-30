@@ -23,22 +23,22 @@ namespace FancyWM.Layouts
 
         public IReadOnlyList<Rectangle> Execute(Rectangle availableArea, IEnumerable<Constraints> constraints)
         {
-            if (constraints.Count() == 0)
+            if (!constraints.Any())
             {
-                return new Rectangle[0];
+                return [];
             }
 
             if (constraints.Count() == 1)
             {
-                return new[]
-                {
+                return
+                [
                     new Rectangle(
                         left: availableArea.Left + Spacing,
                         top: availableArea.Top + Spacing,
                         bottom: availableArea.Bottom - Spacing,
                         right: availableArea.Right - Spacing
                     )
-                };
+                ];
             }
 
             Rectangle currentArea, nextArea;
@@ -76,9 +76,7 @@ namespace FancyWM.Layouts
             }
 
             var rest = Execute(nextArea, constraints.Skip(1));
-            return (new Rectangle[] { currentArea })
-                .Concat(rest)
-                .ToArray();
+            return [.. (new Rectangle[] { currentArea }), .. rest];
         }
     }
 }

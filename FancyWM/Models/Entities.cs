@@ -29,24 +29,22 @@ namespace FancyWM.Models
 
         public IObservable<T> Value => m_value;
 
-        private IObservable<T> m_value;
-        private Subject<T> m_saves = new Subject<T>();
+        private readonly IObservable<T> m_value;
+        private readonly Subject<T> m_saves = new();
         private T? m_currentValue;
-        private SemaphoreSlim m_rwLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim m_rwLock = new(1, 1);
 
         protected ObservableFileEntityBase(string fullPath, Func<T> defaultFactory)
         {
             FullPath = fullPath;
 
-            Func<Task<T>> readAsync = async () =>
+            async Task<T> readAsync()
             {
                 await m_rwLock.WaitAsync();
                 try
                 {
-                    using (var stream = File.OpenRead(FullPath))
-                    {
-                        return await ReadAsync(stream);
-                    }
+                    using var stream = File.OpenRead(FullPath);
+                    return await ReadAsync(stream);
                 }
                 catch (Exception e) when (e is FileNotFoundException || e is JsonException || e is FormatException)
                 {
@@ -61,7 +59,7 @@ namespace FancyWM.Models
                 m_currentValue = defaultValue;
                 await SaveAsync(_ => _, notify: false);
                 return defaultValue;
-            };
+            }
 
             var lastValue = Observable.FromAsync(readAsync)
                 .Merge(m_saves)
@@ -107,10 +105,8 @@ namespace FancyWM.Models
             await m_rwLock.WaitAsync();
             try
             {
-                using (var stream = File.Open(FullPath, FileMode.Create))
-                {
-                    await WriteAsync(stream, newValue);
-                }
+                using var stream = File.Open(FullPath, FileMode.Create);
+                await WriteAsync(stream, newValue);
             }
             finally
             {
@@ -124,22 +120,13 @@ namespace FancyWM.Models
         }
     }
 
-    public class ObservableJsonEntity<T> : ObservableFileEntityBase<T>
+    public class ObservableJsonEntity<T>(string fullPath, Func<T> defaultFactory, JsonSerializerOptions? options = null) : ObservableFileEntityBase<T>(fullPath, defaultFactory)
     {
-        public JsonSerializerOptions Options { get; }
-
-        public ObservableJsonEntity(string fullPath, Func<T> defaultFactory, JsonSerializerOptions? options = null) : base(fullPath, defaultFactory)
-        {
-            Options = options ?? new JsonSerializerOptions();
-        }
+        public JsonSerializerOptions Options { get; } = options ?? new JsonSerializerOptions();
 
         protected override async Task<T> ReadAsync(Stream stream)
         {
-            var result = await JsonSerializer.DeserializeAsync<T>(stream, Options);
-            if (result == null)
-            {
-                throw new InvalidOperationException("Value is null!");
-            }
+            var result = await JsonSerializer.DeserializeAsync<T>(stream, Options) ?? throw new InvalidOperationException("Value is null!");
             return result;
         }
 

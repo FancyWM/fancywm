@@ -77,7 +77,7 @@ namespace FancyWM.Windows
 
         private void OnSponsorButtonClick(object sender, RoutedEventArgs e)
         {
-            App.Current.Sponsor();
+            App.Sponsor();
         }
     }
 }

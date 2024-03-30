@@ -41,10 +41,10 @@ namespace FancyWM
     /// </summary>
     public partial class MainWindow : Window, IDisposable
     {
-        private readonly IWorkspace m_workspace;
+        private readonly Win32Workspace m_workspace;
         private ITilingService m_tiling;
         private readonly CompositeDisposable m_subscriptions;
-        private readonly IToastService m_toasts;
+        private readonly ToastService m_toasts;
 
         private readonly TimeSpan ToastDurationCommandSequence = TimeSpan.FromMilliseconds(3000);
         private readonly TimeSpan ToastDurationCommandSequenceWithContextHints = TimeSpan.FromMilliseconds(9000);
@@ -67,7 +67,7 @@ namespace FancyWM
         private readonly LowLevelKeyboardHook m_llkbdHook;
         private KeybindingDictionary m_keybindings;
         private readonly IntPtr m_hwnd;
-        private readonly IAnimationThread m_animationThread;
+        private readonly AnimationThread m_animationThread;
         private bool m_enableRateReviewRequests;
         private DateTime m_reviewTooltipShown;
         private bool m_showContextHints;
@@ -79,7 +79,7 @@ namespace FancyWM
         private bool m_showFocusDuringAction;
         private bool m_autoCollapse;
         private bool m_notifyVirtualDesktopServiceIncompatibility;
-        private GlobalHotkey[] m_directHks = new GlobalHotkey[0];
+        private GlobalHotkey[] m_directHks = [];
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public MainWindow()
@@ -122,7 +122,7 @@ namespace FancyWM
                 .DistinctUntilChanged()
                 .Do(async x =>
                 {
-                    await Dispatcher.InvokeAsync(async () =>
+                    await Dispatcher.InvokeAsync(() =>
                     {
                         if (x.OverrideAccentColor)
                         {
@@ -143,7 +143,7 @@ namespace FancyWM
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            new StartupWindow(this, new ViewModels.SettingsViewModel(App.Current.AppState.Settings)).Show();
+                            new StartupWindow(new ViewModels.SettingsViewModel(App.Current.AppState.Settings)).Show();
                         }, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
                     }
                 });
@@ -204,8 +204,8 @@ namespace FancyWM
 
             m_llkbdHook = new LowLevelKeyboardHook();
 
-            m_subscriptions = new CompositeDisposable
-            {
+            m_subscriptions =
+            [
                 settings.Subscribe(new NotifyUnhandledObserver<Settings>()),
                 startupSettings.Subscribe(new NotifyUnhandledObserver<Settings>()),
                 activationHotkeySettings.Subscribe(new NotifyUnhandledObserver<ActivationHotkey>()),
@@ -214,7 +214,7 @@ namespace FancyWM
                 multiMonitorObservable
                     .Concat(exclusionListSettings)
                     .Subscribe(new NotifyUnhandledObserver<Unit>()),
-            };
+            ];
 
             m_notifyIcon = new TaskbarIcon
             {
@@ -291,7 +291,7 @@ namespace FancyWM
             });
         }
 
-        private async void OnLoaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
             if (m_workspace.VirtualDesktopManager.GetType().Name == "DummyVirtualDesktopManager" && Environment.OSVersion.Version.Build >= 17661 && m_notifyVirtualDesktopServiceIncompatibility)
             {
@@ -311,7 +311,7 @@ namespace FancyWM
             Dispatcher.RethrowOnDispatcher((Exception)e.ExceptionObject!);
         }
 
-        private IEnumerable<(KeyCode[] KeyA, KeyCode KeyB)> CreateSideInsensitiveHotkeyVariants(ActivationHotkey hk)
+        private static IEnumerable<(KeyCode[] KeyA, KeyCode KeyB)> CreateSideInsensitiveHotkeyVariants(ActivationHotkey hk)
         {
             KeyCode GetLeftVersion(KeyCode k)
             {
@@ -375,7 +375,7 @@ namespace FancyWM
             }
         }
 
-        private async void RebindDirectHotkeys(KeybindingDictionary keybindings)
+        private void RebindDirectHotkeys(KeybindingDictionary keybindings)
         {
             foreach (var hk in m_directHks)
             {
@@ -410,7 +410,7 @@ namespace FancyWM
             {
                 OnDirectHotkeyRegistrationFailed(failedHotkeys);
             }
-            m_directHks = newHotkeys.ToArray();
+            m_directHks = [.. newHotkeys];
         }
 
         private async void OnDirectHotkeyRegistrationFailed(IEnumerable<Keybinding> hotkeys)
@@ -487,12 +487,12 @@ namespace FancyWM
                             return;
                     }
                 }
-                else if (keys.SetEquals(new[] { KeyCode.LeftShift, KeyCode.Snapshot }))
+                else if (keys.SetEquals([KeyCode.LeftShift, KeyCode.Snapshot]))
                 {
                     throw new Exception("Program break requested!");
                 }
 
-                if (keys.Count() == 2 && keys.Contains(KeyCode.LeftAlt)
+                if (keys.Count == 2 && keys.Contains(KeyCode.LeftAlt)
                     && (keys.Contains(KeyCode.LeftShift) || keys.Contains(KeyCode.LeftCtrl) || keys.Contains(KeyCode.LeftAlt)
                     || keys.Contains(KeyCode.RightShift) || keys.Contains(KeyCode.RightCtrl) || keys.Contains(KeyCode.RightAlt)))
                 {
@@ -792,35 +792,24 @@ namespace FancyWM
             }
         }
 
-        private string? GetTilingErrorText(TilingError e)
+        private static string? GetTilingErrorText(TilingError e)
         {
-            switch (e)
+            return e switch
             {
-                case TilingError.NoValidPlacementExists:
-                    return Strings.TilingError_NoValidPlacementExists;
-                case TilingError.CausesRecursiveNesting:
-                    return Strings.TilingError_CausesRecursiveNesting;
-                case TilingError.ModifiesTopLevelPanel:
-                    return Strings.TilingError_ModifiesTopLevelPanel;
-                case TilingError.PullsBeyondTopLevelPanel:
-                    return Strings.TilingError_PullsBeyondTopLevelPanel;
-                case TilingError.MissingAdjacentWindow:
-                    return Strings.TilingError_MissingAdjacentWindow;
-                case TilingError.MissingTarget:
-                    return Strings.TilingError_MissingTarget;
-                case TilingError.TargetCannotFit:
-                    return Strings.TilingError_TargetCannotFit;
-                case TilingError.InvalidTarget:
-                    return Strings.TilingError_InvalidTarget;
-                case TilingError.NestingInStackPanel:
-                    return Strings.TilingError_NestingInStackPanel;
-                case TilingError.Failed:
-                default:
-                    return null;
-            }
+                TilingError.NoValidPlacementExists => Strings.TilingError_NoValidPlacementExists,
+                TilingError.CausesRecursiveNesting => Strings.TilingError_CausesRecursiveNesting,
+                TilingError.ModifiesTopLevelPanel => Strings.TilingError_ModifiesTopLevelPanel,
+                TilingError.PullsBeyondTopLevelPanel => Strings.TilingError_PullsBeyondTopLevelPanel,
+                TilingError.MissingAdjacentWindow => Strings.TilingError_MissingAdjacentWindow,
+                TilingError.MissingTarget => Strings.TilingError_MissingTarget,
+                TilingError.TargetCannotFit => Strings.TilingError_TargetCannotFit,
+                TilingError.InvalidTarget => Strings.TilingError_InvalidTarget,
+                TilingError.NestingInStackPanel => Strings.TilingError_NestingInStackPanel,
+                _ => null,
+            };
         }
 
-        internal void OpenSettings()
+        internal static void OpenSettings()
         {
             if (App.Current.Windows.OfType<SettingsWindow>().Any())
             {
@@ -832,7 +821,7 @@ namespace FancyWM
             }
         }
 
-        internal void OpenHelp()
+        internal static void OpenHelp()
         {
             if (App.Current.Windows.OfType<SettingsWindow>().Any())
             {
@@ -998,8 +987,8 @@ namespace FancyWM
                         Text = Strings.Messages_NothingToDo,
                     },
                     Margin = new Thickness(0, 5, 0, 5),
+                    Style = FindResource("SettingsItemStyle") as Style
                 };
-                border.Style = FindResource("SettingsItemStyle") as Style;
                 return border;
             }
         }
@@ -1184,7 +1173,7 @@ namespace FancyWM
         private async Task MoveToDesktopAsync(IVirtualDesktop desktop, IWindow window)
         {
             var formattedTitle = window.Title.Length > 15
-                ? $"{window.Title.Substring(0, 15)}..."
+                ? $"{window.Title[..15]}..."
                 : window.Title;
             if (desktop.HasWindow(window))
             {
@@ -1257,7 +1246,7 @@ namespace FancyWM
             {
                 var desktop = desktops[desktopIndex];
                 var formattedTitle = window.Title.Length > 15
-                    ? $"{window.Title.Substring(0, 15)}..."
+                    ? $"{window.Title[..15]}..."
                     : window.Title;
                 if (desktop.HasWindow(window))
                 {
@@ -1302,7 +1291,7 @@ namespace FancyWM
         private async Task MoveToDisplayAsync(IDisplay display, IWindow window)
         {
             var formattedTitle = window.Title.Length > 15
-                ? $"{window.Title.Substring(0, 15)}..."
+                ? $"{window.Title[..15]}..."
                 : window.Title;
             if (display.Bounds.Contains(window.Position.Center))
             {
@@ -1403,7 +1392,7 @@ namespace FancyWM
 
         private void OnSponsorClick(object? sender, RoutedEventArgs e)
         {
-            App.Current.Sponsor();
+            App.Sponsor();
         }
 
         private void OnAboutClick(object? sender, RoutedEventArgs e)

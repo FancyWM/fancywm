@@ -66,20 +66,20 @@ namespace FancyWM
             }
         }
 
-        public ITilingServiceIntent PendingIntent
+        public ITilingServiceIntent? PendingIntent
         {
             get => GetActiveTilingService().PendingIntent;
             set => GetActiveTilingService().PendingIntent = value;
         }
 
-        private readonly Dictionary<IDisplay, TilingService> m_tilingServices = new();
-        private readonly CompositeDisposable m_subscriptions = new();
+        private readonly Dictionary<IDisplay, TilingService> m_tilingServices = [];
+        private readonly CompositeDisposable m_subscriptions = [];
         private readonly Subject<Unit> m_focusedWindowLocationChanges = new();
         private readonly ILogger m_logger;
         private IDisplay m_activeDisplay;
         private bool m_showFocus;
         private bool m_autoCollapse;
-        private IReadOnlyCollection<IWindowMatcher> m_exclusionMatchers = new IWindowMatcher[0];
+        private IReadOnlyCollection<IWindowMatcher> m_exclusionMatchers = [];
         private readonly IObservable<ITilingServiceSettings> m_settings;
         private readonly object m_syncRoot = new();
 
@@ -247,7 +247,7 @@ namespace FancyWM
             }
         }
 
-        private ITilingService GetActiveTilingService()
+        private TilingService GetActiveTilingService()
         {
             lock (m_syncRoot)
             {
@@ -255,7 +255,7 @@ namespace FancyWM
             }
         }
 
-        private ITilingService GetPrimaryTilingService()
+        private TilingService GetPrimaryTilingService()
         {
             lock (m_syncRoot)
             {
@@ -455,7 +455,7 @@ namespace FancyWM
             throw new NotSupportedException();
         }
 
-        private double SqrDistanceInDirection(Point from, Point to, TilingDirection direction)
+        private static double SqrDistanceInDirection(Point from, Point to, TilingDirection direction)
         {
             switch (direction)
             {

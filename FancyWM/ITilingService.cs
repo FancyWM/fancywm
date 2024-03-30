@@ -7,16 +7,10 @@ using System.Collections.Generic;
 
 namespace FancyWM
 {
-    internal class TilingFailedEventArgs : EventArgs
+    internal class TilingFailedEventArgs(TilingError reason, IWindow? window = null) : EventArgs
     {
-        public TilingError FailReason { get; }
-        public IWindow? FailSource { get; }
-
-        public TilingFailedEventArgs(TilingError reason, IWindow? window = null)
-        {
-            FailReason = reason;
-            FailSource = window;
-        }
+        public TilingError FailReason { get; } = reason;
+        public IWindow? FailSource { get; } = window;
     }
 
     internal interface ITilingService : IDisposable
@@ -35,7 +29,7 @@ namespace FancyWM
 
         bool AutoCollapse { get; set; }
 
-        ITilingServiceIntent PendingIntent { get; set; }
+        ITilingServiceIntent? PendingIntent { get; set; }
 
         bool CanSplit(bool vertical);
         void Split(bool vertical);
@@ -69,7 +63,7 @@ namespace FancyWM
         void Cancel();
     }
 
-    public class GroupWithIntent : ITilingServiceIntent
+    public class GroupWithIntent(GroupWithIntent.GroupType type, WindowNode source, Action complete, Action cancel) : ITilingServiceIntent
     {
         public enum GroupType
         {
@@ -78,21 +72,13 @@ namespace FancyWM
             StackPanel,
         }
 
-        public GroupType Type { get; }
+        public GroupType Type { get; } = type;
 
-        public WindowNode Source { get; }
+        public WindowNode Source { get; } = source ?? throw new ArgumentNullException(nameof(source));
 
-        private Action? m_completeIntent;
+        private Action? m_completeIntent = complete;
 
-        private Action? m_cancelIntent;
-
-        public GroupWithIntent(GroupType type, WindowNode source, Action complete, Action cancel)
-        {
-            Type = type;
-            Source = source ?? throw new ArgumentNullException(nameof(source));
-            m_completeIntent = complete;
-            m_cancelIntent = cancel;
-        }
+        private Action? m_cancelIntent = cancel;
 
         /// <summary>
         /// Releases the source from its panel and unregisters it.

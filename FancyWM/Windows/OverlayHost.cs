@@ -35,7 +35,6 @@ namespace FancyWM.Windows
             private readonly Border m_contentContainer;
             private readonly IDisposable m_subscription;
             private int m_panelFontSize;
-            private HWND m_hwnd;
 
             public bool AllowClose { get; set; } = false;
 
@@ -164,7 +163,6 @@ namespace FancyWM.Windows
         private readonly IntPtr m_hwnd;
         private readonly IntPtr m_nonHitTestableHwnd;
         private bool m_isShown;
-        private bool m_isClosed;
 
         public OverlayHost(IDisplay display)
         {
@@ -224,7 +222,6 @@ namespace FancyWM.Windows
         public void Close()
         {
             m_isShown = false;
-            m_isClosed = true;
             AnchorSource = null;
             m_display.Workspace.CursorLocationChanged -= OnCursorLocationChanged;
             Dispatcher.Invoke(() =>
@@ -299,7 +296,7 @@ namespace FancyWM.Windows
             }
         }
 
-        private void EnableWindow(IntPtr hwnd)
+        private static void EnableWindow(IntPtr hwnd)
         {
             var oldValue = PInvoke.GetWindowLong(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE);
             var newValue = oldValue & ~(int)WINDOWS_STYLE.WS_DISABLED;
@@ -309,7 +306,7 @@ namespace FancyWM.Windows
             }
         }
 
-        private void DisableWindow(IntPtr hwnd)
+        private static void DisableWindow(IntPtr hwnd)
         {
             var oldValue = PInvoke.GetWindowLong(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE);
             var newValue = oldValue | (int)WINDOWS_STYLE.WS_DISABLED;

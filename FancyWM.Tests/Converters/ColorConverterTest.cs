@@ -106,17 +106,13 @@ namespace FancyWM.Tests.Converters
 
         private static string WriteString(Color color)
         {
-            using (MemoryStream stream = new())
-            {
-                var writer = new Utf8JsonWriter(stream);
-                new ColorConverter().Write(writer, color, new JsonSerializerOptions());
-                writer.Flush();
-                stream.Position = 0;
-                using (StreamReader reader = new(stream))
-                {
-                    return reader.ReadToEnd().Trim('"');
-                }
-            }
+            using MemoryStream stream = new();
+            var writer = new Utf8JsonWriter(stream);
+            new ColorConverter().Write(writer, color, new JsonSerializerOptions());
+            writer.Flush();
+            stream.Position = 0;
+            using StreamReader reader = new(stream);
+            return reader.ReadToEnd().Trim('"');
         }
     }
 }

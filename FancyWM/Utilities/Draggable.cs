@@ -59,7 +59,7 @@ namespace FancyWM.Utilities
 
         private static void OnIsDraggableChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is FrameworkElement element))
+            if (d is not FrameworkElement element)
             {
                 throw new ArgumentException("IsDraggable is only valid on FrameworkElements!");
             }
@@ -90,7 +90,7 @@ namespace FancyWM.Utilities
             element.LostMouseCapture -= OnElementMouseCaptureLost;
         }
 
-        private static readonly ConditionalWeakTable<UIElement, DragData> s_dragData = new ConditionalWeakTable<UIElement, DragData>();
+        private static readonly ConditionalWeakTable<UIElement, DragData> s_dragData = [];
 
         private static void BeginDrag(FrameworkElement element, Point mousePosition)
         {

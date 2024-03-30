@@ -28,18 +28,11 @@ namespace FancyWM
             Resizing,
         }
 
-        private class NodeLocation
+        private class NodeLocation(TilingNode node)
         {
-            public PanelNode Parent;
-            public int Index;
-            public Rectangle ComputedRectangle;
-
-            public NodeLocation(TilingNode node)
-            {
-                Parent = node.Parent ?? throw new ArgumentException(nameof(node));
-                Index = node.Parent.IndexOf(node);
-                ComputedRectangle = node.ComputedRectangle;
-            }
+            public PanelNode Parent = node.Parent ?? throw new ArgumentException(nameof(node));
+            public int Index = node.Parent.IndexOf(node);
+            public Rectangle ComputedRectangle = node.ComputedRectangle;
         }
 
         public event EventHandler<TilingFailedEventArgs>? PlacementFailed;
@@ -104,7 +97,7 @@ namespace FancyWM
             get => m_exclusionMatchers;
             set
             {
-                m_exclusionMatchers = value.ToArray();
+                m_exclusionMatchers = [.. value];
 
                 lock (m_windowSet)
                 {
@@ -144,17 +137,17 @@ namespace FancyWM
         private readonly Dispatcher m_dispatcher;
         private readonly IWorkspace m_workspace;
         private readonly ILogger m_logger = App.Current.Logger;
-        private IReadOnlyCollection<IWindowMatcher> m_exclusionMatchers = Array.Empty<IWindowMatcher>();
+        private IReadOnlyCollection<IWindowMatcher> m_exclusionMatchers = [];
 
         private readonly TilingOverlayRenderer m_gui;
         private readonly TilingWorkspace m_backend;
         private readonly IDisplay m_display;
-        private readonly ISet<IWindow> m_windowSet = new HashSet<IWindow>();
-        private readonly ISet<IWindow> m_floatingSet = new HashSet<IWindow>();
-        private readonly ISet<IWindow> m_ignoreRepositionSet = new HashSet<IWindow>();
-        private IDictionary<IWindow, NodeLocation> m_savedLocations = new Dictionary<IWindow, NodeLocation>();
+        private readonly HashSet<IWindow> m_windowSet = [];
+        private readonly HashSet<IWindow> m_floatingSet = [];
+        private readonly HashSet<IWindow> m_ignoreRepositionSet = [];
+        private readonly Dictionary<IWindow, NodeLocation> m_savedLocations = [];
 
-        private readonly CompositeDisposable m_subscriptions = new();
+        private readonly CompositeDisposable m_subscriptions = [];
         private readonly IAnimationThread m_animationThread;
         private int m_panelHeight = 20;
         private int m_windowPadding = 2;
@@ -164,7 +157,7 @@ namespace FancyWM
         private bool m_dirty = true;
         private UserInteraction m_currentInteraction = UserInteraction.None;
         private ITilingServiceIntent? m_pendingIntent;
-        private Counter m_frozen = new();
+        private readonly Counter m_frozen = new();
 
         public TilingService(IWorkspace workspace, IDisplay display, IAnimationThread animationThread, IObservable<ITilingServiceSettings> settings, bool autoRegisterWindows)
         {
@@ -277,14 +270,8 @@ namespace FancyWM
         {
             lock (m_backend)
             {
-                var focusedNode = m_backend.GetFocus(m_workspace.VirtualDesktopManager.CurrentDesktop);
-                if (focusedNode == null)
-                    throw new TilingFailedException(TilingError.MissingTarget);
-
-                WindowNode? adjacentWindow = focusedNode.GetAdjacentWindow(direction);
-                if (adjacentWindow == null)
-                    throw new TilingFailedException(TilingError.MissingAdjacentWindow);
-
+                var focusedNode = m_backend.GetFocus(m_workspace.VirtualDesktopManager.CurrentDesktop) ?? throw new TilingFailedException(TilingError.MissingTarget);
+                WindowNode? adjacentWindow = focusedNode.GetAdjacentWindow(direction) ?? throw new TilingFailedException(TilingError.MissingAdjacentWindow);
                 var adjancentWindowIndex = adjacentWindow.Parent!.IndexOf(adjacentWindow);
 
                 if (adjacentWindow.Parent == focusedNode.Parent)
@@ -328,7 +315,7 @@ namespace FancyWM
             List<IWindow> windows;
             lock (m_windowSet)
             {
-                windows = m_windowSet.ToList();
+                windows = [.. m_windowSet];
             }
 
             bool anyChanges = false;
@@ -345,7 +332,7 @@ namespace FancyWM
                 InvalidateLayout();
             }
 
-            List<IWindow> movedWindows = new();
+            List<IWindow> movedWindows = [];
 
             lock (m_backend)
             {
@@ -371,7 +358,7 @@ namespace FancyWM
             }
         }
 
-        private bool CanSplit(bool vertical, TilingNode node)
+        private static bool CanSplit(TilingNode node)
         {
             return !node.PathToRoot.OfType<StackPanelNode>().Any();
         }
@@ -381,7 +368,7 @@ namespace FancyWM
             lock (m_backend)
             {
                 var focusedNode = m_backend.GetFocus(m_workspace.VirtualDesktopManager.CurrentDesktop);
-                return focusedNode != null && CanSplit(vertical, focusedNode);
+                return focusedNode != null && CanSplit(focusedNode);
             }
         }
 
@@ -389,10 +376,7 @@ namespace FancyWM
         {
             lock (m_backend)
             {
-                var focusedNode = m_backend.GetFocus(m_workspace.VirtualDesktopManager.CurrentDesktop);
-                if (focusedNode == null)
-                    throw new TilingFailedException(TilingError.MissingTarget);
-
+                var focusedNode = m_backend.GetFocus(m_workspace.VirtualDesktopManager.CurrentDesktop) ?? throw new TilingFailedException(TilingError.MissingTarget);
                 WrapInSplitPanel(focusedNode, vertical);
                 m_backend.SetFocus(focusedNode);
             }
@@ -406,14 +390,11 @@ namespace FancyWM
 
         public void Float()
         {
-            var window = m_workspace.FocusedWindow;
-            if (window == null)
-                throw new TilingFailedException(TilingError.MissingTarget);
-
+            var window = m_workspace.FocusedWindow ?? throw new TilingFailedException(TilingError.MissingTarget);
             ToggleFloat(window);
         }
 
-        private bool CanStack(TilingNode node)
+        private static bool CanStack(TilingNode node)
         {
             return !node.PathToRoot.OfType<StackPanelNode>().Any();
         }
@@ -452,10 +433,7 @@ namespace FancyWM
         {
             lock (m_backend)
             {
-                var focusedNode = m_backend.GetFocus(m_workspace.VirtualDesktopManager.CurrentDesktop);
-                if (focusedNode == null)
-                    throw new TilingFailedException(TilingError.MissingTarget);
-
+                var focusedNode = m_backend.GetFocus(m_workspace.VirtualDesktopManager.CurrentDesktop) ?? throw new TilingFailedException(TilingError.MissingTarget);
                 MoveToParentPanel(focusedNode);
                 m_backend.SetFocus(focusedNode);
             }
@@ -556,7 +534,6 @@ namespace FancyWM
                         case PanelOrientation.Horizontal:
                             newSize = oldSize.Width + horizontalDelta / 2;
                             return focusedNode.Parent!.ComputeFreeSize().X - focusedNode.MinSize.X + newSize > 0;
-                            break;
                         case PanelOrientation.Vertical:
                             newSize = oldSize.Height + verticalDelta / 2;
                             return focusedNode.Parent!.ComputeFreeSize().Y - focusedNode.MinSize.Y + newSize > 0;
@@ -579,25 +556,15 @@ namespace FancyWM
 
                 var window = focusedWindow.WindowReference;
                 var oldSize = window.Position;
-                var display = m_workspace.DisplayManager.Displays.FirstOrDefault(x => x.WorkArea.Contains(window.Position.Center));
-                if (display == null)
-                    throw new TilingFailedException(TilingError.Failed);
-
+                var display = m_workspace.DisplayManager.Displays.FirstOrDefault(x => x.WorkArea.Contains(window.Position.Center)) ?? throw new TilingFailedException(TilingError.Failed);
                 var verticalDelta = (int)(display.WorkArea.Height * displayPercentage);
                 var horizontalDelta = (int)(display.WorkArea.Width * displayPercentage);
-
-                Rectangle newSize;
-                switch (orientation)
+                var newSize = orientation switch
                 {
-                    case PanelOrientation.Horizontal:
-                        newSize = new Rectangle(oldSize.Left - horizontalDelta / 2, oldSize.Top, oldSize.Right + horizontalDelta / 2, oldSize.Bottom);
-                        break;
-                    case PanelOrientation.Vertical:
-                        newSize = new Rectangle(oldSize.Left, oldSize.Top - verticalDelta / 2, oldSize.Right, oldSize.Bottom + verticalDelta / 2);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                    PanelOrientation.Horizontal => new Rectangle(oldSize.Left - horizontalDelta / 2, oldSize.Top, oldSize.Right + horizontalDelta / 2, oldSize.Bottom),
+                    PanelOrientation.Vertical => new Rectangle(oldSize.Left, oldSize.Top - verticalDelta / 2, oldSize.Right, oldSize.Bottom + verticalDelta / 2),
+                    _ => throw new NotImplementedException(),
+                };
                 m_backend.ResizeWindow(window, newSize, oldSize);
             }
         }
@@ -621,7 +588,7 @@ namespace FancyWM
 
         public IWindow? FindClosest(Point center)
         {
-            double Distance(Point point1, Point point2)
+            static double Distance(Point point1, Point point2)
             {
                 return Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2);
             }

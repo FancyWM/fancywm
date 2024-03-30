@@ -7,16 +7,10 @@ using WinMan;
 
 namespace FancyWM.Utilities
 {
-    internal class TransitionTargetGroup
+    internal class TransitionTargetGroup(IAnimationThread animationThread, IEnumerable<TransitionTarget> targets)
     {
-        private readonly IAnimationThread m_animationThread;
-        private readonly List<TransitionTarget> m_targets;
-
-        public TransitionTargetGroup(IAnimationThread animationThread, IEnumerable<TransitionTarget> targets)
-        {
-            m_animationThread = animationThread;
-            m_targets = targets.ToList();
-        }
+        private readonly IAnimationThread m_animationThread = animationThread;
+        private readonly List<TransitionTarget> m_targets = targets.ToList();
 
         public async Task PerformSmoothTransitionAsync(TimeSpan duration)
         {
@@ -83,7 +77,7 @@ namespace FancyWM.Utilities
             await Tasks.WhenAllIgnoreCancelled(tasks);
         }
 
-        public void PerformTransition(List<TransitionTarget> targets)
+        public static void PerformTransition(List<TransitionTarget> targets)
         {
             foreach (var target in targets)
             {

@@ -11,25 +11,20 @@ using System.Windows.Threading;
 namespace FancyWM.ViewModels
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    sealed class DerivedPropertyAttribute : Attribute
+    sealed class DerivedPropertyAttribute(params string[] dependencies) : Attribute
     {
-        public string[] Dependencies { get; }
-
-        public DerivedPropertyAttribute(params string[] dependencies)
-        {
-            Dependencies = dependencies;
-        }
+        public string[] Dependencies { get; } = dependencies;
     }
 
     class ViewModelInfo
     {
         private static readonly ConcurrentDictionary<Type, ViewModelInfo> s_instances = new();
 
-        private static readonly List<PropertyInfo> s_emptyPropertyList = new(0);
+        private static readonly List<PropertyInfo> s_emptyPropertyList = [];
 
-        private readonly Dictionary<string, PropertyInfo> m_properties = new();
+        private readonly Dictionary<string, PropertyInfo> m_properties = [];
 
-        private readonly Dictionary<PropertyInfo, List<PropertyInfo>> m_dependedBy = new();
+        private readonly Dictionary<PropertyInfo, List<PropertyInfo>> m_dependedBy = [];
 
         public static ViewModelInfo Get(Type type)
         {
@@ -39,7 +34,7 @@ namespace FancyWM.ViewModels
 
         private ViewModelInfo(Type type)
         {
-            m_dependedBy = new Dictionary<PropertyInfo, List<PropertyInfo>>();
+            m_dependedBy = [];
 
             var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var prop in props)
@@ -64,7 +59,7 @@ namespace FancyWM.ViewModels
                     }
                     else
                     {
-                        m_dependedBy[dep] = new() { dep };
+                        m_dependedBy[dep] = [dep];
                     }
                 }
             }
@@ -88,7 +83,7 @@ namespace FancyWM.ViewModels
 
         public Dispatcher Dispatcher { get; }
 
-        private ViewModelInfo m_info;
+        private readonly ViewModelInfo m_info;
 
         public ViewModelBase()
         {

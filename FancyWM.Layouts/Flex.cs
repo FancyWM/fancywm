@@ -22,26 +22,15 @@ namespace FancyWM.Layouts
         public UnsatisfiableFlexConstraintsException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        protected UnsatisfiableFlexConstraintsException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 
-    public struct FlexConstraints
+    public struct FlexConstraints(double width, double minWidth, double maxWidth)
     {
-        public double Width;
-        public double MinWidth;
-        public double MaxWidth;
+        public double Width = width;
+        public double MinWidth = minWidth;
+        public double MaxWidth = maxWidth;
 
-        public FlexConstraints(double width, double minWidth, double maxWidth)
-        {
-            Width = width;
-            MinWidth = minWidth;
-            MaxWidth = maxWidth;
-        }
-
-        public override string ToString()
+        public override readonly string ToString()
         {
             return $"FlexItem {{ {MinWidth} <- {Width} -> {MaxWidth} }}";
         }
@@ -67,13 +56,13 @@ namespace FancyWM.Layouts
 
         public Flex()
         {
-            m_items = new();
+            m_items = [];
         }
 
         public Flex(Flex constraints)
         {
             ContainerWidth = constraints.ContainerWidth;
-            m_items = constraints.m_items.ToList();
+            m_items = [.. constraints.m_items];
         }
 
         public void InsertItem(int index, double minWidth, double maxWidth)

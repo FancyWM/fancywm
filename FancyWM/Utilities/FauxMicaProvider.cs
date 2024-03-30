@@ -157,7 +157,7 @@ namespace FancyWM.Utilities
             return hwndDefView;
         }
 
-        private System.Drawing.Color TransformColor(System.Drawing.Color color)
+        private static System.Drawing.Color TransformColor(System.Drawing.Color color)
         {
             var h = color.GetHue();
             var l = color.GetBrightness();
@@ -166,9 +166,9 @@ namespace FancyWM.Utilities
 
         public static System.Drawing.Color GDIColorFromHSL(float h, float s, float l)
         {
-            byte r = 0;
-            byte g = 0;
-            byte b = 0;
+            byte r;
+            byte g;
+            byte b;
 
             if (s == 0)
             {
@@ -210,7 +210,7 @@ namespace FancyWM.Utilities
             return v1;
         }
 
-        private System.Drawing.Color AverageColor(IEnumerable<System.Drawing.Color> colors)
+        private static System.Drawing.Color AverageColor(IEnumerable<System.Drawing.Color> colors)
         {
             int r = 0;
             int g = 0;
@@ -226,7 +226,7 @@ namespace FancyWM.Utilities
             return System.Drawing.Color.FromArgb(r / count, g / count, b / count);
         }
 
-        private Color ToMediaColor(System.Drawing.Color color)
+        private static Color ToMediaColor(System.Drawing.Color color)
         {
             return new Color
             {

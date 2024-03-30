@@ -28,45 +28,45 @@ namespace FancyWM.Tests.Utilities
         [TestMethod]
         public void TestChangesAdd()
         {
-            var (addList, removeList, persistList) = Collections.Changes(new[] { 1, 2, 3 }, new[] { 1, 2, 3, 4 });
-            Assert.IsTrue(addList.SequenceEqual(new[] { 4 }));
+            var (addList, removeList, persistList) = Collections.Changes([1, 2, 3], [1, 2, 3, 4]);
+            Assert.IsTrue(addList.SequenceEqual([4]));
             Assert.IsTrue(!removeList.Any());
-            Assert.IsTrue(persistList.SequenceEqual(new[] { 1, 2, 3 }));
+            Assert.IsTrue(persistList.SequenceEqual([1, 2, 3]));
         }
 
         [TestMethod]
         public void TestChangesRemove()
         {
-            var (addList, removeList, persistList) = Collections.Changes(new[] { 1, 2, 3 }, new[] { 1, 2 });
+            var (addList, removeList, persistList) = Collections.Changes([1, 2, 3], [1, 2]);
             Assert.IsTrue(!addList.Any());
-            Assert.IsTrue(removeList.SequenceEqual(new[] { 3 }));
-            Assert.IsTrue(persistList.SequenceEqual(new[] { 1, 2 }));
+            Assert.IsTrue(removeList.SequenceEqual([3]));
+            Assert.IsTrue(persistList.SequenceEqual([1, 2]));
         }
 
         [TestMethod]
         public void TestChangesAddRemove()
         {
-            var (addList, removeList, persistList) = Collections.Changes(new[] { 1, 2, 3, 4 }, new[] { 5, 6, 7, 1 });
-            Assert.IsTrue(addList.SequenceEqual(new[] { 5, 6, 7 }));
-            Assert.IsTrue(removeList.SequenceEqual(new[] { 2, 3, 4 }));
-            Assert.IsTrue(persistList.SequenceEqual(new[] { 1 }));
+            var (addList, removeList, persistList) = Collections.Changes([1, 2, 3, 4], [5, 6, 7, 1]);
+            Assert.IsTrue(addList.SequenceEqual([5, 6, 7]));
+            Assert.IsTrue(removeList.SequenceEqual([2, 3, 4]));
+            Assert.IsTrue(persistList.SequenceEqual([1]));
         }
 
         [TestMethod]
         public void TestChangesComparerAddRemove()
         {
-            var (addList, removeList, persistList) = Collections.Changes(new[] { 1, 2, 3, 4 }, new[] { 5, 6, 7, 1 }, EqualityComparer<int>.Default);
-            Assert.IsTrue(addList.SequenceEqual(new[] { 5, 6, 7 }));
-            Assert.IsTrue(removeList.SequenceEqual(new[] { 2, 3, 4 }));
-            Assert.IsTrue(persistList.SequenceEqual(new[] { 1 }));
+            var (addList, removeList, persistList) = Collections.Changes([1, 2, 3, 4], [5, 6, 7, 1], EqualityComparer<int>.Default);
+            Assert.IsTrue(addList.SequenceEqual([5, 6, 7]));
+            Assert.IsTrue(removeList.SequenceEqual([2, 3, 4]));
+            Assert.IsTrue(persistList.SequenceEqual([1]));
         }
 
         [TestMethod]
         public void TestToSequenceComparer()
         {
             var comparer = EqualityComparer<int>.Default.ToSequenceComparer();
-            Assert.IsTrue(comparer.Equals(new[] { 1, 2, 3 }, new[] { 1, 2, 3 }));
-            Assert.IsFalse(comparer.Equals(new[] { 1 }, new[] { 1, 2, 3 }));
+            Assert.IsTrue(comparer.Equals([1, 2, 3], [1, 2, 3]));
+            Assert.IsFalse(comparer.Equals([1], [1, 2, 3]));
         }
     }
 }

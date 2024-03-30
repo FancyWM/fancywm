@@ -23,7 +23,7 @@ namespace FancyWM.Utilities
 
     internal static class AnimationJob
     {
-        private class DelegateAnimationJob : IAnimationJob
+        private class DelegateAnimationJob(Action<IAnimationJob, double> animate, TimeSpan duration) : IAnimationJob
         {
             public bool IsCancelled => m_isCancelled;
 
@@ -31,16 +31,10 @@ namespace FancyWM.Utilities
 
             public Task Task => m_tcs.Task;
 
-            private readonly Action<IAnimationJob, double> m_animate;
-            private readonly TimeSpan m_duration;
+            private readonly Action<IAnimationJob, double> m_animate = animate;
+            private readonly TimeSpan m_duration = duration;
             private bool m_isCancelled;
             private readonly TaskCompletionSource<object?> m_tcs = new();
-
-            public DelegateAnimationJob(Action<IAnimationJob, double> animate, TimeSpan duration)
-            {
-                m_animate = animate;
-                m_duration = duration;
-            }
 
             public void Cancel()
             {
@@ -76,23 +70,16 @@ namespace FancyWM.Utilities
 
     internal class AnimationThread : IAnimationThread
     {
-        private class WorkItem
+        private class WorkItem(IAnimationJob job, TimeSpan startTime, TimeSpan endTime)
         {
-            public TimeSpan StartTime { get; set; }
-            public TimeSpan EndTime { get; set; }
-            public IAnimationJob Job { get; set; }
-
-            public WorkItem(IAnimationJob job, TimeSpan startTime, TimeSpan endTime)
-            {
-                Job = job ?? throw new ArgumentNullException(nameof(job));
-                StartTime = startTime;
-                EndTime = endTime;
-            }
+            public TimeSpan StartTime { get; set; } = startTime;
+            public TimeSpan EndTime { get; set; } = endTime;
+            public IAnimationJob Job { get; set; } = job ?? throw new ArgumentNullException(nameof(job));
         }
 
         private readonly Thread m_thread;
         private readonly TimeSpan m_targetFrameTime;
-        private readonly BlockingCollection<IAnimationJob> m_queue = new();
+        private readonly BlockingCollection<IAnimationJob> m_queue = [];
         private readonly Stopwatch m_sw = new();
 
         public AnimationThread(int targetFrameRate)
@@ -113,7 +100,6 @@ namespace FancyWM.Utilities
         private void ThreadStart(object? obj)
         {
             m_sw.Restart();
-            int sleepAmount = (int)(m_targetFrameTime / 2.0).TotalMilliseconds;
 
             var jobs = new List<WorkItem>();
             var completedJobs = new List<WorkItem>();

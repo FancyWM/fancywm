@@ -17,8 +17,8 @@ namespace FancyWM.Utilities
 {
     internal static class WindowExtensions
     {
-        private static readonly ConditionalWeakTable<IWindow, string> m_processNames = new ConditionalWeakTable<IWindow, string>();
-        private static readonly ConditionalWeakTable<IWindow, BitmapSource?> m_icons = new ConditionalWeakTable<IWindow, BitmapSource?>();
+        private static readonly ConditionalWeakTable<IWindow, string> m_processNames = [];
+        private static readonly ConditionalWeakTable<IWindow, BitmapSource?> m_icons = [];
 
         [DllImport("User32", EntryPoint = "GetClassLongW", SetLastError = true)]
         [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
@@ -85,12 +85,10 @@ namespace FancyWM.Utilities
 
             try
             {
-                using (Bitmap bmp = Icon.FromHandle(hIcon).ToBitmap())
-                {
-                    return Imaging.CreateBitmapSourceFromHBitmap(
-                       bmp.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty,
-                       BitmapSizeOptions.FromEmptyOptions());
-                }
+                using Bitmap bmp = Icon.FromHandle(hIcon).ToBitmap();
+                return Imaging.CreateBitmapSourceFromHBitmap(
+                   bmp.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty,
+                   BitmapSizeOptions.FromEmptyOptions());
             }
             finally
             {
@@ -98,7 +96,7 @@ namespace FancyWM.Utilities
             }
         }
 
-        private static BitmapSource? TryLoadModernAppShellIcon(IWindow window)
+        private static BitmapImage? TryLoadModernAppShellIcon(IWindow window)
         {
             HWND hwndChild = PInvoke.FindWindowEx(new(window.Handle), new HWND(), "Windows.UI.Core.CoreWindow", null);
             for (int i = 0; i < 3; i++)
@@ -151,20 +149,17 @@ namespace FancyWM.Utilities
 
         private static BitmapSource LoadShellIcon(string fileName)
         {
-            SHFILEINFOW shinfo = new SHFILEINFOW();
-            IntPtr hImg;
+            SHFILEINFOW shinfo = new();
             unsafe
             {
-                hImg = (IntPtr)(void*)PInvoke.SHGetFileInfo(fileName, 0, &shinfo, (uint)Marshal.SizeOf(shinfo), SHGFI_FLAGS.SHGFI_ICON | SHGFI_FLAGS.SHGFI_LARGEICON);
+                _ = (IntPtr)(void*)PInvoke.SHGetFileInfo(fileName, 0, &shinfo, (uint)Marshal.SizeOf(shinfo), SHGFI_FLAGS.SHGFI_ICON | SHGFI_FLAGS.SHGFI_LARGEICON);
             }
             try
             {
-                using (Bitmap bmp = Icon.FromHandle(shinfo.hIcon).ToBitmap())
-                {
-                    return Imaging.CreateBitmapSourceFromHBitmap(
-                       bmp.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty,
-                       BitmapSizeOptions.FromEmptyOptions());
-                }
+                using Bitmap bmp = Icon.FromHandle(shinfo.hIcon).ToBitmap();
+                return Imaging.CreateBitmapSourceFromHBitmap(
+                   bmp.GetHbitmap(), IntPtr.Zero, System.Windows.Int32Rect.Empty,
+                   BitmapSizeOptions.FromEmptyOptions());
             }
             finally
             {
