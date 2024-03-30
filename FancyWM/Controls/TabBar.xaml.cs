@@ -12,14 +12,14 @@ namespace FancyWM.Controls
     public partial class TabBar : UserControl
     {
         public static DependencyProperty ItemsSourceProperty = DependencyProperty.Register(
-            nameof(ItemsSource), 
-            typeof(ObservableCollection<TilingNodeViewModel>), 
+            nameof(ItemsSource),
+            typeof(ObservableCollection<TilingNodeViewModel>),
             typeof(TabBar));
 
         public ObservableCollection<TilingNodeViewModel> ItemsSource
         {
-            get => (ObservableCollection<TilingNodeViewModel>)GetValue(ItemsSourceProperty); 
-            set => SetValue(ItemsSourceProperty, value); 
+            get => (ObservableCollection<TilingNodeViewModel>)GetValue(ItemsSourceProperty);
+            set => SetValue(ItemsSourceProperty, value);
         }
 
         public static DependencyProperty TabMinWidthProperty = DependencyProperty.Register(

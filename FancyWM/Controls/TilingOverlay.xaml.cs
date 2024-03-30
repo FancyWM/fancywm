@@ -52,7 +52,7 @@ namespace FancyWM.Controls
                 EasingMode = EasingMode.EaseOut,
                 //Bounciness = 2
             };
-            
+
             if (e.PropertyName == nameof(TilingOverlayViewModel.OverlayVisibility))
             {
                 BeginAnimation(OpacityProperty, null);

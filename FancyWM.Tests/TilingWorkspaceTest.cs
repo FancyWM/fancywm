@@ -190,7 +190,7 @@ namespace FancyWM.Tests
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
             workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
-            
+
             var explorer1 = m_windowFactory.CreateExplorerWindow();
             var node1 = workspace.RegisterWindow(explorer1);
 

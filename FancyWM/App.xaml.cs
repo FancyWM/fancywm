@@ -34,7 +34,7 @@ namespace FancyWM
         internal AppState AppState => m_appState.Value;
 
         internal IServiceProvider Services { get; }
-        
+
         internal ILogger Logger { get; }
 
         internal string? PackageFamilyName

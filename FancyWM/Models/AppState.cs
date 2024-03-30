@@ -10,11 +10,11 @@ namespace FancyWM.Models
 
         public AppState()
         {
-            Settings = new ObservableJsonEntity<Settings>(Path.GetFullPath("settings.json"), 
+            Settings = new ObservableJsonEntity<Settings>(Path.GetFullPath("settings.json"),
                 () => new Settings
                 {
                     AutoCollapsePanels = true,
-                }, 
+                },
                 new JsonSerializerOptions
                 {
                     AllowTrailingCommas = true,

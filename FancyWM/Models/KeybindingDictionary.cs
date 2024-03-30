@@ -31,6 +31,11 @@ namespace FancyWM.Models
         {
             return Equals(obj as Keybinding);
         }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Keys, IsDirectMode);
+        }
     }
 
     public class KeybindingDictionary : Dictionary<BindableAction, Keybinding?>

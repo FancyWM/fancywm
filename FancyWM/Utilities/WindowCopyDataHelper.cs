@@ -8,7 +8,7 @@ namespace FancyWM.Utilities
 {
     internal class WindowCopyDataHelper
     {
-        
+
         internal static byte[] Receive(IntPtr lParam)
         {
             unsafe

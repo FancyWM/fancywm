@@ -73,7 +73,7 @@ namespace FancyWM.Utilities
                 {
                     Pattern = m_pressedKeys.ToHashSet();
                     m_pressedKeys.Clear();
-                    Dispatcher.BeginInvoke(new Action(() => 
+                    Dispatcher.BeginInvoke(new Action(() =>
                     {
                         PatternChanged?.Invoke(this, new KeyPatternChangedEventArgs(Pattern));
                     }));

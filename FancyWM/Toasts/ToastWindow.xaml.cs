@@ -37,7 +37,7 @@ namespace FancyWM.Toasts
         public ToastWindow(IWorkspace workspace)
         {
             m_workspace = workspace;
-            
+
             InitializeComponent();
             DataContext = this;
 

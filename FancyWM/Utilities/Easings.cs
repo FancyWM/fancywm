@@ -34,7 +34,7 @@ namespace FancyWM.Utilities
             ? (1 - Math.Sqrt(1 - Math.Pow(2 * x, 2))) / 2
             : (Math.Sqrt(1 - Math.Pow(-2 * x + 2, 2)) + 1) / 2);
 
-        public static IEasingFunction EaseOutBouce => Create(x => 
+        public static IEasingFunction EaseOutBouce => Create(x =>
         {
             var n1 = 7.5625;
             var d1 = 2.75;
@@ -62,7 +62,7 @@ namespace FancyWM.Utilities
     {
         public double P0 { get; }
         public double P1 { get; }
-        public double P2 { get; } 
+        public double P2 { get; }
         public double P3 { get; }
 
         public CubicBezierCurve(double p0, double p1, double p2, double p3)

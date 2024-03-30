@@ -439,7 +439,7 @@ namespace FancyWM
         private Rectangle GetOptimalRestoredSize(IWindow window)
         {
             var screenSize = m_display.WorkArea.Size;
-            var minSize = window.MinSize ?? new Point(0,0);
+            var minSize = window.MinSize ?? new Point(0, 0);
             var maxSize = window.MaxSize ?? new Point(screenSize.X, screenSize.Y);
             var pos = window.Position;
 
@@ -538,8 +538,8 @@ namespace FancyWM
                 {
                     var node = m_backend.NodeAtPoint(m_workspace.VirtualDesktopManager.CurrentDesktop, cursorPosition);
                     if (node is not WindowNode targetNode)
-                        {
-                            intent.Cancel();
+                    {
+                        intent.Cancel();
                         return;
                     }
                     if (targetNode.WindowReference.Equals(intent.Source.WindowReference))

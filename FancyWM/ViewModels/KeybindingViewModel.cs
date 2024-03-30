@@ -65,7 +65,7 @@ namespace FancyWM.ViewModels
         {
             return new KeybindingDictionary(
                         items.Select(vm => new KeyValuePair<BindableAction, Keybinding?>(
-                            vm.Action, 
+                            vm.Action,
                             vm.Pattern != null ? new Keybinding(vm.Pattern, vm.IsDirectMode) : null)));
         }
     }

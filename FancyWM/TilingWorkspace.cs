@@ -61,7 +61,7 @@ namespace FancyWM
     internal class TilingWorkspaceState
     {
         private readonly Dictionary<IVirtualDesktop, DesktopState> m_states = new();
-        
+
         public IEnumerable<IVirtualDesktop> Desktops => m_states.Keys;
         public IEnumerable<DesktopState> States => m_states.Values;
 
@@ -312,8 +312,8 @@ namespace FancyWM
                     .OfType<PanelNode>()
                     .Where(x => x != node)
                     .FirstOrDefault(x => Rectangle.OffsetAndSize(
-                        x.ComputedRectangle.Left - x.Padding.Left, 
-                        x.ComputedRectangle.Top - x.Padding.Top, 
+                        x.ComputedRectangle.Left - x.Padding.Left,
+                        x.ComputedRectangle.Top - x.Padding.Top,
                         x.ComputedRectangle.Width + x.Padding.Left + x.Padding.Right,
                         x.Padding.Top).Contains(pt));
             }
@@ -390,7 +390,7 @@ namespace FancyWM
                     {
                         throw new TilingFailedException(TilingError.Failed);
                     }
-                 }
+                }
             }
         }
 

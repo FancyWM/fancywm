@@ -50,16 +50,18 @@ namespace FancyWM
             }
 
             if (isPackaged)
-            try
             {
-                if (global::Windows.ApplicationModel.AppInstance.GetActivatedEventArgs() is global::Windows.ApplicationModel.Activation.CommandLineActivatedEventArgs storeAppArgs)
+                try
                 {
-                    args = storeAppArgs.Operation.Arguments.Split();
+                    if (global::Windows.ApplicationModel.AppInstance.GetActivatedEventArgs() is global::Windows.ApplicationModel.Activation.CommandLineActivatedEventArgs storeAppArgs)
+                    {
+                        args = storeAppArgs.Operation.Arguments.Split();
+                    }
                 }
-            }
-            catch (COMException)
-            {
-                // not a store packaged app
+                catch (COMException)
+                {
+                    // not a store packaged app
+                }
             }
 
             if (args.Contains("--action"))

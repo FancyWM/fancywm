@@ -32,7 +32,7 @@ namespace FancyWM
         IReadOnlyCollection<IWindowMatcher> ExclusionMatchers { get; set; }
 
         bool ShowFocus { get; set; }
-        
+
         bool AutoCollapse { get; set; }
 
         ITilingServiceIntent PendingIntent { get; set; }
@@ -93,7 +93,7 @@ namespace FancyWM
             m_completeIntent = complete;
             m_cancelIntent = cancel;
         }
-        
+
         /// <summary>
         /// Releases the source from its panel and unregisters it.
         /// </summary>

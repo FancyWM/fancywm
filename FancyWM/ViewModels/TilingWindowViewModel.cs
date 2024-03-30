@@ -188,7 +188,7 @@ namespace FancyWM.ViewModels
                 var dpi = node.WindowReference.Workspace.DisplayManager.Displays.FirstOrDefault(x => x.Bounds.Contains(windowPos.Center))?.Scaling ?? 1.0;
                 var revealHighlightRadius = m_revealHighlightRadius * dpi;
 
-                if (isInBoundsX && - (revealHighlightRadius / 2) < y && y <= 0)
+                if (isInBoundsX && -(revealHighlightRadius / 2) < y && y <= 0)
                 {
                     if (m_actionsRevealState == RevealState.IndicatorVisible)
                     {

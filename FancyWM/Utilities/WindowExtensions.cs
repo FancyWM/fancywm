@@ -192,7 +192,7 @@ namespace FancyWM.Utilities
                     }
                 }
             }
-            catch (InvalidWindowReferenceException) 
+            catch (InvalidWindowReferenceException)
             {
                 processName = "Invalid handle";
             }

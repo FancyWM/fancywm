@@ -195,7 +195,7 @@ namespace FancyWM.Layouts.Tiling
         {
             if (Parent != null)
             {
-                Rectangle = availableArea.Pad(new RectangleF(Padding)); 
+                Rectangle = availableArea.Pad(new RectangleF(Padding));
             }
             else
             {

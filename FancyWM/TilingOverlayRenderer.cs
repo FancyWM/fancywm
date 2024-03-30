@@ -36,7 +36,7 @@ namespace FancyWM
 
         public IReadOnlySet<IWindow> PreviewWindows
         {
-            get => m_previewWindows; 
+            get => m_previewWindows;
             set
             {
                 if (m_previewWindows != value)
@@ -50,7 +50,7 @@ namespace FancyWM
         public IWindow? IntentSourceWindow
         {
             get => m_intentSourceWindow;
-            set 
+            set
             {
                 if (m_intentSourceWindow != value)
                 {

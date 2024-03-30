@@ -127,7 +127,7 @@ namespace FancyWM.Utilities
                     {
                         jobs.Add(new WorkItem(job, m_sw.Elapsed, m_sw.Elapsed + job.Duration));
                     }
-                } 
+                }
                 catch (InvalidOperationException) when (m_queue.IsCompleted)
                 {
                     break;
@@ -192,9 +192,9 @@ namespace FancyWM.Utilities
 
         private static bool NanoSleep(TimeSpan timeSpan)
         {
-            unsafe 
+            unsafe
             {
-                HANDLE hTimer = PInvoke.CreateWaitableTimerEx(null,new PCWSTR(), Constants.CREATE_WAITABLE_TIMER_MANUAL_RESET | CREATE_WAITABLE_TIMER_HIGH_RESOLUTION, TIMER_ALL_ACCESS);
+                HANDLE hTimer = PInvoke.CreateWaitableTimerEx(null, new PCWSTR(), Constants.CREATE_WAITABLE_TIMER_MANUAL_RESET | CREATE_WAITABLE_TIMER_HIGH_RESOLUTION, TIMER_ALL_ACCESS);
                 if (hTimer.Value == IntPtr.Zero)
                 {
                     return false;

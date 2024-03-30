@@ -32,7 +32,7 @@ namespace FancyWM.Utilities
                     OutputCollection.Add(line);
                 }
             }
-            else 
+            else
             {
                 m_line.Append(value);
             }

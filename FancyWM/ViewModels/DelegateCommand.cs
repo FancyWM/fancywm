@@ -13,7 +13,7 @@ namespace FancyWM.ViewModels
         public static DelegateCommand Create<T>(Action<T> executeDelegate) => new(
             obj => executeDelegate((T)obj! ?? throw new ArgumentNullException()));
         public static DelegateCommand Create<T>(Action<T> executeDelegate, Predicate<T> canExecuteDelegate) => new(
-            obj => executeDelegate((T)obj! ?? throw new ArgumentNullException()), 
+            obj => executeDelegate((T)obj! ?? throw new ArgumentNullException()),
             obj => canExecuteDelegate((T)obj! ?? throw new ArgumentNullException()));
 
         public DelegateCommand(Action<object?> executeDelegate, Predicate<object?>? canExecuteDelegate = null)
