@@ -15,6 +15,7 @@ namespace FancyWM.Utilities
         public KeyCode Key { get; }
         public bool ScanOnRelease { get; init; } = false;
         public bool HideKeyPress { get; init; } = true;
+        public bool ClearModifiersOnMiss { get; init; } = false;
 
         private readonly KeyCode[] m_modifiers;
         private readonly bool[] m_pressedModifiers;
@@ -62,7 +63,7 @@ namespace FancyWM.Utilities
                 {
                     m_pressedModifiers[modifierIndex] = true;
                 }
-                else if (e.KeyCode != Key)
+                else if (e.KeyCode != Key && ClearModifiersOnMiss)
                 {
                     // A non-modifier, non-main key was pressed, in which case
                     // we reset the state, to allow other hotkeys to trigger.

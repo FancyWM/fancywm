@@ -79,7 +79,7 @@ namespace FancyWM
         private bool m_showFocusDuringAction;
         private bool m_autoCollapse;
         private bool m_notifyVirtualDesktopServiceIncompatibility;
-        private GlobalHotkey[] m_directHks = [];
+        private LowLevelHotkey[] m_directHks = [];
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public MainWindow()
@@ -387,7 +387,7 @@ namespace FancyWM
                 hk.Dispose();
             }
 
-            var newHotkeys = new List<GlobalHotkey>();
+            var newHotkeys = new List<LowLevelHotkey>();
             var failedHotkeys = new List<Keybinding>();
             foreach (var x in keybindings
                 .Where(x => x.Value?.IsDirectMode == true))
@@ -395,9 +395,13 @@ namespace FancyWM
                 try
                 {
                     var (modifiers, key) = KeyCodeHelper.GetModifierAndKeyCode(x.Value!.Keys);
-                    var hk = new GlobalHotkey(m_hwnd, modifiers, key);
+                    var hk = new LowLevelHotkey(m_llkbdHook, modifiers, key)
+                    {
+                        HideKeyPress = true,
+                        ScanOnRelease = false,
+                        ClearModifiersOnMiss = false,
+                    };
                     hk.Pressed += delegate { OnDirectHotkeyPressed(x.Key); };
-                    hk.Register();
                     newHotkeys.Add(hk);
                 }
                 catch (Win32Exception)
