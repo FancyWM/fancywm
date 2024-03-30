@@ -45,9 +45,12 @@ namespace FancyWM.Utilities
                 }
                 return false;
             }
-
+            
             if (e.IsPressed)
             {
+                // 1. Unless we want the trigger on release.
+                // 2. Check if the hotkey is triggered (requires main key).
+                // 3. And if so, if we need to hide the main key, do so.
                 if (!ScanOnRelease && Scan(ref e) && HideKeyPress)
                 {
                     m_keyDirty = true;
@@ -61,6 +64,8 @@ namespace FancyWM.Utilities
                 }
                 else if (e.KeyCode != Key)
                 {
+                    // A non-modifier, non-main key was pressed, in which case
+                    // we reset the state, to allow other hotkeys to trigger.
                     Array.Fill(m_pressedModifiers, false);
                 }
             }
@@ -72,6 +77,9 @@ namespace FancyWM.Utilities
                     m_pressedModifiers[modifierIndex] = false;
                 }
 
+                // 1. If we want to trigger on release.
+                // 2. Check if the hotkey is triggered (requires main key).
+                // 3. And if so, if we need to hide the main key, do so.
                 if (ScanOnRelease && Scan(ref e) && HideKeyPress)
                 {
                     if (e.KeyCode == Key && m_keyDirty)

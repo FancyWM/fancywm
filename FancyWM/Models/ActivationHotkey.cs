@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using FancyWM.Utilities;
 
@@ -7,45 +8,37 @@ namespace FancyWM.Models
 {
     public class ActivationHotkey
     {
-        public KeyCode KeyA { get; }
-        public KeyCode KeyB { get; }
+        public KeyCode[] ModifierKeys { get; }
+        public KeyCode Key { get; }
         public string Description { get; }
 
         public static IReadOnlyList<ActivationHotkey> AllowedHotkeys { get; } =
         [
-            new(KeyCode.LeftShift, KeyCode.LWin, "⇧ + ⊞"),
-            new(KeyCode.LeftCtrl, KeyCode.LWin, "Ctrl + ⊞"),
-            new(KeyCode.LeftAlt, KeyCode.LWin, "Alt + ⊞"),
-            new(KeyCode.None, KeyCode.None, "Disabled"),
+            new([KeyCode.LeftShift], KeyCode.LWin, "⇧ + ⊞"),
+            new([KeyCode.LeftCtrl], KeyCode.LWin, "Ctrl + ⊞"),
+            new([KeyCode.LeftAlt], KeyCode.LWin, "Alt + ⊞"),
+            new([KeyCode.None], KeyCode.None, "Disabled"),
         ];
 
         public static ActivationHotkey Default => AllowedHotkeys[0];
 
-        private ActivationHotkey(KeyCode keyA, KeyCode keyB, string description)
+        private ActivationHotkey(KeyCode[] modifierKeys, KeyCode key, string description)
         {
-            if ((int)keyA <= (int)keyB)
-            {
-                KeyA = keyA;
-                KeyB = keyB;
-            }
-            else
-            {
-                KeyA = keyB;
-                KeyB = keyA;
-            }
+            ModifierKeys = [..modifierKeys.OrderBy(x => (int)x)];
+            Key = key;
             Description = description;
         }
 
         public override bool Equals(object? obj)
         {
             return obj is ActivationHotkey hotkey &&
-                   KeyA == hotkey.KeyA &&
-                   KeyB == hotkey.KeyB;
+                   ModifierKeys.Equals(hotkey.ModifierKeys) &&
+                   Key == hotkey.Key;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(KeyA, KeyB);
+            return HashCode.Combine(ModifierKeys, Key);
         }
 
         public override string ToString()

@@ -313,6 +313,11 @@ namespace FancyWM
 
         private static IEnumerable<(KeyCode[] KeyA, KeyCode KeyB)> CreateSideInsensitiveHotkeyVariants(ActivationHotkey hk)
         {
+            if (hk.ModifierKeys.Length != 1)
+            {
+                throw new NotSupportedException();
+            }
+
             KeyCode GetLeftVersion(KeyCode k)
             {
                 return k switch
@@ -337,10 +342,10 @@ namespace FancyWM
                 };
             }
 
-            var keyA = GetLeftVersion(hk.KeyA);
-            var keyB = GetLeftVersion(hk.KeyB);
-            var rKeyA = GetRightVersion(hk.KeyA);
-            var rKeyB = GetRightVersion(hk.KeyB);
+            var keyA = GetLeftVersion(hk.ModifierKeys[0]);
+            var keyB = GetLeftVersion(hk.Key);
+            var rKeyA = GetRightVersion(hk.ModifierKeys[0]);
+            var rKeyB = GetRightVersion(hk.Key);
 
             yield return (new[] { keyA }, keyB);
             yield return (new[] { keyB }, keyA);
