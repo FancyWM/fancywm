@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:FancyWM.Controls" xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ItemsControl ItemsSource="{Binding Path=Pattern}">
+    <ItemsControl ItemsSource="{Binding Path=KeyStrings, RelativeSource={RelativeSource AncestorType=UserControl}}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Border Padding="4,2" CornerRadius="2" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">

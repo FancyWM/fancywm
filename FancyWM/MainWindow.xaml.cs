@@ -33,6 +33,7 @@ using System.Text;
 using FancyWM.Resources;
 
 using Strings = FancyWM.Resources.Strings;
+using System.Data;
 
 namespace FancyWM
 {
@@ -89,6 +90,8 @@ namespace FancyWM
             InitializeComponent();
 
             m_logger = App.Current.Logger;
+
+            BindingErrorListener.Listen(OnBindingError);
 
             m_hwnd = new WindowInteropHelper(this).EnsureHandle();
 
@@ -252,6 +255,13 @@ namespace FancyWM
             Show();
 
             ((HwndSource)PresentationSource.FromVisual(this)).AddHook(WndProc);
+        }
+
+        private void OnBindingError(string? msg)
+        {
+#if DEBUG
+            throw new DataException($"Binding error: {msg}");
+#endif
         }
 
         private void OnFocusedWindowChanged(object? sender, FocusedWindowChangedEventArgs e)

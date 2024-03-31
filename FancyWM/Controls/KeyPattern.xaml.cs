@@ -18,10 +18,22 @@ namespace FancyWM.Controls
             typeof(KeyPattern),
             new PropertyMetadata(null));
 
+        public static readonly DependencyProperty KeyStringsProperty = DependencyProperty.Register(
+            nameof(KeyStrings),
+            typeof(List<string>),
+            typeof(KeyPattern),
+            new PropertyMetadata(new List<string>()));
+
         public IReadOnlySet<KeyCode> Pattern
         {
             get => (IReadOnlySet<KeyCode>)GetValue(PatternProperty);
             set => SetValue(PatternProperty, value);
+        }
+
+        public List<string> KeyStrings
+        {
+            get => (List<string>)GetValue(KeyStringsProperty);
+            set => SetValue(KeyStringsProperty, value);
         }
 
         public KeyPattern()
@@ -32,19 +44,18 @@ namespace FancyWM.Controls
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
-            if (e.Property == PatternProperty)
+            if (e.Property == PatternProperty && Pattern != null)
             {
-                if (Pattern != null)
-                    UpdateDataContext();
+                UpdateKeyStrings();
             }
         }
 
-        private void UpdateDataContext()
+        private void UpdateKeyStrings()
         {
-            DataContext = new
+            if (Pattern != null)
             {
-                Pattern = Pattern?.Select(x => KeyDescriptions.GetDescription(x))?.ToList()
-            };
+                KeyStrings = [.. Pattern.Select(KeyDescriptions.GetDescription)];
+            }
         }
     }
 }
