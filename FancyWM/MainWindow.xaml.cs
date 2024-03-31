@@ -878,7 +878,9 @@ namespace FancyWM
 
         private async void OnCmdSequenceBegin(object? sender, EventArgs e)
         {
-            m_logger.Debug("Command sequence started...");
+            long currentId = ++m_cmdSequenceId;
+
+            m_logger.Debug($"Command sequence {m_cmdSequenceId} started");
             if (m_stopwatch.Elapsed >= RateReviewDelay && m_enableRateReviewRequests)
             {
                 m_enableRateReviewRequests = false;
@@ -907,12 +909,15 @@ namespace FancyWM
                 using var keyListener = new LowLevelKeyPatternListener(m_llkbdHook);
                 keyListener.PatternChanged += (s, e) =>
                 {
+                    m_logger.Debug($"Command sequence {currentId} detected");
                     cts.Cancel();
                     keyListener.Dispose();
-                    OnCommandKey(e.Keys);
+                    if (currentId == m_cmdSequenceId)
+                    {
+                        OnCommandKey(e.Keys);
+                    }
                 };
 
-                long currentId = ++m_cmdSequenceId;
                 bool showFocus = m_showFocusDuringAction;
                 if (showFocus)
                 {
@@ -927,6 +932,7 @@ namespace FancyWM
                         m_tiling.ShowFocus = false;
                     }
                 }
+                m_logger.Debug($"Command sequence {currentId} ended");
             });
         }
 

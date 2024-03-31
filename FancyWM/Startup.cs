@@ -216,7 +216,7 @@ namespace FancyWM
 #if DEBUG
             if (Debugger.IsAttached)
             {
-                logConfig.WriteTo.Debug(restrictedToMinimumLevel: LogEventLevel.Information);
+                logConfig.WriteTo.Debug();
             }
 #endif
 
