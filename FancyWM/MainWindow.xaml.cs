@@ -344,6 +344,7 @@ namespace FancyWM
                 foreach (var cmdHk in m_cmdHks)
                 {
                     cmdHk.Pressed -= OnCmdSequenceBegin;
+                    cmdHk.Dispose();
                 }
             }
 
@@ -369,6 +370,7 @@ namespace FancyWM
                 if (m_capsLockHk != null)
                 {
                     m_capsLockHk.Pressed -= OnCmdSequenceBegin;
+                    m_capsLockHk.Dispose();
                     m_capsLockHk = null;
                 }
                 return;
