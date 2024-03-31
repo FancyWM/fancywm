@@ -13,13 +13,18 @@ namespace FancyWM.Converters
         static string Serialize(ActivationHotkey hk)
         {
             KeyCode[] keys = [..hk.ModifierKeys, hk.Key];
-            return string.Join('_', keys);
+            return TidyString(string.Join('_', keys));
+        }
+
+        static string TidyString(string hk)
+        {
+            return hk.Replace("Left", "").Replace("L", "");
         }
 
         public override ActivationHotkey Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             string? str = reader.GetString() ?? throw new FormatException();
-            var hotkey = ActivationHotkey.AllowedHotkeys.FirstOrDefault(x => Serialize(x) == str) ?? ActivationHotkey.AllowedHotkeys[0];
+            var hotkey = ActivationHotkey.AllowedHotkeys.FirstOrDefault(x => Serialize(x) == TidyString(str)) ?? ActivationHotkey.AllowedHotkeys[0];
             return hotkey;
         }
 
