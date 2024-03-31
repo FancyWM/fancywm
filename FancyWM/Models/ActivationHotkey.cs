@@ -27,7 +27,7 @@ namespace FancyWM.Models
             new([KeyCode.None], KeyCode.None, "Disabled"),
         ];
 
-        public static ActivationHotkey Default => AllowedHotkeys[0];
+        public static ActivationHotkey Default { get; } = AllowedHotkeys.First(x => x.Description == "Shift + Win");
 
         private ActivationHotkey(KeyCode[] modifierKeys, KeyCode key, string description)
         {
