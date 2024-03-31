@@ -16,6 +16,7 @@ namespace FancyWM.Models
         [
             new([KeyCode.LeftShift], KeyCode.LWin, "⇧ + ⊞"),
             new([KeyCode.LeftCtrl], KeyCode.LWin, "Ctrl + ⊞"),
+            new([KeyCode.LeftCtrl, KeyCode.LeftShift], KeyCode.LWin, "Ctrl + ⇧ + ⊞"),
             new([KeyCode.LeftAlt], KeyCode.LWin, "Alt + ⊞"),
             new([KeyCode.None], KeyCode.None, "Disabled"),
         ];

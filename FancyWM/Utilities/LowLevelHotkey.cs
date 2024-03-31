@@ -13,9 +13,10 @@ namespace FancyWM.Utilities
         public LowLevelKeyboardHook KeyboardHook { get; }
         public IReadOnlyCollection<KeyCode> ModifierKeys => m_modifiers;
         public KeyCode Key { get; }
-        public bool ScanOnRelease { get; init; } = false;
-        public bool HideKeyPress { get; init; } = true;
-        public bool ClearModifiersOnMiss { get; init; } = false;
+        public required bool ScanOnRelease { get; init; }
+        public required bool HideKeyPress { get; init; }
+        public required bool ClearModifiersOnMiss { get; init; }
+        public required bool SideAgnostic { get; set; }
 
         private readonly KeyCode[] m_modifiers;
         private readonly bool[] m_pressedModifiers;
@@ -32,11 +33,30 @@ namespace FancyWM.Utilities
             KeyboardHook.KeyStateChanged += OnLowLevelKeyStateChanged;
         }
 
+        private KeyCode RemapKeyCode(KeyCode k)
+        {
+            if (!SideAgnostic)
+            {
+                return k;
+            }
+            return k switch
+            {
+                KeyCode.RightShift => KeyCode.LeftShift,
+                KeyCode.RightCtrl => KeyCode.LeftCtrl,
+                KeyCode.RWin => KeyCode.LWin,
+                KeyCode.RightAlt => KeyCode.LeftAlt,
+                _ => k,
+            };
+        }
+
         private void OnLowLevelKeyStateChanged(object? sender, ref LowLevelKeyboardHook.KeyStateChangedEventArgs e)
         {
+            var inputKeyCode = RemapKeyCode(e.KeyCode);
+            var mainKeyCode = RemapKeyCode(Key);
+
             bool Scan(ref LowLevelKeyboardHook.KeyStateChangedEventArgs e)
             {
-                if (m_pressedModifiers.All(x => x) && e.KeyCode == Key)
+                if (m_pressedModifiers.All(x => x) && inputKeyCode == mainKeyCode)
                 {
                     Dispatcher.BeginInvoke(() =>
                     {
@@ -63,7 +83,7 @@ namespace FancyWM.Utilities
                 {
                     m_pressedModifiers[modifierIndex] = true;
                 }
-                else if (e.KeyCode != Key && ClearModifiersOnMiss)
+                else if (inputKeyCode != mainKeyCode && ClearModifiersOnMiss)
                 {
                     // A non-modifier, non-main key was pressed, in which case
                     // we reset the state, to allow other hotkeys to trigger.

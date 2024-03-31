@@ -307,50 +307,27 @@ namespace FancyWM
             Dispatcher.RethrowOnDispatcher((Exception)e.ExceptionObject!);
         }
 
-        private static IEnumerable<(KeyCode[] KeyA, KeyCode KeyB)> CreateSideInsensitiveHotkeyVariants(ActivationHotkey hk)
+        private static IEnumerable<(KeyCode[] KeyA, KeyCode KeyB)> CreateHotkeyVariants(ActivationHotkey hk)
         {
-            if (hk.ModifierKeys.Length != 1)
+            KeyCode[] keys = [.. hk.ModifierKeys, hk.Key];
+            if (hk.ModifierKeys.Length == 1)
+            {
+                yield return ([keys[0]], keys[1]);
+                yield return ([keys[1]], keys[0]);
+            } 
+            else if (hk.ModifierKeys.Length == 2)
+            {
+                yield return ([keys[0], keys[1]], keys[2]);
+                yield return ([keys[0], keys[2]], keys[1]);
+                yield return ([keys[1], keys[0]], keys[2]);
+                yield return ([keys[1], keys[2]], keys[0]);
+                yield return ([keys[2], keys[0]], keys[1]);
+                yield return ([keys[2], keys[1]], keys[0]);
+            }
+            else
             {
                 throw new NotSupportedException();
             }
-
-            KeyCode GetLeftVersion(KeyCode k)
-            {
-                return k switch
-                {
-                    KeyCode.RightShift => KeyCode.LeftShift,
-                    KeyCode.RightCtrl => KeyCode.LeftCtrl,
-                    KeyCode.RWin => KeyCode.LWin,
-                    KeyCode.RightAlt => KeyCode.LeftAlt,
-                    _ => k,
-                };
-            }
-
-            KeyCode GetRightVersion(KeyCode k)
-            {
-                return k switch
-                {
-                    KeyCode.LeftShift => KeyCode.RightShift,
-                    KeyCode.LeftCtrl => KeyCode.RightCtrl,
-                    KeyCode.LWin => KeyCode.RWin,
-                    KeyCode.LeftAlt => KeyCode.RightAlt,
-                    _ => k,
-                };
-            }
-
-            var keyA = GetLeftVersion(hk.ModifierKeys[0]);
-            var keyB = GetLeftVersion(hk.Key);
-            var rKeyA = GetRightVersion(hk.ModifierKeys[0]);
-            var rKeyB = GetRightVersion(hk.Key);
-
-            yield return (new[] { keyA }, keyB);
-            yield return (new[] { keyB }, keyA);
-            yield return (new[] { keyA }, rKeyB);
-            yield return (new[] { keyB }, rKeyA);
-            yield return (new[] { rKeyA }, keyB);
-            yield return (new[] { rKeyB }, keyA);
-            yield return (new[] { rKeyA }, rKeyB);
-            yield return (new[] { rKeyB }, rKeyA);
         }
 
         private void RebindActivationHotkey(ActivationHotkey hk)
@@ -363,11 +340,13 @@ namespace FancyWM
                 }
             }
 
-            m_cmdHks = CreateSideInsensitiveHotkeyVariants(hk)
+            m_cmdHks = CreateHotkeyVariants(hk)
                 .Select(hk => new LowLevelHotkey(m_llkbdHook, hk.KeyA, hk.KeyB)
                 {
                     HideKeyPress = false,
                     ScanOnRelease = true,
+                    SideAgnostic = true,
+                    ClearModifiersOnMiss = true,
                 }).ToArray();
 
             foreach (var cmdHk in m_cmdHks)
@@ -396,6 +375,7 @@ namespace FancyWM
                         HideKeyPress = true,
                         ScanOnRelease = false,
                         ClearModifiersOnMiss = false,
+                        SideAgnostic = false,
                     };
                     hk.Pressed += delegate { OnDirectHotkeyPressed(x.Key); };
                     newHotkeys.Add(hk);
