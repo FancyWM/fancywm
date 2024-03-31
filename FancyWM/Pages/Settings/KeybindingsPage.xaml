@@ -23,7 +23,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{x:Static res:Strings.Keybinding_ActivationHotkey}" Margin="0, 0, 10, 0" />
-                    <ComboBox Grid.Column="2" SelectedItem="{Binding SelectedActivationHotkey, Mode=TwoWay}" ItemsSource="{Binding ActivationHotkeyOptions}" Width="150" Margin="0, 0, 10, 0">
+                    <ComboBox Grid.Column="2" SelectedItem="{Binding SelectedActivationHotkey, Mode=TwoWay}" ItemsSource="{Binding ActivationHotkeyOptions}" Width="160" Margin="0, 0, 10, 0">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}" />
@@ -78,7 +78,7 @@
                                                     </CheckBox>
                                                 </StackPanel>
                                                 
-                                                <controls:KeyPressBox Grid.Column="2" Pattern="{Binding Pattern, Mode=TwoWay}" Width="150" Margin="0, 0, 10, 0">
+                                                <controls:KeyPressBox Grid.Column="2" Pattern="{Binding Pattern, Mode=TwoWay}" Width="160" Margin="0, 0, 10, 0">
                                                     <controls:KeyPressBox.Style>
                                                         <Style>
                                                             <Style.Triggers>

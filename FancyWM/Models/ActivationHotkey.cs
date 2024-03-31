@@ -14,10 +14,16 @@ namespace FancyWM.Models
 
         public static IReadOnlyList<ActivationHotkey> AllowedHotkeys { get; } =
         [
-            new([KeyCode.LeftShift], KeyCode.LWin, "⇧ + ⊞"),
-            new([KeyCode.LeftCtrl], KeyCode.LWin, "Ctrl + ⊞"),
-            new([KeyCode.LeftCtrl, KeyCode.LeftShift], KeyCode.LWin, "Ctrl + ⇧ + ⊞"),
-            new([KeyCode.LeftAlt], KeyCode.LWin, "Alt + ⊞"),
+            new([KeyCode.LeftAlt], KeyCode.LWin, "Alt + Win"),
+            new([KeyCode.LeftAlt], KeyCode.LeftCtrl, "Alt + Ctrl"),
+            new([KeyCode.LeftAlt], KeyCode.LeftShift, "Alt + Shift"),
+            new([KeyCode.LeftCtrl], KeyCode.LWin, "Ctrl + Win"),
+            new([KeyCode.LeftCtrl], KeyCode.LeftShift, "Ctrl + Shift"),
+            new([KeyCode.LeftShift], KeyCode.LWin, "Shift + Win"),
+            new([KeyCode.LeftAlt, KeyCode.LeftCtrl], KeyCode.LWin, "Alt + Ctrl + Win"),
+            new([KeyCode.LeftAlt, KeyCode.LeftCtrl], KeyCode.LeftShift, "Alt + Ctrl + Shift"),
+            new([KeyCode.LeftAlt, KeyCode.LeftShift], KeyCode.LWin, "Alt + Shift + Win"),
+            new([KeyCode.LeftCtrl, KeyCode.LeftShift], KeyCode.LWin, "Ctrl + Shift + Win"),
             new([KeyCode.None], KeyCode.None, "Disabled"),
         ];
 
