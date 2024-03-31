@@ -98,15 +98,18 @@ namespace FancyWM.Utilities
                     m_pressedModifiers[modifierIndex] = false;
                 }
 
+                // Handle the dirty key.
+                if (inputKeyCode == mainKeyCode && m_keyDirty)
+                {
+                    m_keyDirty = false;
+                    e.Handled = true;
+                }
+
                 // 1. If we want to trigger on release.
                 // 2. Check if the hotkey is triggered (requires main key).
-                // 3. And if so, if we need to hide the main key, do so.
-                if (ScanOnRelease && Scan(ref e) && HideKeyPress)
+                if (ScanOnRelease)
                 {
-                    if (e.KeyCode == Key && m_keyDirty)
-                    {
-                        e.Handled = true;
-                    }
+                    Scan(ref e);
                 }
             }
         }
