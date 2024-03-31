@@ -300,10 +300,6 @@ namespace FancyWM
                     m_logger.Warning("Unsupported OS Version: " + Environment.OSVersion.Version.ToString());
                 }
             }
-
-#if !DEBUG
-            await Task.Delay(10000);
-#endif
         }
 
         private void OnWorkspaceUnhandledException(object sender, UnhandledExceptionEventArgs e)
