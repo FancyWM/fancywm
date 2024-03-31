@@ -109,7 +109,7 @@ namespace FancyWM
         {
             Process.Start(new ProcessStartInfo
             {
-                FileName = "https://www.paypal.com/donate/?hosted_button_id=NKQ6DKGFVN7S2",
+                FileName = "https://fancywm.github.io/fancywm/donate.html",
                 UseShellExecute = true,
                 Verb = "open",
             });

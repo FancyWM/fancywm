@@ -1,7 +1,7 @@
 # FancyWM
 
 [![Gitter](https://badges.gitter.im/FancyWM/community.svg)](https://gitter.im/FancyWM/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Donate via PayPal](https://shields.io/badge/Donate-gold?logo=paypal&style=flat)](https://www.paypal.com/donate/?hosted_button_id=NKQ6DKGFVN7S2)
+<!-- [![Donate via PayPal](https://shields.io/badge/Donate-gold?logo=paypal&style=flat)](https://fancywm.github.io/fancywm/donate.html) -->
 
 FancyWM is a dynamic tiling window manager for Windows 10/11
 
