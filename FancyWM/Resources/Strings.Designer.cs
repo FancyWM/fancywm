@@ -1771,6 +1771,24 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You do not have to release the key to activate. ⇪ Caps Lock will no longer function normally.
+        /// </summary>
+        public static string Keybindings_ActivateOnCapsLock_About {
+            get {
+                return ResourceManager.GetString("Keybindings.ActivateOnCapsLock.About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use ⇪ Caps Lock as  the Activation hotkey.
+        /// </summary>
+        public static string Keybindings_ActivateOnCapsLock_Checkbox {
+            get {
+                return ResourceManager.GetString("Keybindings.ActivateOnCapsLock.Checkbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keybindings.
         /// </summary>
         public static string Keybindings_Caption {

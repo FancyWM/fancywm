@@ -33,6 +33,8 @@ namespace FancyWM.Models
         [JsonConverter(typeof(Converters.ActivationHotkeyConverter))]
         public ActivationHotkey ActivationHotkey { get; set; } = ActivationHotkey.Default;
 
+        public bool ActivateOnCapsLock { get; set; } = false;
+
         public bool ShowStartupWindow { get; set; } = true;
 
         public bool NotifyVirtualDesktopServiceIncompatibility { get; set; } = true;
@@ -84,6 +86,8 @@ namespace FancyWM.Models
         public override bool Equals(object? obj)
         {
             return obj is Settings settings &&
+                   ActivationHotkey == settings.ActivationHotkey &&
+                   ActivateOnCapsLock == settings.ActivateOnCapsLock &&
                    ShowStartupWindow == settings.ShowStartupWindow &&
                    NotifyVirtualDesktopServiceIncompatibility == settings.NotifyVirtualDesktopServiceIncompatibility &&
                    AllocateNewPanelSpace == settings.AllocateNewPanelSpace &&
@@ -105,6 +109,8 @@ namespace FancyWM.Models
         public override int GetHashCode()
         {
             HashCode hash = new();
+            hash.Add(ActivationHotkey);
+            hash.Add(ActivateOnCapsLock);
             hash.Add(ShowStartupWindow);
             hash.Add(NotifyVirtualDesktopServiceIncompatibility);
             hash.Add(AllocateNewPanelSpace);

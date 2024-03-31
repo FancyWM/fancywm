@@ -22,6 +22,10 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{x:Static res:Strings.Keybinding_ActivationHotkey}" Margin="0, 0, 10, 0" />
                     <ComboBox Grid.Column="2" SelectedItem="{Binding SelectedActivationHotkey, Mode=TwoWay}" ItemsSource="{Binding ActivationHotkeyOptions}" Width="180" Margin="0, 0, 10, 0">
                         <ComboBox.ItemTemplate>
@@ -30,6 +34,19 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
+                    
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                        <TextBlock Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" Margin="0,0,15,0" VerticalAlignment="Center" Text="{x:Static res:Strings.Keybindings_ActivateOnCapsLock_Checkbox}" />
+                        <CheckBox Grid.Column="0"
+                                IsChecked="{Binding ActivateOnCapsLock, Mode=TwoWay}"
+                                ToolTipService.InitialShowDelay="0">
+                            <CheckBox.ToolTip>
+                                <TextBlock>
+                                    <Run Text="{x:Static res:Strings.Keybindings_ActivateOnCapsLock_About}" />
+                                </TextBlock>
+                            </CheckBox.ToolTip>
+                        </CheckBox>
+                    </StackPanel>
                 </Grid>
             </Border>
 

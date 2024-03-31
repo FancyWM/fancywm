@@ -60,6 +60,7 @@ namespace FancyWM
         private IDisplay? m_currentDisplay = null;
 
         private LowLevelHotkey[]? m_cmdHks;
+        private LowLevelHotkey? m_capsLockHk;
 
         private readonly TaskbarIcon m_notifyIcon;
         private readonly CountdownTimer m_hideCountdownTimer;
@@ -153,6 +154,11 @@ namespace FancyWM
                 .DistinctUntilChanged()
                 .Do(_ => Dispatcher.BeginInvoke(() => RebindActivationHotkey(_)));
 
+            var activateOnCapsLockSetting = settings
+                .Select(x => x.ActivateOnCapsLock)
+                .DistinctUntilChanged()
+                .Do(_ => Dispatcher.BeginInvoke(() => RebindCapsLockHotkey(_)));
+
             var keybindingsSettings = settings
                 .Select(x => x.Keybindings)
                 .DistinctUntilChanged()
@@ -209,6 +215,7 @@ namespace FancyWM
                 settings.Subscribe(new NotifyUnhandledObserver<Settings>()),
                 startupSettings.Subscribe(new NotifyUnhandledObserver<Settings>()),
                 activationHotkeySettings.Subscribe(new NotifyUnhandledObserver<ActivationHotkey>()),
+                activateOnCapsLockSetting.Subscribe(new NotifyUnhandledObserver<bool>()),
                 keybindingsSettings.Subscribe(new NotifyUnhandledObserver<KeybindingDictionary>()),
                 autoCollapseSettings.Subscribe(new NotifyUnhandledObserver<Settings>()),
                 multiMonitorObservable
@@ -353,6 +360,28 @@ namespace FancyWM
             {
                 cmdHk.Pressed += OnCmdSequenceBegin;
             }
+        }
+
+        private void RebindCapsLockHotkey(bool enabled)
+        {
+            if (!enabled)
+            {
+                if (m_capsLockHk != null)
+                {
+                    m_capsLockHk.Pressed -= OnCmdSequenceBegin;
+                    m_capsLockHk = null;
+                }
+                return;
+            }
+
+            m_capsLockHk = new LowLevelHotkey(m_llkbdHook, [], KeyCode.CapsLock)
+            {
+                HideKeyPress = true,
+                ScanOnRelease = false,
+                SideAgnostic = false,
+                ClearModifiersOnMiss = true,
+            };
+            m_capsLockHk.Pressed += OnCmdSequenceBegin;
         }
 
         private void RebindDirectHotkeys(KeybindingDictionary keybindings)

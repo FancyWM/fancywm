@@ -32,6 +32,7 @@ namespace FancyWM.ViewModels
         public ObservableCollection<ActivationHotkey> ActivationHotkeyOptions { get; }
             = new ObservableCollection<ActivationHotkey>(ActivationHotkey.AllowedHotkeys);
 
+        public bool ActivateOnCapsLock { get => m_activateOnCapsLock; set => SetField(ref m_activateOnCapsLock, value); }
         public bool ShowStartupWindow { get => m_showStartupWindow; set => SetField(ref m_showStartupWindow, value); }
         public bool NotifyVirtualDesktopServiceIncompatibility { get => m_notifyVirtualDesktopServiceIncompatibility; set => SetField(ref m_notifyVirtualDesktopServiceIncompatibility, value); }
         public bool AllocateNewPanelSpace { get => m_allocateNewPanelSpace; set => SetField(ref m_allocateNewPanelSpace, value); }
@@ -188,6 +189,7 @@ namespace FancyWM.ViewModels
         private int m_panelFontSize;
         private int m_windowPadding;
         private ActivationHotkey? m_activationHotkey;
+        private bool m_activateOnCapsLock;
         private IList<string>? m_processIgnoreList;
         private IList<string>? m_classIgnoreList;
         private bool m_multiMonitorSupport;
@@ -209,6 +211,7 @@ namespace FancyWM.ViewModels
                     m_logger.Debug($"{nameof(FancyWM.ViewModels.SettingsViewModel)} received new Settings");
 
                     SelectedActivationHotkey = settings.ActivationHotkey;
+                    ActivateOnCapsLock = settings.ActivateOnCapsLock;
                     ShowStartupWindow = settings.ShowStartupWindow;
                     NotifyVirtualDesktopServiceIncompatibility = settings.NotifyVirtualDesktopServiceIncompatibility;
                     AllocateNewPanelSpace = settings.AllocateNewPanelSpace;
@@ -315,6 +318,7 @@ namespace FancyWM.ViewModels
 
                 x = x.Clone();
                 x.ActivationHotkey = SelectedActivationHotkey!;
+                x.ActivateOnCapsLock = ActivateOnCapsLock;
                 x.ShowStartupWindow = ShowStartupWindow;
                 x.NotifyVirtualDesktopServiceIncompatibility = NotifyVirtualDesktopServiceIncompatibility;
                 x.AllocateNewPanelSpace = AllocateNewPanelSpace;
