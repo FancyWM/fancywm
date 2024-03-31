@@ -1,12 +1,12 @@
 ﻿<UserControl x:Class="FancyWM.Controls.TilingNodeCaptionBlock"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:FancyWM.Controls"
              xmlns:viewmodels="clr-namespace:FancyWM.ViewModels"
              xmlns:tiling="clr-namespace:FancyWM.Layouts.Tiling;assembly=FancyWM.Layouts"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DataContext="{x:Type viewmodels:TilingNodeViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Border VerticalAlignment="Center">
@@ -27,7 +27,7 @@
                                                 <Setter Property="Content">
                                                     <Setter.Value>
                                                         <Viewbox Width="{DynamicResource OverlayFontSize}" Height="{DynamicResource OverlayFontSize}" Stretch="Uniform">
-                                                            <local:SvgIcon Icon="hsplit" Color="{Binding Path=Foreground, ElementName=InfoTextBlock}" />
+                                                            <local:SvgIcon Icon="hsplit" Color="{DynamicResource TextControlButtonForegroundPressed}" />
                                                         </Viewbox>
                                                     </Setter.Value>
                                                 </Setter>
@@ -42,7 +42,7 @@
                                                 <Setter Property="Content">
                                                     <Setter.Value>
                                                         <Viewbox Width="{DynamicResource OverlayFontSize}" Height="{DynamicResource OverlayFontSize}" Stretch="Uniform">
-                                                            <local:SvgIcon Icon="vsplit" Color="{Binding Path=Foreground, ElementName=InfoTextBlock}" />
+                                                            <local:SvgIcon Icon="vsplit" Color="{DynamicResource TextControlButtonForegroundPressed}" />
                                                         </Viewbox>
                                                     </Setter.Value>
                                                 </Setter>
@@ -52,7 +52,7 @@
                                             <Setter Property="Content">
                                                 <Setter.Value>
                                                     <Viewbox Width="{DynamicResource OverlayFontSize}" Height="{DynamicResource OverlayFontSize}" Stretch="Uniform">
-                                                        <local:SvgIcon Icon="stack" Color="{Binding Path=Foreground, ElementName=InfoTextBlock}" />
+                                                        <local:SvgIcon Icon="stack" Color="{DynamicResource TextControlButtonForegroundPressed}" />
                                                     </Viewbox>
                                                 </Setter.Value>
                                             </Setter>
@@ -62,7 +62,7 @@
                             </ContentControl.Style>
                         </ContentControl>
                         <Border VerticalAlignment="Center">
-                            <TextBlock Visibility="{Binding ExtraTextVisibility, RelativeSource={RelativeSource AncestorType=local:TilingNodeCaptionBlock}}" Margin="5,0,0,0" x:Name="InfoTextBlock" FontSize="{DynamicResource OverlayFontSize}">
+                            <TextBlock Visibility="{Binding ExtraTextVisibility, RelativeSource={RelativeSource AncestorType=local:TilingNodeCaptionBlock}}" Margin="5,0,0,0" FontSize="{DynamicResource OverlayFontSize}">
                                 <Run>
                                     <Run.Style>
                                         <Style TargetType="Run">
@@ -106,7 +106,7 @@
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </Run.Style>    
+                                    </Run.Style>
                                 </Run>
                             </TextBlock>
                         </Border>
