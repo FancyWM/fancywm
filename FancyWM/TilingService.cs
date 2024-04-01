@@ -310,6 +310,46 @@ namespace FancyWM
             InvalidateLayout();
         }
 
+        public bool DiscoverWindows()
+        {
+            if (!AutoRegisterWindows)
+            {
+                return false;
+            }
+
+            List<IWindow> windows;
+            lock (m_windowSet)
+            {
+                windows = [.. m_windowSet];
+            }
+
+            bool anyChanges = false;
+            foreach (var window in windows)
+            {
+                lock (m_backend)
+                {
+                    try
+                    {
+                        if (!m_backend.HasWindow(window) && window.State == WindowState.Restored && CanManage(window))
+                        {
+                            m_logger.Debug("Discovered window {Handle}={ProcessName}", window.Handle, window.GetCachedProcessName());
+                            var newNode = m_backend.RegisterWindow(window);
+                            newNode.Parent!.Padding = GetPanelPaddingRect();
+                            InvalidateLayout();
+                            anyChanges = true;
+                        }
+                    }
+                    catch (InvalidWindowReferenceException)
+                    {
+                        if (m_backend.HasWindow(window))
+                            m_backend.UnregisterWindow(window);
+                    }
+                }
+            }
+
+            return anyChanges;
+        }
+
         public void Refresh()
         {
             List<IWindow> windows;

@@ -281,6 +281,19 @@ namespace FancyWM
             GetActiveTilingService().Stack();
         }
 
+        public bool DiscoverWindows()
+        {
+            bool anyChanges = false;
+            lock (m_syncRoot)
+            {
+                foreach (var tiling in m_tilingServices.Values)
+                {
+                    anyChanges = anyChanges || tiling.DiscoverWindows();
+                }
+            }
+            return anyChanges;
+        }
+
         public void Refresh()
         {
             lock (m_syncRoot)

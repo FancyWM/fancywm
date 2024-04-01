@@ -35,6 +35,7 @@ namespace FancyWM
         void Split(bool vertical);
         bool CanStack();
         void Stack();
+        bool DiscoverWindows();
         void Refresh();
         bool CanFloat();
         void Float();

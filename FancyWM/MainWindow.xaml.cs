@@ -34,6 +34,7 @@ using FancyWM.Resources;
 
 using Strings = FancyWM.Resources.Strings;
 using System.Data;
+using System.Windows.Threading;
 
 namespace FancyWM
 {
@@ -82,6 +83,7 @@ namespace FancyWM
         private bool m_autoCollapse;
         private bool m_notifyVirtualDesktopServiceIncompatibility;
         private LowLevelHotkey[] m_directHks = [];
+        private DispatcherTimer m_dispatcherTimer;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public MainWindow()
@@ -241,6 +243,13 @@ namespace FancyWM
             m_stopwatch = new Stopwatch();
             m_stopwatch.Start();
 
+            m_dispatcherTimer = new DispatcherTimer(DispatcherPriority.Background)
+            {
+                Interval = TimeSpan.FromMilliseconds(250)
+            };
+            m_dispatcherTimer.Tick += new EventHandler(OnDispatcherTimerTick);
+            m_dispatcherTimer.Start();
+
             _ = PInvoke.SetWindowLong(new(m_hwnd), GetWindowLongPtr_nIndex.GWL_EXSTYLE,
                 (int)(WINDOWS_EX_STYLE.WS_EX_TOOLWINDOW | WINDOWS_EX_STYLE.WS_EX_TOPMOST));
 
@@ -255,6 +264,15 @@ namespace FancyWM
             Show();
 
             ((HwndSource)PresentationSource.FromVisual(this)).AddHook(WndProc);
+        }
+
+        private void OnDispatcherTimerTick(object? sender, EventArgs e)
+        {
+            bool anyDiscovered = m_tiling.DiscoverWindows();
+            if (anyDiscovered)
+            {
+                m_tiling.Refresh();
+            }
         }
 
         private void OnBindingError(string? msg)
@@ -1463,6 +1481,9 @@ namespace FancyWM
             {
                 hk.Dispose();
             }
+
+            m_dispatcherTimer.Tick -= OnDispatcherTimerTick;
+            m_dispatcherTimer?.Stop();
 
             m_logger.Debug($"Stopping the tiling window manager...");
             m_tiling?.Dispose();
