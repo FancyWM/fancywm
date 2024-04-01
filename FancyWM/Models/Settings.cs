@@ -60,7 +60,7 @@ namespace FancyWM.Models
         public bool OverrideAccentColor { get; set; } = false;
 
         [JsonConverter(typeof(Converters.ColorConverter))]
-        public Color CustomAccentColor { get; set; } = Colors.Blue;
+        public Color CustomAccentColor { get; set; } = Color.FromRgb(0, 100, 255);
 
         [JsonConverter(typeof(Converters.KeybindingConverter))]
         public KeybindingDictionary Keybindings { get; set; } = [];
