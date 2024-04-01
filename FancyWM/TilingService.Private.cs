@@ -179,7 +179,7 @@ namespace FancyWM
 
             if (useSmoothing)
             {
-                await transitionGroup.PerformSmoothTransitionAsync(TimeSpan.FromMilliseconds(200));
+                await transitionGroup.PerformSmoothTransitionAsync(TimeSpan.FromMilliseconds(100));
             }
             else
             {
