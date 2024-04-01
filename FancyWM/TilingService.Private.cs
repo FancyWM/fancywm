@@ -12,6 +12,7 @@ using FancyWM.Layouts;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reactive.Linq;
+using System.Windows.Threading;
 
 namespace FancyWM
 {
@@ -458,6 +459,15 @@ namespace FancyWM
 
             if (PendingIntent is GroupWithIntent gwi)
             {
+                m_dispatcher.BeginInvoke(() =>
+                {
+                    if (Mouse.LeftButton != MouseButtonState.Pressed)
+                    {
+                        PendingIntent.Cancel();
+                        PendingIntent = null;
+                    }
+                });
+
                 lock (m_backend)
                 {
                     if (m_backend.NodeAtPoint(m_workspace.VirtualDesktopManager.CurrentDesktop, e.NewLocation) is WindowNode targetNode)

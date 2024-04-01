@@ -85,7 +85,6 @@ namespace FancyWM.Controls
                     ViewModel.IsActionActive = true;
                     ViewModel.BeginHorizontalSplitWithCommand.Execute(null);
                     m_canTriggerHorizontalGroup = false;
-                    UnregisterCapture(btn);
                 }
             }
             else
@@ -115,7 +114,6 @@ namespace FancyWM.Controls
                     ViewModel.IsActionActive = true;
                     ViewModel.BeginVerticalSplitWithCommand.Execute(null);
                     m_canTriggerVerticalGroup = false;
-                    UnregisterCapture(btn);
                 }
             }
             else
@@ -145,7 +143,6 @@ namespace FancyWM.Controls
                     ViewModel.IsActionActive = true;
                     ViewModel.BeginStackWithCommand.Execute(null);
                     m_canTriggerStackGroup = false;
-                    UnregisterCapture(btn);
                 }
             }
             else
@@ -154,14 +151,12 @@ namespace FancyWM.Controls
             }
         }
 
-        private void UnregisterCapture(Button btn)
+        private void OnLostMouseCapture(object sender, MouseEventArgs e)
         {
-            void onCaptureLost(object sender, MouseEventArgs e)
+            if (ViewModel.IsActionActive)
             {
                 ViewModel.IsActionActive = false;
-                btn.LostMouseCapture -= onCaptureLost;
             }
-            btn.LostMouseCapture += onCaptureLost;
         }
     }
 }

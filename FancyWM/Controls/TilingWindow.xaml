@@ -44,6 +44,7 @@
             BorderBrush="{DynamicResource SystemControlBackgroundBaseMediumLowBrush}"
             Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
             CornerRadius="{StaticResource ControlCornerRadiusBottom}"
+            LostMouseCapture="OnLostMouseCapture"
             VerticalAlignment="Top" 
             HorizontalAlignment="Center">
             <Border.RenderTransform>
