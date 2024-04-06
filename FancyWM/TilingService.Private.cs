@@ -1376,7 +1376,7 @@ namespace FancyWM
             m_logger.Verbose("Dirty checking for changes with window {Handle}={ProcessName}", window.Handle, window.GetCachedProcessName());
             try
             {
-                if (CanManage(window) && window.State == WindowState.Restored)
+                if (window.State == WindowState.Restored && CanManage(window))
                 {
                     if (!AutoRegisterWindows)
                     {
@@ -1459,22 +1459,43 @@ namespace FancyWM
                 }
             }
 
-            if (!x.IsAlive || !x.CanMove || !x.CanResize || x.IsTopmost)
+            // Cheap boolean read
+            if (x.IsTopmost)
             {
                 return false;
             }
 
-            if (m_workspace.VirtualDesktopManager.IsWindowPinned(x))
+            // Set lookup
+            if (!ignoreFloating && IsFloating())
             {
                 return false;
             }
 
+            // GetWindowStyle
+            if (!x.CanResize)
+            {
+                return false;
+            }
+
+            // GetWindowPos + Lookup
             if (!IsOnCurrentDisplay())
             {
                 return false;
             }
 
-            return ignoreFloating || !IsFloating();
+            // OpenProcess (expensive)
+            if (!x.CanMove)
+            {
+                return false;
+            }
+
+            // Virtual Desktop stuff is very expensive
+            if (m_workspace.VirtualDesktopManager.IsWindowPinned(x))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void InvalidateLayout()
