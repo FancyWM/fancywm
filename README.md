@@ -1,7 +1,7 @@
 # FancyWM
 
+
 [![Gitter](https://badges.gitter.im/FancyWM/community.svg)](https://gitter.im/FancyWM/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-<!-- [![Donate via PayPal](https://shields.io/badge/Donate-gold?logo=paypal&style=flat)](https://fancywm.github.io/fancywm/donate.html) -->
 
 FancyWM is a dynamic tiling window manager for Windows 10/11
 
@@ -39,11 +39,20 @@ Pre-built binaries can be downloaded from [Releases](https://github.com/FancyWM/
 
 These are built by an automated GitHub Action and you can see all of the [build steps](https://github.com/FancyWM/fancywm/blob/main/.github/workflows/dotnet-desktop.yml) and [previous runs](https://github.com/FancyWM/fancywm/actions/workflows/dotnet-desktop.yml).
 
+### Install via winget
+```powershell
+winget install fancywm
+```
+
+### Install from the Microsoft Store
+
+<a href='//www.microsoft.com/store/apps/9p1741lkhqs9?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' width="138" height="50"/></a>
+
 ### Install .msixbundle (not recommended)
 You can test the Microsoft Store packages by installing them using PowerShell.
 
 #### PowerShell (as Administrator)
-```
+```powershell
 certutil.exe -addstore TrustedPeople .\FancyWM.Package_1.0.0.0.x64.cer
 Add-AppxPackage -Path .\FancyWM.Package_1.0.0.0.x64.msixbundle
 ```
