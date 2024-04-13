@@ -11,6 +11,7 @@ using FancyWM.Utilities;
 using System.Text;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace FancyWM
 {
@@ -27,6 +28,22 @@ namespace FancyWM
 
         private const string LogFile = "fancywm.log";
 
+        private static bool IsPackaged
+        {
+            get
+            {
+                try
+                {
+                    global::Windows.ApplicationModel.Package.Current.GetHashCode();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
         [STAThread]
         public static int Main(string[] args)
         {
@@ -39,17 +56,7 @@ namespace FancyWM
             }
             Directory.SetCurrentDirectory(fullPath);
 
-            bool isPackaged = false;
-            try
-            {
-                global::Windows.ApplicationModel.Package.Current.GetHashCode();
-                isPackaged = true;
-            }
-            catch (Exception)
-            {
-            }
-
-            if (isPackaged)
+            if (IsPackaged)
             {
                 try
                 {
@@ -178,10 +185,15 @@ namespace FancyWM
         {
             if (Application.Current is App app && app.RestartOnClose)
             {
+                var startupCommand = IsPackaged ? $"fancywm" : Assembly.GetEntryAssembly()?.Location.Replace(".dll", ".exe");
+                if (startupCommand == null)
+                {
+                    return;
+                }
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
-                    Arguments = @"/c timeout 5 && explorer.exe shell:appsFolder\2203VeselinKaraganev.FancyWM_9x2ndwrcmyd2c!App",
+                    Arguments = $"/c timeout 1 && taskkill /f /im fancywm.exe && timeout 1 && {startupCommand}",
                     UseShellExecute = false,
                     CreateNoWindow = true,
                 });
