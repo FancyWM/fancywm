@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -68,8 +69,15 @@ namespace FancyWM.Utilities
         void Start(IAnimationJob job);
     }
 
-    internal class AnimationThread : IAnimationThread
+    internal partial class AnimationThread : IAnimationThread
     {
+        [LibraryImport("dcomp")]
+        internal static partial uint DCompositionWaitForCompositorClock(int count, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)] IntPtr[]? handles, uint timeoutInMs);
+
+        [LibraryImport("dcomp")]
+        internal static partial int DCompositionBoostCompositorClock(int enable);
+
+
         private class WorkItem(IAnimationJob job, TimeSpan startTime, TimeSpan endTime)
         {
             public TimeSpan StartTime { get; set; } = startTime;
@@ -103,7 +111,6 @@ namespace FancyWM.Utilities
 
             var jobs = new List<WorkItem>();
             var completedJobs = new List<WorkItem>();
-            TimeSpan lastFrameTime = m_sw.Elapsed;
 
             while (true)
             {
@@ -136,34 +143,41 @@ namespace FancyWM.Utilities
                     jobs.Add(new WorkItem(job, m_sw.Elapsed, m_sw.Elapsed + job.Duration));
                 }
 
-                while ((m_sw.Elapsed - lastFrameTime) < m_targetFrameTime)
+                _ = DCompositionBoostCompositorClock(1);
+                try
                 {
-                    NanoSleep(m_sw.Elapsed - lastFrameTime);
-                }
+                    uint waitResult = DCompositionWaitForCompositorClock(0, null, (uint)m_targetFrameTime.TotalMilliseconds);
+                    Debug.Assert(waitResult >= 0);
 
-                completedJobs.Clear();
-                foreach (var job in jobs)
-                {
-                    var progress = Math.Min(1.0, (m_sw.Elapsed - job.StartTime).TotalMilliseconds / job.Job.Duration.TotalMilliseconds);
-                    job.Job.Update(progress);
-                    if (progress >= 1.0)
+                    completedJobs.Clear();
+                    foreach (var job in jobs)
                     {
-                        completedJobs.Add(job);
-                        job.Job.OnCompleted();
+                        var progress = Math.Min(1.0, (m_sw.Elapsed - job.StartTime).TotalMilliseconds / job.Job.Duration.TotalMilliseconds);
+                        job.Job.Update(progress);
+                        if (progress >= 1.0)
+                        {
+                            completedJobs.Add(job);
+                            job.Job.OnCompleted();
+                        }
+                        else if (job.Job.IsCancelled)
+                        {
+                            completedJobs.Add(job);
+                            job.Job.OnCancelled();
+                        }
                     }
-                    else if (job.Job.IsCancelled)
+
+                    foreach (var completedJob in completedJobs)
                     {
-                        completedJobs.Add(job);
-                        job.Job.OnCancelled();
+                        jobs.Remove(completedJob);
                     }
                 }
-
-                foreach (var completedJob in completedJobs)
+                finally
                 {
-                    jobs.Remove(completedJob);
+                    if (m_queue.Count == 0)
+                    {
+                        _ = DCompositionBoostCompositorClock(0);
+                    }
                 }
-
-                lastFrameTime = m_sw.Elapsed;
             }
         }
 
@@ -171,34 +185,6 @@ namespace FancyWM.Utilities
         {
             m_queue.CompleteAdding();
             m_thread.Join(1000);
-        }
-
-        private const uint CREATE_WAITABLE_TIMER_HIGH_RESOLUTION = 0x2;
-        private const uint TIMER_ALL_ACCESS = 0x001f0003;
-
-        private static bool NanoSleep(TimeSpan timeSpan)
-        {
-            unsafe
-            {
-                HANDLE hTimer = PInvoke.CreateWaitableTimerEx(null, new PCWSTR(), Constants.CREATE_WAITABLE_TIMER_MANUAL_RESET | CREATE_WAITABLE_TIMER_HIGH_RESOLUTION, TIMER_ALL_ACCESS);
-                if (hTimer.Value == IntPtr.Zero)
-                {
-                    return false;
-                }
-
-                long timeout100ns = (long)(timeSpan.TotalMilliseconds / 1E4);
-                long li = -timeout100ns;
-
-                if (!PInvoke.SetWaitableTimerEx(hTimer, &li, 0, null, null, null, 0))
-                {
-                    PInvoke.CloseHandle(hTimer);
-                    return false;
-                }
-
-                PInvoke.WaitForSingleObject(hTimer, Constants.INFINITE);
-                PInvoke.CloseHandle(hTimer);
-                return true;
-            }
         }
     }
 }
