@@ -20,7 +20,7 @@ namespace FancyWM.Pages.Settings
             InitializeComponent();
             DataContext = new
             {
-                AppVersionText = GetVersionString(),
+                AppVersionText = App.Current.VersionString,
             };
         }
 
@@ -31,22 +31,6 @@ namespace FancyWM.Pages.Settings
         private void OnHyperlinkRequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             _ = Launcher.LaunchUriAsync(e.Uri);
-        }
-
-        private static string GetVersionString()
-        {
-            try
-            {
-                Package package = Package.Current;
-                PackageId packageId = package.Id;
-                PackageVersion version = packageId.Version;
-                return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
-            }
-            catch (Exception)
-            {
-                var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location);
-                return versionInfo.FileVersion ?? "0.0.0.0";
-            }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -15,8 +16,9 @@ using FancyWM.Utilities;
 using FancyWM.Windows;
 
 using Microsoft.Extensions.DependencyInjection;
-
 using Serilog;
+
+using Windows.ApplicationModel;
 
 namespace FancyWM
 {
@@ -57,6 +59,25 @@ namespace FancyWM
                             return null;
                         }
                     }
+                }
+            }
+        }
+
+        internal string VersionString
+        {
+            get
+            {
+                try
+                {
+                    Package package = Package.Current;
+                    PackageId packageId = package.Id;
+                    PackageVersion version = packageId.Version;
+                    return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+                }
+                catch (Exception)
+                {
+                    var versionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location);
+                    return versionInfo.FileVersion ?? "0.0.0.0";
                 }
             }
         }

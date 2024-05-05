@@ -85,14 +85,41 @@ namespace FancyWM.Windows
             Close();
         }
 
+        private void OpenIssue()
+        {
+            var title = Uri.EscapeDataString(ExceptionMessage ?? "");
+            var body = Uri.EscapeDataString(@$"**Describe the bug**
+Observing the following error:
+```
+{ExceptionText}
+```
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Open '...'
+2. Resize '....'
+3. Enable '....'
+4. See error
+
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
+**Desktop (please complete the following information):**
+ - OS: {Environment.OSVersion.VersionString}
+ - FancyWM Version: {App.Current.VersionString}
+
+**Additional context**
+Add any other context about the problem here.
+");
+            var uri = new Uri($"https://github.com/fancywm/fancywm/issues/new?labels=bug&title={title}&body={body}");
+            _ = Launcher.LaunchUriAsync(uri);
+        }
+
         private void OnSubmitLogButtonClick(object sender, RoutedEventArgs e)
         {
-            if (!IsSubmitLogEnabled)
-            {
-                return;
-            }
-
-            Thread.Sleep(1000);
+            OpenIssue();
+            DialogResult = false;
+            Close();
         }
 
         private void OnQuitButtonClick(object sender, RoutedEventArgs e)
@@ -113,7 +140,7 @@ namespace FancyWM.Windows
 
         private void OnRequestNavigate(object sender, MouseButtonEventArgs e)
         {
-            _ = Launcher.LaunchUriAsync(new Uri("https://github.com/veselink1/fancywm/issues"));
+            OpenIssue();
         }
     }
 }
