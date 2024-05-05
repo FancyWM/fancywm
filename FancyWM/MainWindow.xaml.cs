@@ -268,6 +268,11 @@ namespace FancyWM
 
         private void OnDispatcherTimerTick(object? sender, EventArgs e)
         {
+            if (m_tiling == null)
+            {
+                return;
+            }
+
             bool anyDiscovered = m_tiling.DiscoverWindows();
             if (anyDiscovered)
             {
