@@ -12,6 +12,7 @@ using System.Reactive.Disposables;
 using Serilog;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace FancyWM
 {
@@ -158,6 +159,7 @@ namespace FancyWM
         private UserInteraction m_currentInteraction = UserInteraction.None;
         private ITilingServiceIntent? m_pendingIntent;
         private readonly Counter m_frozen = new();
+        private readonly Stopwatch m_sw = new();
 
         public TilingService(IWorkspace workspace, IDisplay display, IAnimationThread animationThread, IObservable<ITilingServiceSettings> settings, bool autoRegisterWindows)
         {
@@ -215,6 +217,8 @@ namespace FancyWM
 
             m_subscriptions.Add(m_gui);
             m_subscriptions.Add(settings.Subscribe(OnSettingsChanged));
+
+            m_sw.Start();
         }
 
         private void OnSettingsChanged(ITilingServiceSettings x)

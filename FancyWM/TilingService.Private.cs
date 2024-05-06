@@ -59,18 +59,18 @@ namespace FancyWM
             }
         }
 
-        private DateTime m_lastUpdateLayout = DateTime.MinValue;
+        private TimeSpan m_lastUpdateLayout = TimeSpan.Zero;
 
         private async Task UpdateLayoutAsync()
         {
             if (!Active)
                 return;
 
-            if (m_currentInteraction != UserInteraction.None && DateTime.UtcNow - m_lastUpdateLayout <= TimeSpan.FromSeconds(1.0 / m_display.RefreshRate))
+            if (m_currentInteraction != UserInteraction.None && m_sw.Elapsed - m_lastUpdateLayout <= TimeSpan.FromSeconds(1.0 / m_display.RefreshRate))
             {
                 return;
             }
-            m_lastUpdateLayout = DateTime.UtcNow;
+            m_lastUpdateLayout = m_sw.Elapsed;
 
 
             List<TilingNode> snapshot;
@@ -988,24 +988,24 @@ namespace FancyWM
             m_currentInteraction = UserInteraction.None;
         }
 
-        private DateTime m_lastPlacementFailed = DateTime.MinValue;
-        private DateTime m_lastWindowPositionChanged = DateTime.MinValue;
+        private TimeSpan m_lastPlacementFailed = TimeSpan.Zero;
+        private TimeSpan m_lastWindowPositionChanged = TimeSpan.Zero;
 
         private void OnWindowPositionChanged(object? sender, WindowPositionChangedEventArgs e)
         {
             if (!m_active)
                 return;
 
-            if (DateTime.UtcNow - m_lastPlacementFailed <= TimeSpan.FromMilliseconds(100))
+            if (m_sw.Elapsed - m_lastPlacementFailed <= TimeSpan.FromMilliseconds(100))
             {
                 return;
             }
 
-            if (m_currentInteraction != UserInteraction.None && DateTime.UtcNow - m_lastWindowPositionChanged <= TimeSpan.FromSeconds(1.0 / m_display.RefreshRate))
+            if (m_currentInteraction != UserInteraction.None && m_sw.Elapsed - m_lastWindowPositionChanged <= TimeSpan.FromSeconds(1.0 / m_display.RefreshRate))
             {
                 return;
             }
-            m_lastWindowPositionChanged = DateTime.UtcNow;
+            m_lastWindowPositionChanged = m_sw.Elapsed;
 
             lock (m_ignoreRepositionSet)
             {
@@ -1080,11 +1080,11 @@ namespace FancyWM
             }
             catch (TilingFailedException ex)
             {
-                if (DateTime.UtcNow - m_lastPlacementFailed <= TimeSpan.FromSeconds(1))
+                if (m_sw.Elapsed - m_lastPlacementFailed <= TimeSpan.FromSeconds(1))
                 {
                     return;
                 }
-                m_lastPlacementFailed = DateTime.UtcNow;
+                m_lastPlacementFailed = m_sw.Elapsed;
                 PlacementFailed?.Invoke(this, new TilingFailedEventArgs(ex.FailReason, e.Source));
             }
             finally
