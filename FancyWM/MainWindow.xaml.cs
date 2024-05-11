@@ -528,7 +528,7 @@ namespace FancyWM
                     var key = keys.First();
                     switch (key)
                     {
-                        case KeyCode.F1:
+                        case KeyCode.F12:
                             OpenHelp();
                             return;
                         case KeyCode.Snapshot:
@@ -1016,7 +1016,7 @@ namespace FancyWM
             container.Children.Add(new MessageBoxContent
             {
                 Text = Strings.Messages_WaitingForAction,
-                HintText = Strings.Messages_PressF1ForHelp,
+                HintText = Strings.Messages_PressF12ForHelp,
             });
             await m_toasts.ShowToastAsync(container, cancellationToken);
         }

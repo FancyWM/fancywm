@@ -621,8 +621,8 @@
   <data name="Messages.OperationFailed" xml:space="preserve">
     <value>Operation failed!</value>
   </data>
-  <data name="Messages.PressF1ForHelp" xml:space="preserve">
-    <value>Press F1 for help</value>
+  <data name="Messages.PressF12ForHelp" xml:space="preserve">
+    <value>Press F12 for help</value>
   </data>
   <data name="Messages.ReceivedInvalidCommand" xml:space="preserve">
     <value>Received invalid command</value>

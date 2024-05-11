@@ -1996,11 +1996,11 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Press F1 for help.
+        ///   Looks up a localized string similar to Press F12 for help.
         /// </summary>
-        public static string Messages_PressF1ForHelp {
+        public static string Messages_PressF12ForHelp {
             get {
-                return ResourceManager.GetString("Messages.PressF1ForHelp", resourceCulture);
+                return ResourceManager.GetString("Messages.PressF12ForHelp", resourceCulture);
             }
         }
         
