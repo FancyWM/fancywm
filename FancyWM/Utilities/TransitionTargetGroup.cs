@@ -12,6 +12,22 @@ namespace FancyWM.Utilities
         private readonly IAnimationThread m_animationThread = animationThread;
         private readonly List<TransitionTarget> m_targets = targets.ToList();
 
+        private static async ValueTask RunOnThreadPool(Action action)
+        {
+            await await Task.Run(() =>
+            {
+                try
+                {
+                    action();
+                    return ValueTask.CompletedTask;
+                }
+                catch (Exception e)
+                {
+                    return ValueTask.FromException(e);
+                }
+            });
+        }
+
         public async Task PerformSmoothTransitionAsync(TimeSpan duration)
         {
             int Lerp(int x1, int x2, double t)
@@ -45,7 +61,7 @@ namespace FancyWM.Utilities
                         if (working[index] == m_targets[index].Window.Position)
                         {
                             Rectangle newCurrent = LerpRectPosition(m_targets[index].OriginalPosition, m_targets[index].ComputedPosition, ease.Evaluate(progress));
-                            await Task.Run(() => m_targets[index].Window.SetPosition(newCurrent));
+                            await RunOnThreadPool(() => m_targets[index].Window.SetPosition(newCurrent));
                             if (newCurrent == m_targets[index].ComputedPosition)
                             {
                                 job.Cancel();
@@ -55,7 +71,7 @@ namespace FancyWM.Utilities
                         }
                         else
                         {
-                            await Task.Run(() => m_targets[index].Window.SetPosition(m_targets[index].ComputedPosition));
+                            await RunOnThreadPool(() => m_targets[index].Window.SetPosition(m_targets[index].ComputedPosition));
                             job.Cancel();
                         }
                     }
