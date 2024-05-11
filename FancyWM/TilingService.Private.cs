@@ -1012,7 +1012,8 @@ namespace FancyWM
                 if (!m_ignoreRepositionSet.Contains(e.Source))
                 {
                     // Some other event might have resulted in the movement of the window.
-                    DetectChanges(e.Source);
+                    // Do not call DetectChanges under the lock, to avoid deadlock.
+                    m_dispatcher.InvokeAsync(() => DetectChanges(e.Source));
                     return;
                 }
             }
