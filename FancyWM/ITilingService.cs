@@ -29,6 +29,8 @@ namespace FancyWM
 
         bool AutoCollapse { get; set; }
 
+        int AutoSplitCount { get; set; }
+
         ITilingServiceIntent? PendingIntent { get; set; }
 
         bool CanSplit(bool vertical);

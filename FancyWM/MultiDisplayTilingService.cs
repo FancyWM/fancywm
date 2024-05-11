@@ -66,6 +66,19 @@ namespace FancyWM
             }
         }
 
+        public int AutoSplitCount
+        {
+            get => m_autoSplitCount;
+            set
+            {
+                foreach (var tiling in m_tilingServices.Values)
+                {
+                    tiling.AutoSplitCount = value;
+                }
+                m_autoSplitCount = value;
+            }
+        }
+
         public ITilingServiceIntent? PendingIntent
         {
             get => GetActiveTilingService().PendingIntent;
@@ -79,6 +92,7 @@ namespace FancyWM
         private IDisplay m_activeDisplay;
         private bool m_showFocus;
         private bool m_autoCollapse;
+        private int m_autoSplitCount;
         private IReadOnlyCollection<IWindowMatcher> m_exclusionMatchers = [];
         private readonly IObservable<ITilingServiceSettings> m_settings;
         private readonly object m_syncRoot = new();

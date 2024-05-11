@@ -43,6 +43,8 @@ namespace FancyWM.Models
 
         public bool AutoCollapsePanels { get; set; } = true;
 
+        public int AutoSplitCount { get; set; } = 2;
+
         public bool AnimateWindowMovement { get; set; } = true;
 
         public bool ModifierMoveWindow { get; set; } = false;

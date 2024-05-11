@@ -55,6 +55,8 @@ namespace FancyWM
 
         public bool AnimateWindowMovement { get; set; }
 
+        public int AutoSplitCount { get; set; } = 100;
+
         public bool AutoCollapse
         {
             get => m_backend.AutoCollapse;
@@ -337,8 +339,9 @@ namespace FancyWM
                         if (!m_backend.HasWindow(window) && window.State == WindowState.Restored && CanManage(window))
                         {
                             m_logger.Debug("Discovered window {Handle}={ProcessName}", window.Handle, window.GetCachedProcessName());
-                            var newNode = m_backend.RegisterWindow(window);
+                            var newNode = m_backend.RegisterWindow(window, maxTreeWidth: AutoSplitCount);
                             newNode.Parent!.Padding = GetPanelPaddingRect();
+                            newNode.Parent!.Spacing = GetPanelSpacing();
                             InvalidateLayout();
                             anyChanges = true;
                         }

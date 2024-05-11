@@ -12,7 +12,6 @@ using FancyWM.Layouts;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reactive.Linq;
-using System.Windows.Threading;
 
 namespace FancyWM
 {
@@ -911,8 +910,9 @@ namespace FancyWM
                         {
                             lock (m_backend)
                             {
-                                var node = m_backend.RegisterWindow(e.Source);
+                                var node = m_backend.RegisterWindow(e.Source, maxTreeWidth: AutoSplitCount);
                                 node.Parent!.Padding = GetPanelPaddingRect();
+                                node.Parent!.Spacing = GetPanelSpacing();
                             }
                         }
                         catch (NoValidPlacementExistsException)
@@ -1147,8 +1147,9 @@ namespace FancyWM
 
                 void RegisterInTopLevelPanel()
                 {
-                    var window = m_backend.RegisterWindow(e.Source);
+                    var window = m_backend.RegisterWindow(e.Source, maxTreeWidth: AutoSplitCount);
                     window.Parent!.Padding = GetPanelPaddingRect();
+                    window.Parent!.Spacing = GetPanelSpacing();
                 }
 
                 void RegisterInSavedPanel()
@@ -1158,6 +1159,7 @@ namespace FancyWM
                     {
                         window = m_backend.RegisterWindow(e.Source, savedLocation.Parent);
                         window.Parent!.Padding = GetPanelPaddingRect();
+                        window.Parent!.Spacing = GetPanelSpacing();
                     }
                     catch (WindowAlreadyRegisteredException)
                     {
@@ -1393,8 +1395,9 @@ namespace FancyWM
                                 if (!m_backend.HasWindow(window))
                                 {
                                     m_logger.Debug("Window {Handle}={ProcessName} can be managed, but is not registered with backend, registering now", window.Handle, window.GetCachedProcessName());
-                                    var newNode = m_backend.RegisterWindow(window);
+                                    var newNode = m_backend.RegisterWindow(window, maxTreeWidth: AutoSplitCount);
                                     newNode.Parent!.Padding = GetPanelPaddingRect();
+                                    newNode.Parent!.Spacing = GetPanelSpacing();
                                     InvalidateLayout();
                                     return true;
                                 }
@@ -1596,6 +1599,7 @@ namespace FancyWM
                 foreach (var panel in m_backend.Trees.SelectMany(x => x.Root!.Nodes).OfType<PanelNode>())
                 {
                     panel.Padding = GetPanelPaddingRect();
+                    panel.Spacing = GetPanelSpacing();
                 }
             }
             UpdateGuiNodeOptions();

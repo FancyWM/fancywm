@@ -349,6 +349,24 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatic Split Threshold.
+        /// </summary>
+        public static string General_AutoSplitCount {
+            get {
+                return ResourceManager.GetString("General.AutoSplitCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Triggers automatic panel creation when the focused panel has more than the specified number of children..
+        /// </summary>
+        public static string General_AutoSplitCount_Description {
+            get {
+                return ResourceManager.GetString("General.AutoSplitCount.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         public static string General_Caption {

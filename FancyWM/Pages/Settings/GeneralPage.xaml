@@ -91,6 +91,30 @@
                 </StackPanel>
             </Border>
 
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Slider
+                            x:Name="AutoSplitCountSlider"
+                            ui:ControlHelper.Header="{x:Static res:Strings.General_AutoSplitCount}"
+                            HorizontalAlignment="Left"
+                            Maximum="10"
+                            Minimum="2"
+                            IsSnapToTickEnabled="True"
+                            TickFrequency="1"
+                            Value="{Binding AutoSplitCount, Mode=TwoWay}"
+                            Width="200" />
+
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Padding="10,20,0,0"
+                            Text="{Binding Value, ElementName=AutoSplitCountSlider, Mode=OneWay}"  />
+                    </StackPanel>
+
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Text="{x:Static res:Strings.General_AutoSplitCount_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
+                </StackPanel>
+            </Border>
+
             <TextBlock Text="{x:Static res:Strings.General_WindowMovement}" Style="{DynamicResource SubtitleTextBlockStyle}" Margin="0, 20" />
 
             <Border Style="{DynamicResource SettingsItemStyle}">

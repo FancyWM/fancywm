@@ -137,14 +137,30 @@ namespace FancyWM
             m_states.RemoveState(virtualDesktop);
         }
 
-        public WindowNode RegisterWindow(IWindow window)
+        public WindowNode RegisterWindow(IWindow window, int maxTreeWidth = 100)
         {
             var state = m_states.FindByVdm(window) ?? throw new InvalidWindowReferenceException(window.Handle);
             var focusedNode = state.FocusedNode;
 
-            PanelNode parent = focusedNode is WindowNode focusedWindow
-                ? focusedWindow.Parent!
-                : state.DesktopTree.Root!;
+            PanelNode parent;
+            if (focusedNode is WindowNode focusedWindow)
+            {
+                parent = focusedWindow.Parent!;
+            }
+            else
+            {
+                parent = state.DesktopTree.Root!;
+            }
+
+            if (parent.Children.Where(x => x is not PlaceholderNode).Count() >= maxTreeWidth && parent is SplitPanelNode parentSplit)
+            {
+                var nodeToSplit = parent.Children.Contains(focusedNode) ? focusedNode! : parent.Children.Last();
+                if (nodeToSplit is WindowNode)
+                {
+                    WrapInSplitPanel(nodeToSplit, vertical: parentSplit.Orientation == PanelOrientation.Horizontal);
+                }
+                parent = nodeToSplit.Parent!;
+            }
 
             return RegisterWindow(window, parent, focusedNode as WindowNode);
         }
