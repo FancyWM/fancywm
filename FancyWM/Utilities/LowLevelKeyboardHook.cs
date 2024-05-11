@@ -37,6 +37,7 @@ namespace FancyWM.Utilities
             m_hookThread = new Thread(HookThreadMessageLoop)
             {
                 Name = "LowLevelKeyboardHookThread",
+                IsBackground = true,
             };
             m_hookThread.SetApartmentState(ApartmentState.STA);
             m_hookThread.Start();

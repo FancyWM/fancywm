@@ -213,7 +213,7 @@ namespace FancyWM
                     }
                 }));
 
-            m_llkbdHook = new LowLevelKeyboardHook();
+            m_llkbdHook = App.Current.Services.GetRequiredService<LowLevelKeyboardHook>();
 
             m_subscriptions =
             [
@@ -1472,8 +1472,6 @@ namespace FancyWM
             m_workspace.FocusedWindowChanged -= OnFocusedWindowChanged;
 
             m_logger.Debug($"Disposing of {nameof(MainWindow)}...");
-
-            m_llkbdHook?.Dispose();
 
             if (m_tiling?.Active == true)
             {

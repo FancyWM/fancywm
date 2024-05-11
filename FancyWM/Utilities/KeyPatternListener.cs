@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
+using Microsoft.Extensions.DependencyInjection;
+
 namespace FancyWM.Utilities
 {
     internal class KeyPatternChangedEventArgs(IReadOnlySet<KeyCode> keys) : EventArgs
@@ -32,55 +34,59 @@ namespace FancyWM.Utilities
 
         public UIElement EventSource { get; }
 
+        private readonly LowLevelKeyboardHook m_llKbdHk = App.Current.Services.GetRequiredService<LowLevelKeyboardHook>();
+
         private readonly HashSet<KeyCode> m_pressedKeys = [];
 
         public KeyPatternListener(UIElement eventSource)
         {
             EventSource = eventSource;
-            EventSource.PreviewKeyUp += OnKeyUp;
-            EventSource.PreviewKeyDown += OnKeyDown;
-            EventSource.LostKeyboardFocus += OnLostKeyboardFocus;
-            EventSource.Focus();
-            IsListening = true;
+            EventSource.IsKeyboardFocusWithinChanged += OnKeyboardFocusChanged;
+        }
+
+        private void OnKeyboardFocusChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            m_pressedKeys.Clear();
+
+            if (EventSource.IsKeyboardFocusWithin)
+            {
+                IsListening = true;
+                m_llKbdHk.KeyStateChanged += OnKeyStateChanged;
+            }
+            else
+            {
+                IsListening = false;
+                m_llKbdHk.KeyStateChanged -= OnKeyStateChanged;
+            }
         }
 
         public void Dispose()
         {
-            if (!IsListening)
-                return;
-            EventSource.PreviewKeyUp -= OnKeyUp;
-            EventSource.PreviewKeyDown -= OnKeyDown;
-            EventSource.LostKeyboardFocus -= OnLostKeyboardFocus;
+            m_llKbdHk.KeyStateChanged -= OnKeyStateChanged;
+            EventSource.IsKeyboardFocusWithinChanged -= OnKeyboardFocusChanged;
             IsListening = false;
         }
 
-        private void OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            m_pressedKeys.Clear();
-        }
-
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        private void OnKeyStateChanged(object? sender, ref LowLevelKeyboardHook.KeyStateChangedEventArgs e)
         {
             e.Handled = true;
-            if (m_pressedKeys.Count > 0)
+            var eCopy = e;
+            _ = EventSource.Dispatcher.InvokeAsync(() =>
             {
-                Pattern = m_pressedKeys.ToHashSet();
-                m_pressedKeys.Clear();
-                PatternChanged?.Invoke(this, new KeyPatternChangedEventArgs(Pattern));
-            }
-        }
-
-        private void OnKeyDown(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-            if (e.SystemKey != Key.None)
-            {
-                m_pressedKeys.Add(KeyCodeHelper.MapToKeyCode(e.SystemKey));
-            }
-            else
-            {
-                m_pressedKeys.Add(KeyCodeHelper.MapToKeyCode(e.Key));
-            }
+                if (eCopy.IsPressed)
+                {
+                    m_pressedKeys.Add(eCopy.KeyCode);
+                }
+                else
+                {
+                    if (m_pressedKeys.Count > 0)
+                    {
+                        Pattern = m_pressedKeys.ToHashSet();
+                        m_pressedKeys.Clear();
+                        PatternChanged?.Invoke(this, new KeyPatternChangedEventArgs(Pattern));
+                    }
+                }
+            });
         }
     }
 

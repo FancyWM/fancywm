@@ -205,6 +205,7 @@ namespace FancyWM
             ConfigureLogging(services, args);
             services.AddSingleton<IMicaProvider>(_ => new FauxMicaProvider(TimeSpan.FromSeconds(1)));
             services.AddSingleton(_ => new LowLevelMouseHook());
+            services.AddSingleton(_ => new LowLevelKeyboardHook());
         }
 
         private static void ConfigureLogging(IServiceCollection services, Arguments args)
