@@ -83,8 +83,15 @@ namespace FancyWM.Controls
             base.OnPropertyChanged(e);
             if (e.Property == PatternProperty)
             {
-                InputBox.Text = Pattern.OrderByDescending(x => (int)x).ToPrettyString();
-                Keyboard.ClearFocus();
+                if (Pattern != null)
+                {
+                    InputBox.Text = Pattern.OrderByDescending(x => (int)x).ToPrettyString();
+                    Keyboard.ClearFocus();
+                }
+                else
+                {
+                    InputBox.Text = EmptyPlaceholder;
+                }
             }
             else if (e.Property == InitialPatternProperty)
             {
