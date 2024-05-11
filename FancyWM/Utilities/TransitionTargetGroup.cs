@@ -38,14 +38,14 @@ namespace FancyWM.Utilities
             {
                 // Capture index
                 var index = i;
-                IAnimationJob job = AnimationJob.Create((job, progress) =>
+                IAnimationJob job = AnimationJob.Create(async (job, progress) =>
                 {
                     try
                     {
                         if (working[index] == m_targets[index].Window.Position)
                         {
                             Rectangle newCurrent = LerpRectPosition(m_targets[index].OriginalPosition, m_targets[index].ComputedPosition, ease.Evaluate(progress));
-                            m_targets[index].Window.SetPosition(newCurrent);
+                            await Task.Run(() => m_targets[index].Window.SetPosition(newCurrent));
                             if (newCurrent == m_targets[index].ComputedPosition)
                             {
                                 job.Cancel();
@@ -55,7 +55,7 @@ namespace FancyWM.Utilities
                         }
                         else
                         {
-                            m_targets[index].Window.SetPosition(m_targets[index].ComputedPosition);
+                            await Task.Run(() => m_targets[index].Window.SetPosition(m_targets[index].ComputedPosition));
                             job.Cancel();
                         }
                     }

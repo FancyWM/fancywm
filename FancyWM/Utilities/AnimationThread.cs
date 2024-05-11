@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace FancyWM.Utilities
         bool IsCancelled { get; }
         TimeSpan Duration { get; }
         Task Task { get; }
-        void Update(double progress);
+        ValueTask Update(double progress);
         void Cancel();
 
         void OnCompleted();
@@ -24,7 +25,7 @@ namespace FancyWM.Utilities
 
     internal static class AnimationJob
     {
-        private class DelegateAnimationJob(Action<IAnimationJob, double> animate, TimeSpan duration) : IAnimationJob
+        private class DelegateAnimationJob(Func<IAnimationJob, double, ValueTask> animate, TimeSpan duration) : IAnimationJob
         {
             public bool IsCancelled => m_isCancelled;
 
@@ -32,7 +33,7 @@ namespace FancyWM.Utilities
 
             public Task Task => m_tcs.Task;
 
-            private readonly Action<IAnimationJob, double> m_animate = animate;
+            private readonly Func<IAnimationJob, double, ValueTask> m_animate = animate;
             private readonly TimeSpan m_duration = duration;
             private bool m_isCancelled;
             private readonly TaskCompletionSource<object?> m_tcs = new();
@@ -42,9 +43,9 @@ namespace FancyWM.Utilities
                 m_isCancelled = true;
             }
 
-            public void Update(double progress)
+            public ValueTask Update(double progress)
             {
-                m_animate(this, progress);
+                return m_animate(this, progress);
             }
 
             public void OnCompleted()
@@ -58,7 +59,7 @@ namespace FancyWM.Utilities
             }
         }
 
-        public static IAnimationJob Create(Action<IAnimationJob, double> animate, TimeSpan duration)
+        public static IAnimationJob Create(Func<IAnimationJob, double, ValueTask> animate, TimeSpan duration)
         {
             return new DelegateAnimationJob(animate, duration);
         }
@@ -150,21 +151,27 @@ namespace FancyWM.Utilities
                     Debug.Assert(waitResult >= 0);
 
                     completedJobs.Clear();
-                    foreach (var job in jobs)
+                    Task.WaitAll(jobs.Select(async (job) =>
                     {
                         var progress = Math.Min(1.0, (m_sw.Elapsed - job.StartTime).TotalMilliseconds / job.Job.Duration.TotalMilliseconds);
-                        job.Job.Update(progress);
+                        await job.Job.Update(progress);
                         if (progress >= 1.0)
                         {
-                            completedJobs.Add(job);
+                            lock (completedJobs)
+                            {
+                                completedJobs.Add(job);
+                            }
                             job.Job.OnCompleted();
                         }
                         else if (job.Job.IsCancelled)
                         {
-                            completedJobs.Add(job);
+                            lock (completedJobs)
+                            {
+                                completedJobs.Add(job);
+                            }
                             job.Job.OnCancelled();
                         }
-                    }
+                    }).ToArray());
 
                     foreach (var completedJob in completedJobs)
                     {
