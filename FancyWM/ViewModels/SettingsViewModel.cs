@@ -151,7 +151,7 @@ namespace FancyWM.ViewModels
 
         public bool ShowFocusDuringAction { get => m_showFocusDuringAction; set => SetField(ref m_showFocusDuringAction, value); }
 
-        public IList<KeybindingViewModel>? Keybindings
+        public ObservableCollection<KeybindingViewModel>? Keybindings
         {
             get => m_keybindings; set
             {
@@ -184,7 +184,7 @@ namespace FancyWM.ViewModels
         private Color m_accentColor;
         private readonly IDisposable m_subscription;
         private bool m_isInit = false;
-        private IList<KeybindingViewModel>? m_keybindings;
+        private ObservableCollection<KeybindingViewModel>? m_keybindings;
         private int m_panelHeight;
         private int m_panelFontSize;
         private int m_windowPadding;
@@ -231,10 +231,24 @@ namespace FancyWM.ViewModels
                     SoundOnFailure = settings.SoundOnFailure;
                     ShowFocusDuringAction = settings.ShowFocusDuringAction;
 
-                    Keybindings = KeybindingViewModel.FromDictionary(settings.Keybindings);
-                    foreach (var vm in Keybindings)
+                    var newKeybindings = KeybindingViewModel.FromDictionary(settings.Keybindings);
+                    if (m_keybindings == null)
                     {
-                        vm.PropertyChanged += OnKeybindingPropertyChanged;
+                        Keybindings = [..newKeybindings];
+                        foreach (var vm in Keybindings)
+                        {
+                            vm.PropertyChanged += OnKeybindingPropertyChanged;
+                        }
+                    }
+                    else
+                    {
+                        Debug.Assert(m_keybindings.Count == newKeybindings.Count);
+                        foreach (var vm in newKeybindings)
+                        {
+                            var existingVm = m_keybindings.First(x => x.Action == vm.Action);
+                            existingVm.Pattern = vm.Pattern;
+                            existingVm.IsDirectMode = vm.IsDirectMode;
+                        }
                     }
 
                     Autostart.IsEnabledAsync()
