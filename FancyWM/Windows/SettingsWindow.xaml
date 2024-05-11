@@ -13,6 +13,7 @@
         Width="800"
         MinWidth="400"
         MinHeight="300"
+        FontSize="14"
         Title="{x:Static res:Strings.Settings_FancyWM}"
         Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
