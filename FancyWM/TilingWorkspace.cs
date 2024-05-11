@@ -375,7 +375,7 @@ namespace FancyWM
                         }
                     }
                 }
-                else
+                else if (node.Parent != nodeAtPoint)
                 {
                     try
                     {

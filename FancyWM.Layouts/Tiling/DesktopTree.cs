@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using WinMan;
 
@@ -70,6 +71,9 @@ namespace FancyWM.Layouts.Tiling
 
             var parentB = nodeB.Parent ?? throw new InvalidOperationException($"Parent of {nameof(nodeB)} is null!");
             var indexB = parentB.IndexOf(nodeB);
+
+            Debug.Assert(parentA != nodeB);
+            Debug.Assert(parentB != nodeA);
 
             parentA.SetReference(indexA, nodeB);
             nodeB.Parent = parentA;

@@ -12,6 +12,7 @@ using FancyWM.Layouts;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reactive.Linq;
+using System.Diagnostics;
 
 namespace FancyWM
 {
