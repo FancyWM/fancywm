@@ -349,7 +349,7 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Automatic Split Threshold.
+        ///   Looks up a localized string similar to Automatic Split Threshold ᴺᴱᵂ.
         /// </summary>
         public static string General_AutoSplitCount {
             get {

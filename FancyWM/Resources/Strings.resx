@@ -908,7 +908,7 @@ If you are running a supported non-Insider Windows build and you see this messag
     <value>Use ⇪ Caps Lock as  the Activation hotkey</value>
   </data>
   <data name="General.AutoSplitCount" xml:space="preserve">
-    <value>Automatic Split Threshold</value>
+    <value>Automatic Split Threshold ᴺᴱᵂ</value>
   </data>
   <data name="General.AutoSplitCount.Description" xml:space="preserve">
     <value>Triggers automatic panel creation when the focused panel has more than the specified number of children.</value>

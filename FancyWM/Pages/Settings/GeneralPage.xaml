@@ -130,7 +130,6 @@
                     <TextBlock VerticalAlignment="Center" Margin="0,0,16,0">
                         <Run Text="{x:Static res:Strings.General_ModifierMoveWindow}" />
                         <Run Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Text="&#160;Alt&#160;" />
-                        <Run Text="ᴺᴱᵂ" />
                     </TextBlock>
                 </DockPanel>
             </Border>
