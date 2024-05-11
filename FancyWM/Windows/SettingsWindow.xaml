@@ -23,6 +23,7 @@
             <ListView
                 x:Name="PagesList"
                 DockPanel.Dock="Top"
+                SelectionMode="Single"
                 SelectedValuePath="Page"
                 SelectedIndex="0"
                 SelectionChanged="PagesList_SelectionChanged">
