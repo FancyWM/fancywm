@@ -106,6 +106,15 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FancyWM is free and open-source, but requires the same time and effort as any other software..
+        /// </summary>
+        public static string About_FOSS {
+            get {
+                return ResourceManager.GetString("About.FOSS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new.
         /// </summary>
         public static string AddNew {
@@ -1897,7 +1906,7 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you are, please take a moment to review it on the Microsoft Store. Thank you for your support!.
+        ///   Looks up a localized string similar to If you are, please take a moment to review it on the Microsoft Store or consider sponsoring the project&apos;s development..
         /// </summary>
         public static string Messages_AskForReview {
             get {

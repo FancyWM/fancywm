@@ -589,7 +589,7 @@
     <value>window</value>
   </data>
   <data name="Messages.AskForReview" xml:space="preserve">
-    <value>If you are, please take a moment to review it on the Microsoft Store. Thank you for your support!</value>
+    <value>If you are, please take a moment to review it on the Microsoft Store or consider sponsoring the project's development.</value>
   </data>
   <data name="Messages.CannotBeResizedToFit" xml:space="preserve">
     <value>The window cannot be resized to fit!</value>
@@ -912,5 +912,8 @@ If you are running a supported non-Insider Windows build and you see this messag
   </data>
   <data name="General.AutoSplitCount.Description" xml:space="preserve">
     <value>Triggers automatic panel creation when the focused panel has more than the specified number of children.</value>
+  </data>
+  <data name="About.FOSS" xml:space="preserve">
+    <value>FancyWM is free and open-source, but requires the same time and effort as any other software.</value>
   </data>
 </root>

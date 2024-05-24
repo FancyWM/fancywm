@@ -904,7 +904,7 @@ namespace FancyWM
         {
             if (DateTime.UtcNow - m_reviewTooltipShown < TimeSpan.FromSeconds(10))
             {
-                await Launcher.LaunchUriAsync(new Uri(Publishing.StoreReviewProtocolLink));
+                new AboutWindow().Show();
                 await App.Current.AppState.Settings.SaveAsync(x =>
                 {
                     x.RemindToRateReview = false;

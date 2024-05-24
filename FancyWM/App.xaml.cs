@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 using Windows.ApplicationModel;
+using Windows.System;
 
 namespace FancyWM
 {
@@ -134,6 +135,11 @@ namespace FancyWM
                 UseShellExecute = true,
                 Verb = "open",
             });
+        }
+
+        internal static void Review()
+        {
+            _ = Launcher.LaunchUriAsync(new Uri(Publishing.StoreReviewProtocolLink));
         }
 
         internal void Terminate()

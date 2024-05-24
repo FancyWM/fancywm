@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
 
 using FancyWM.ViewModels;
@@ -31,6 +32,14 @@ namespace FancyWM.Pages.Settings
         private void OnHyperlinkRequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             _ = Launcher.LaunchUriAsync(e.Uri);
+        }
+        private void OnSponsorButtonClick(object sender, RoutedEventArgs e)
+        {
+            App.Sponsor();
+        }
+        private void OnReviewButtonClick(object sender, RoutedEventArgs e)
+        {
+            App.Review();
         }
     }
 }
