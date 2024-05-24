@@ -72,11 +72,54 @@ namespace FancyWM.Utilities
 
     internal partial class AnimationThread : IAnimationThread
     {
-        [LibraryImport("dcomp")]
-        internal static partial uint DCompositionWaitForCompositorClock(int count, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)] IntPtr[]? handles, uint timeoutInMs);
+        internal partial class Compositor
+        {
+            [LibraryImport("dcomp")]
+            internal static partial uint DCompositionWaitForCompositorClock(int count, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)] IntPtr[]? handles, uint timeoutInMs);
 
-        [LibraryImport("dcomp")]
-        internal static partial int DCompositionBoostCompositorClock(int enable);
+            [LibraryImport("dcomp")]
+            internal static partial int DCompositionBoostCompositorClock(int enable);
+
+            internal static bool s_isDCompositionCompositorAPIAvailable = true;
+
+            internal static int BoostClock(bool enable)
+            {
+                int hr = 0;
+                if (s_isDCompositionCompositorAPIAvailable)
+                {
+                    try
+                    {
+                        hr = DCompositionBoostCompositorClock(enable ? 1 : 0);
+                    }
+                    catch (EntryPointNotFoundException)
+                    {
+                        s_isDCompositionCompositorAPIAvailable = false;
+                    }
+                }
+                return hr;
+            }
+
+            internal static uint Wait(uint timeoutInMs)
+            {
+                uint hr = 0;
+                if (s_isDCompositionCompositorAPIAvailable)
+                {
+                    try
+                    {
+                        hr = DCompositionWaitForCompositorClock(0, null, timeoutInMs);
+                    }
+                    catch (EntryPointNotFoundException)
+                    {
+                        s_isDCompositionCompositorAPIAvailable = false;
+                    }
+                }
+                else
+                {
+                    Thread.Sleep(10);
+                }
+                return hr;
+            }
+        }
 
 
         private class WorkItem(IAnimationJob job, TimeSpan startTime, TimeSpan endTime)
@@ -144,10 +187,10 @@ namespace FancyWM.Utilities
                     jobs.Add(new WorkItem(job, m_sw.Elapsed, m_sw.Elapsed + job.Duration));
                 }
 
-                _ = DCompositionBoostCompositorClock(1);
+                _ = Compositor.BoostClock(true);
                 try
                 {
-                    uint waitResult = DCompositionWaitForCompositorClock(0, null, (uint)m_targetFrameTime.TotalMilliseconds);
+                    uint waitResult = Compositor.Wait((uint)m_targetFrameTime.TotalMilliseconds);
                     Debug.Assert(waitResult >= 0);
 
                     completedJobs.Clear();
@@ -182,7 +225,7 @@ namespace FancyWM.Utilities
                 {
                     if (m_queue.Count == 0)
                     {
-                        _ = DCompositionBoostCompositorClock(0);
+                        _ = Compositor.BoostClock(false);
                     }
                 }
             }
