@@ -41,7 +41,7 @@ namespace FancyWM.Models
 
         public bool AllocateNewPanelSpace { get; set; } = true;
 
-        public bool AutoCollapsePanels { get; set; } = true;
+        public bool AutoCollapsePanels { get; set; } = false;
 
         public int AutoSplitCount { get; set; } = 2;
 
