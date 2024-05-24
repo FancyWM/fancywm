@@ -79,7 +79,7 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright © 2022 Vesko Karaganev. All Rights Reserved..
+        ///   Looks up a localized string similar to Copyright © 2024 Vesko Karaganev. All Rights Reserved..
         /// </summary>
         public static string About_Copyright {
             get {
