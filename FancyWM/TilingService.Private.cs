@@ -1058,7 +1058,17 @@ namespace FancyWM
 
             if (DelayReposition)
             {
-                DoWindowMove(e.Source);
+                try
+                {
+                    DoWindowMove(e.Source);
+                }
+                catch (InvalidWindowReferenceException)
+                {
+                }
+                catch (TilingFailedException ex)
+                {
+                    PlacementFailed?.Invoke(this, new TilingFailedEventArgs(ex.FailReason, e.Source));
+                }
             }
 
             m_logger.Information("Window {Handle}={ProcessName} move ended", e.Source.Handle, e.Source.GetCachedProcessName());
