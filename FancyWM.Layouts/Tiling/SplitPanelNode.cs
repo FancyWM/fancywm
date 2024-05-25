@@ -191,15 +191,18 @@ namespace FancyWM.Layouts.Tiling
 
         public override Point ComputeFreeSize()
         {
-            //var parentFreeSize = Parent!.ComputeFreeSize();
-            //var maxSize = new Point(ComputedRectangle.Width + parentFreeSize.X, ComputedRectangle.Height + parentFreeSize.Y);
+            var contentRectangle = new Rectangle(
+                ComputedRectangle.Left + Padding.Left + Spacing / 2,
+                ComputedRectangle.Top + Padding.Top + Spacing / 2,
+                ComputedRectangle.Right - Padding.Right - Spacing / 2,
+                ComputedRectangle.Bottom - Padding.Bottom - Spacing / 2);
             if (Orientation == PanelOrientation.Horizontal)
             {
-                return new Point(ComputedRectangle.Width - MinSize.X, ComputedRectangle.Height);
+                return new Point(contentRectangle.Width - (int)m_constraints.MinWidth, contentRectangle.Height);
             }
             else
             {
-                return new Point(ComputedRectangle.Width, ComputedRectangle.Height - MinSize.Y);
+                return new Point(contentRectangle.Width, contentRectangle.Height - (int)m_constraints.MinWidth);
             }
         }
 
