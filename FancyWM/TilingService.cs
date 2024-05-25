@@ -57,6 +57,8 @@ namespace FancyWM
 
         public int AutoSplitCount { get; set; } = 100;
 
+        public bool DelayReposition { get; set; } = false;
+
         public bool AutoCollapse
         {
             get => m_backend.AutoCollapse;

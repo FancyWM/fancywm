@@ -916,4 +916,10 @@ If you are running a supported non-Insider Windows build and you see this messag
   <data name="About.FOSS" xml:space="preserve">
     <value>FancyWM is free and open-source, but requires the same time and effort as any other software.</value>
   </data>
+  <data name="General.DelayReposition" xml:space="preserve">
+    <value>Release window to move</value>
+  </data>
+  <data name="General.DelayReposition.Description" xml:space="preserve">
+    <value>When enabled, the tiling layout will update once the window has finished moving.</value>
+  </data>
 </root>

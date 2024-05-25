@@ -79,6 +79,19 @@ namespace FancyWM
             }
         }
 
+        public bool DelayReposition
+        {
+            get => m_delayReposition;
+            set
+            {
+                foreach (var tiling in m_tilingServices.Values)
+                {
+                    tiling.DelayReposition = value;
+                }
+                m_delayReposition = value;
+            }
+        }
+
         public ITilingServiceIntent? PendingIntent
         {
             get => GetActiveTilingService().PendingIntent;
@@ -93,6 +106,7 @@ namespace FancyWM
         private bool m_showFocus;
         private bool m_autoCollapse;
         private int m_autoSplitCount;
+        private bool m_delayReposition;
         private IReadOnlyCollection<IWindowMatcher> m_exclusionMatchers = [];
         private readonly IObservable<ITilingServiceSettings> m_settings;
         private readonly object m_syncRoot = new();

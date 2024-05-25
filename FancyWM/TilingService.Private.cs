@@ -255,7 +255,7 @@ namespace FancyWM
 
         private Rectangle? GetPreviewRectangle()
         {
-            if (m_currentInteraction == UserInteraction.Moving && m_delayedReposition || m_movingPanelNode != null)
+            if (m_currentInteraction == UserInteraction.Moving && DelayReposition || m_movingPanelNode != null)
             {
                 try
                 {
@@ -1036,8 +1036,6 @@ namespace FancyWM
             }
         }
 
-        bool m_delayedReposition = true;
-
         private void DoWindowMove(IWindow window)
         {
             var isSwapping = IsSwapModifierPressed();
@@ -1058,7 +1056,7 @@ namespace FancyWM
             if (!m_active)
                 return;
 
-            if (m_delayedReposition)
+            if (DelayReposition)
             {
                 DoWindowMove(e.Source);
             }
@@ -1133,7 +1131,7 @@ namespace FancyWM
 
                 if (e.NewPosition.Width == e.OldPosition.Width && e.NewPosition.Height == e.OldPosition.Height)
                 {
-                    if (!m_delayedReposition)
+                    if (!DelayReposition)
                     {
                         DoWindowMove(e.Source);
                     }

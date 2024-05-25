@@ -82,6 +82,7 @@ namespace FancyWM
         private bool m_showFocusDuringAction;
         private bool m_autoCollapse;
         private int m_autoSplitCount;
+        private bool m_delayReposition;
         private bool m_notifyVirtualDesktopServiceIncompatibility;
         private LowLevelHotkey[] m_directHks = [];
         private DispatcherTimer m_dispatcherTimer;
@@ -121,6 +122,7 @@ namespace FancyWM
                 .Do(x => m_showFocusDuringAction = x.ShowFocusDuringAction)
                 .Do(x => m_autoCollapse = x.AutoCollapsePanels)
                 .Do(x => m_autoSplitCount = x.AutoSplitCount)
+                .Do(x => m_delayReposition = x.DelayReposition)
                 .Do(x => m_notifyVirtualDesktopServiceIncompatibility = x.NotifyVirtualDesktopServiceIncompatibility)
                 .Do(x =>
                 {
@@ -187,6 +189,7 @@ namespace FancyWM
 
                     m_tiling.AutoCollapse = m_autoCollapse;
                     m_tiling.AutoSplitCount = m_autoSplitCount;
+                    m_tiling.DelayReposition = m_delayReposition;
                     m_tiling.PlacementFailed += OnTilingFailed;
                     m_tiling.Start();
                 }))
@@ -226,6 +229,16 @@ namespace FancyWM
                     }
                 }));
 
+            var delayRepositionSettings = settings
+                .DistinctUntilChanged(x => x.DelayReposition)
+                .Do(async _ => await Dispatcher.InvokeAsync(() =>
+                {
+                    if (m_tiling != null)
+                    {
+                        m_tiling.DelayReposition = m_delayReposition;
+                    }
+                }));
+
             m_llkbdHook = App.Current.Services.GetRequiredService<LowLevelKeyboardHook>();
 
             m_subscriptions =
@@ -237,6 +250,7 @@ namespace FancyWM
                 keybindingsSettings.Subscribe(new NotifyUnhandledObserver<KeybindingDictionary>()),
                 autoSplitSettings.Subscribe(new NotifyUnhandledObserver<Settings>()),
                 autoCollapseSettings.Subscribe(new NotifyUnhandledObserver<Settings>()),
+                delayRepositionSettings.Subscribe(new NotifyUnhandledObserver<Settings>()),
                 multiMonitorObservable
                     .Concat(exclusionListSettings)
                     .Subscribe(new NotifyUnhandledObserver<Unit>()),

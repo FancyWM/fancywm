@@ -385,6 +385,24 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Release window to move.
+        /// </summary>
+        public static string General_DelayReposition {
+            get {
+                return ResourceManager.GetString("General.DelayReposition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled, the tiling layout will update once the window has finished moving..
+        /// </summary>
+        public static string General_DelayReposition_Description {
+            get {
+                return ResourceManager.GetString("General.DelayReposition.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interface.
         /// </summary>
         public static string General_Interface {

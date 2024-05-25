@@ -31,6 +31,8 @@ namespace FancyWM
 
         int AutoSplitCount { get; set; }
 
+        bool DelayReposition { get; set; }
+
         ITilingServiceIntent? PendingIntent { get; set; }
 
         bool CanSplit(bool vertical);

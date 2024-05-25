@@ -6,6 +6,8 @@ using System.Windows.Media;
 
 using FancyWM.Utilities;
 
+using Windows.Foundation.Diagnostics;
+
 namespace FancyWM.Models
 {
     public interface ITilingServiceSettings
@@ -44,6 +46,8 @@ namespace FancyWM.Models
         public bool AutoCollapsePanels { get; set; } = false;
 
         public int AutoSplitCount { get; set; } = 2;
+
+        public bool DelayReposition { get; set; } = true;
 
         public bool AnimateWindowMovement { get; set; } = true;
 

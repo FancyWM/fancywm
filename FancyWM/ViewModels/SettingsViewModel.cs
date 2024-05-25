@@ -38,6 +38,8 @@ namespace FancyWM.ViewModels
         public bool AllocateNewPanelSpace { get => m_allocateNewPanelSpace; set => SetField(ref m_allocateNewPanelSpace, value); }
         public bool AutoCollapsePanels { get => m_autoCollapsePanels; set => SetField(ref m_autoCollapsePanels, value); }
         public int AutoSplitCount { get => m_autoSplitCount; set => SetField(ref m_autoSplitCount, value); }
+
+        public bool DelayReposition { get => m_delayReposition; set => SetField(ref m_delayReposition, value); }
         public bool AnimateWindowMovement { get => m_animateWindowMovement; set => SetField(ref m_animateWindowMovement, value); }
         public bool ModifierMoveWindow { get => m_modifierMoveWindow; set => SetField(ref m_modifierMoveWindow, value); }
         public bool ModifierMoveWindowAutoFocus { get => m_modifierMoveWindowAutoFocus; set => SetField(ref m_modifierMoveWindowAutoFocus, value); }
@@ -179,6 +181,7 @@ namespace FancyWM.ViewModels
         private bool m_allocateNewPanelSpace;
         private bool m_autoCollapsePanels;
         private int m_autoSplitCount;
+        private bool m_delayReposition;
         private bool m_customAccentColor;
         private bool m_animateWindowMovement;
         private bool m_modifierMoveWindow;
@@ -219,6 +222,7 @@ namespace FancyWM.ViewModels
                     AllocateNewPanelSpace = settings.AllocateNewPanelSpace;
                     AutoCollapsePanels = settings.AutoCollapsePanels;
                     AutoSplitCount = settings.AutoSplitCount;
+                    DelayReposition = settings.DelayReposition;
                     AnimateWindowMovement = settings.AnimateWindowMovement;
                     ModifierMoveWindow = settings.ModifierMoveWindow;
                     ModifierMoveWindowAutoFocus = settings.ModifierMoveWindowAutoFocus;
@@ -341,6 +345,7 @@ namespace FancyWM.ViewModels
                 x.AllocateNewPanelSpace = AllocateNewPanelSpace;
                 x.AutoCollapsePanels = AutoCollapsePanels;
                 x.AutoSplitCount = AutoSplitCount;
+                x.DelayReposition = DelayReposition;
                 x.AnimateWindowMovement = AnimateWindowMovement;
                 x.ModifierMoveWindow = ModifierMoveWindow;
                 x.ModifierMoveWindowAutoFocus = ModifierMoveWindowAutoFocus;
