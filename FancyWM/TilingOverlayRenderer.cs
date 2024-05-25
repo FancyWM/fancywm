@@ -48,6 +48,19 @@ namespace FancyWM
             }
         }
 
+        public Rectangle? FocusRectangle
+        {
+            get => m_focusRectangle;
+            set
+            {
+                if (m_focusRectangle != value)
+                {
+                    OnSetFocusRectangle(oldValue: m_focusRectangle, newValue: value);
+                    m_focusRectangle = value;
+                }
+            }
+        }
+
         public Rectangle? PreviewRectangle
         {
             get => m_previewRectangle;
@@ -84,6 +97,7 @@ namespace FancyWM
         private IReadOnlyCollection<TilingNode> m_previousSnapshot = [];
         private readonly Dictionary<TilingNode, TilingNodeViewModel> m_nodeViewModels = [];
         private IReadOnlySet<IWindow> m_previewWindows = new HashSet<IWindow>();
+        private Rectangle? m_focusRectangle;
         private Rectangle? m_previewRectangle;
         private IWindow? m_intentSourceWindow;
 
@@ -306,6 +320,11 @@ namespace FancyWM
             {
                 newVm.IsPreviewVisible = true;
             }
+        }
+
+        private void OnSetFocusRectangle(Rectangle? oldValue, Rectangle? newValue)
+        {
+            m_viewModel.FocusRectangle = newValue ?? new Rectangle();
         }
 
         private void OnSetPreviewRectangle(Rectangle? oldValue, Rectangle? newValue)

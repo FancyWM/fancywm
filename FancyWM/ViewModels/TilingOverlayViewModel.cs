@@ -10,6 +10,7 @@ namespace FancyWM.ViewModels
         private Visibility m_overlayVisibility;
         private ObservableCollection<TilingPanelViewModel> m_panelElements = [];
         private ObservableCollection<TilingWindowViewModel> m_windowElements = [];
+        private Rectangle m_focusRectangle;
         private Rectangle m_previewRectangle;
 
         public Visibility OverlayVisibility { get => m_overlayVisibility; set => SetField(ref m_overlayVisibility, value); }
@@ -17,6 +18,11 @@ namespace FancyWM.ViewModels
         public ObservableCollection<TilingPanelViewModel> PanelElements { get => m_panelElements; set => SetField(ref m_panelElements, value); }
 
         public ObservableCollection<TilingWindowViewModel> WindowElements { get => m_windowElements; set => SetField(ref m_windowElements, value); }
+
+        public Rectangle FocusRectangle { get => m_focusRectangle; set => SetField(ref m_focusRectangle, value); }
+
+        [DerivedProperty(nameof(FocusRectangle))]
+        public bool IsFocusRectangleVisible => m_focusRectangle.Width == 0;
 
         public Rectangle PreviewRectangle { get => m_previewRectangle; set => SetField(ref m_previewRectangle, value); }
 

@@ -122,6 +122,7 @@ namespace FancyWM
                 var focusedNode = m_backend.GetFocus(desktop);
                 var focusedPath = (IReadOnlyCollection<TilingNode>?)focusedNode?.PathToRoot?.ToList() ?? [];
 
+                m_gui.FocusRectangle = GetFocusRectangle();
                 m_gui.PreviewRectangle = GetPreviewRectangle();
                 m_gui.UpdateOverlay(snapshot, focusedPath);
 
@@ -181,7 +182,10 @@ namespace FancyWM
 
             if (useSmoothing)
             {
+                var focusRectangle = m_gui.FocusRectangle;
+                m_gui.FocusRectangle = null;
                 await transitionGroup.PerformSmoothTransitionAsync(TimeSpan.FromMilliseconds(100));
+                m_gui.FocusRectangle = focusRectangle;
             }
             else
             {
@@ -251,6 +255,22 @@ namespace FancyWM
                 }
             }
             return targets;
+        }
+
+        private Rectangle? GetFocusRectangle()
+        {
+            if (m_currentInteraction == UserInteraction.None && m_movingPanelNode == null)
+            {
+                lock (m_backend)
+                {
+                    var focusedNode = m_backend.GetFocus(m_workspace.VirtualDesktopManager.CurrentDesktop);
+                    if (focusedNode is not WindowNode focusedWindow)
+                        return null;
+
+                    return focusedWindow.ComputedRectangle;
+                }
+            }
+            return null;
         }
 
         private Rectangle? GetPreviewRectangle()

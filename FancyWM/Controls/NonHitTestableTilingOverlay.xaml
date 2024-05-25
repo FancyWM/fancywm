@@ -12,6 +12,35 @@
     <Canvas>
         <Rectangle
             StrokeThickness="2"
+            RadiusX="{DynamicResource OverlayCornerRadiusPx}"
+            RadiusY="{DynamicResource OverlayCornerRadiusPx}"
+            Width="{Binding FocusRectangle.Width}" 
+            Height="{Binding FocusRectangle.Height}"
+            Canvas.Left="{Binding FocusRectangle.Left}"
+            Canvas.Top="{Binding FocusRectangle.Top}">
+            <Rectangle.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsFocusRectangleVisible}" Value="True">
+                            <DataTrigger.Setters>
+                                <Setter Property="UIElement.Visibility" Value="Visible" />
+                            </DataTrigger.Setters>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=IsFocusRectangleVisible}" Value="False">
+                            <DataTrigger.Setters>
+                                <Setter Property="UIElement.Visibility" Value="Collapsed" />
+                            </DataTrigger.Setters>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+            <Rectangle.Stroke>
+                <SolidColorBrush Color="{DynamicResource SystemAccentColorLight2}" Opacity="1" />
+            </Rectangle.Stroke>
+        </Rectangle>
+
+        <Rectangle
+            StrokeThickness="2"
             Opacity="0"
             RadiusX="{DynamicResource OverlayCornerRadiusPx}"
             RadiusY="{DynamicResource OverlayCornerRadiusPx}"
