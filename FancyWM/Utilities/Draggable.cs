@@ -40,6 +40,19 @@ namespace FancyWM.Utilities
             element.RemoveHandler(DragStartedEvent, handler);
         }
 
+        public static readonly RoutedEvent DraggingEvent = EventManager.RegisterRoutedEvent(
+            "Dragging", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(FrameworkElement));
+
+        public static void AddDraggingHandler(UIElement element, RoutedEventHandler handler)
+        {
+            element.AddHandler(DraggingEvent, handler);
+        }
+
+        public static void RemoveDraggingdHandler(UIElement element, RoutedEventHandler handler)
+        {
+            element.RemoveHandler(DraggingEvent, handler);
+        }
+
         public static readonly DependencyProperty IsDraggableProperty = DependencyProperty.RegisterAttached(
             "IsDraggable",
             typeof(bool),
@@ -112,6 +125,7 @@ namespace FancyWM.Utilities
                 {
                     transform.X = offset.X;
                     transform.Y = offset.Y;
+                    element.RaiseEvent(new RoutedEventArgs(DraggingEvent, element));
                 }
                 else
                 {

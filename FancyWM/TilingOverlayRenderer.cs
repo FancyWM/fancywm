@@ -15,6 +15,7 @@ namespace FancyWM
     public class TilingOverlayRenderer : IDisposable
     {
         public event EventHandler<PanelNode>? TilingPanelMoveRequested;
+        public event EventHandler<PanelNode>? TilingPanelMoving;
         public event EventHandler<TilingNode>? TilingNodeFocusRequested;
         public event EventHandler<TilingNode>? TilingNodePullUpRequested;
         public event EventHandler<TilingNode>? TilingNodeCloseRequested;
@@ -115,6 +116,7 @@ namespace FancyWM
                 };
                 Draggable.AddDragStartedHandler(overlayView, OnDragStarted);
                 Draggable.AddDragCompletedHandler(overlayView, OnDragCompleted);
+                Draggable.AddDraggingHandler(overlayView, OnDraggingEvent);
                 m_overlay.Content = overlayView;
 
                 m_overlay.NonHitTestableContent = new NonHitTestableTilingOverlay
@@ -428,6 +430,17 @@ namespace FancyWM
                 {
                     view.ViewModel.IsMoving = false;
                     TilingPanelMoveRequested?.Invoke(this, (PanelNode)view.ViewModel.Node!);
+                }
+            }
+        }
+
+        private void OnDraggingEvent(object sender, RoutedEventArgs e)
+        {
+            if (e.OriginalSource is TilingPanel view)
+            {
+                if (view.ViewModel != null)
+                {
+                    TilingPanelMoving?.Invoke(this, (PanelNode)view.ViewModel.Node!);
                 }
             }
         }

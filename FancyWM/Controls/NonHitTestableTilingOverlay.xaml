@@ -13,7 +13,6 @@
         <Rectangle
             StrokeThickness="2"
             Opacity="0"
-            Visibility="Collapsed"
             RadiusX="{DynamicResource OverlayCornerRadiusPx}"
             RadiusY="{DynamicResource OverlayCornerRadiusPx}"
             Width="{Binding PreviewRectangle.Width}" 

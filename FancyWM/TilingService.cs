@@ -159,6 +159,7 @@ namespace FancyWM
         private bool m_active = false;
         private bool m_dirty = true;
         private UserInteraction m_currentInteraction = UserInteraction.None;
+        private PanelNode? m_movingPanelNode;
         private ITilingServiceIntent? m_pendingIntent;
         private readonly Counter m_frozen = new();
         private readonly Stopwatch m_sw = new();
@@ -178,6 +179,7 @@ namespace FancyWM
             m_gui.TilingNodeFocusRequested += OnTilingNodeFocusRequested;
             m_gui.TilingNodeCloseRequested += OnTilingNodeCloseRequested;
             m_gui.TilingNodePullUpRequested += OnTilingNodePullUpRequested;
+            m_gui.TilingPanelMoving += OnTilingPanelMoving;
             m_gui.TilingPanelMoveRequested += OnTilingPanelMoveRequested;
             m_gui.BeginHorizontalWithRequested += OnBeginHorizontalWithRequestedAsync;
             m_gui.BeginVerticalWithRequested += OnBeginVerticalWithRequested;

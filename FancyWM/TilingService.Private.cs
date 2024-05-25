@@ -255,23 +255,41 @@ namespace FancyWM
 
         private Rectangle? GetPreviewRectangle()
         {
-            if (m_currentInteraction == UserInteraction.Moving && m_delayedReposition)
+            if (m_currentInteraction == UserInteraction.Moving && m_delayedReposition || m_movingPanelNode != null)
             {
                 try
                 {
                     var isSwapping = IsSwapModifierPressed();
                     var pt = m_workspace.CursorLocation;
-                    var window = m_workspace.FocusedWindow;
-                    if (window == null)
-                    {
-                        return null;
-                    }
 
-                    lock (m_backend)
+                    if (m_movingPanelNode == null)
                     {
-                        if (m_backend.HasWindow(window))
+                        var window = m_workspace.FocusedWindow;
+                        if (window == null)
                         {
-                            return m_backend.MockMoveWindow(window, pt, allowNesting: !isSwapping).preArrange;
+                            return null;
+                        }
+
+                        lock (m_backend)
+                        {
+                            if (m_backend.HasWindow(window))
+                            {
+                                return m_backend.MockMoveWindow(window, pt, allowNesting: !isSwapping).preArrange;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        lock (m_backend)
+                        {
+                            var rect = m_backend.MockMoveNode(m_movingPanelNode, pt, allowNesting: !isSwapping).preArrange;
+                            var padding = GetPanelPaddingRect();
+                            var spacing = GetPanelSpacing();
+                            return new Rectangle(
+                                rect.Left - padding.Left - spacing / 2,
+                                rect.Top - padding.Top - spacing / 2, 
+                                rect.Right + padding.Right + spacing / 2,
+                                rect.Bottom + padding.Bottom + spacing / 2);
                         }
                     }
                 }
@@ -769,9 +787,18 @@ namespace FancyWM
             });
         }
 
+        private void OnTilingPanelMoving(object? sender, PanelNode panel)
+        {
+            m_currentInteraction = UserInteraction.Moving;
+            m_movingPanelNode = panel;
+            InvalidateLayout();
+        }
+
         private void OnTilingPanelMoveRequested(object? sender, PanelNode panel)
         {
             m_logger.Information("Panel {Panel} move ended", panel);
+            m_currentInteraction = UserInteraction.None;
+            m_movingPanelNode = null;
 
             try
             {
