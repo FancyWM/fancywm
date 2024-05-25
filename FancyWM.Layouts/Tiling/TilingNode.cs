@@ -179,14 +179,20 @@ namespace FancyWM.Layouts.Tiling
             return copy;
         }
 
-        internal void Measure()
+        public void ClearConstraints()
+        {
+            MinSize = new();
+            MaxSize = new Point(short.MaxValue, short.MaxValue);
+        }
+
+        public void Measure()
         {
             MeasureCore();
         }
 
         internal abstract void MeasureCore();
 
-        internal void Arrange(RectangleF availableArea)
+        public void Arrange(RectangleF availableArea)
         {
             if (Parent != null)
             {

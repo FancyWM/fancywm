@@ -47,6 +47,19 @@ namespace FancyWM
             }
         }
 
+        public Rectangle? PreviewRectangle
+        {
+            get => m_previewRectangle;
+            set
+            {
+                if (m_previewRectangle != value)
+                {
+                    OnSetPreviewRectangle(oldValue: m_previewRectangle, newValue: value);
+                    m_previewRectangle = value;
+                }
+            }
+        }
+
         public IWindow? IntentSourceWindow
         {
             get => m_intentSourceWindow;
@@ -70,6 +83,7 @@ namespace FancyWM
         private IReadOnlyCollection<TilingNode> m_previousSnapshot = [];
         private readonly Dictionary<TilingNode, TilingNodeViewModel> m_nodeViewModels = [];
         private IReadOnlySet<IWindow> m_previewWindows = new HashSet<IWindow>();
+        private Rectangle? m_previewRectangle;
         private IWindow? m_intentSourceWindow;
 
         public TilingOverlayRenderer(IDisplay display, Func<IntPtr> overlayAnchorSource)
@@ -291,6 +305,12 @@ namespace FancyWM
                 newVm.IsPreviewVisible = true;
             }
         }
+
+        private void OnSetPreviewRectangle(Rectangle? oldValue, Rectangle? newValue)
+        {
+            m_viewModel.PreviewRectangle = newValue ?? new Rectangle();
+        }
+
 
         private void UpdateViewModel(TilingWindowViewModel vm, WindowNode node, IEnumerable<TilingNode> focusedPath)
         {

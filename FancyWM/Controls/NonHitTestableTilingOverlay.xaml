@@ -10,6 +10,52 @@
              UseLayoutRounding="True"
              d:DesignHeight="450" d:DesignWidth="800">
     <Canvas>
+        <Rectangle
+            StrokeThickness="2"
+            Opacity="0"
+            Visibility="Collapsed"
+            RadiusX="{DynamicResource OverlayCornerRadiusPx}"
+            RadiusY="{DynamicResource OverlayCornerRadiusPx}"
+            Width="{Binding PreviewRectangle.Width}" 
+            Height="{Binding PreviewRectangle.Height}"
+            Canvas.Left="{Binding PreviewRectangle.Left}"
+            Canvas.Top="{Binding PreviewRectangle.Top}">
+            <Rectangle.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsPreviewRectangleVisible}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.1" />
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.1" />
+                                        <ObjectAnimationUsingKeyFrames BeginTime="0:0:0.1" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+            <Rectangle.Stroke>
+                <SolidColorBrush Color="{DynamicResource SystemAccentColorLight2}" Opacity="1" />
+            </Rectangle.Stroke>
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{DynamicResource SystemAccentColorLight1}" Opacity="0.1" />
+            </Rectangle.Fill>
+        </Rectangle>
+
         <ItemsControl ItemsSource="{Binding Path=WindowElements}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>

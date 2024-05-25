@@ -117,10 +117,12 @@ namespace FancyWM
                     }
                 }
 
+
                 snapshot = tree.Root!.Nodes.Skip(1).ToList();
                 var focusedNode = m_backend.GetFocus(desktop);
                 var focusedPath = (IReadOnlyCollection<TilingNode>?)focusedNode?.PathToRoot?.ToList() ?? [];
 
+                m_gui.PreviewRectangle = GetPreviewRectangle();
                 m_gui.UpdateOverlay(snapshot, focusedPath);
 
                 if (m_showFocus)
@@ -249,6 +251,38 @@ namespace FancyWM
                 }
             }
             return targets;
+        }
+
+        private Rectangle? GetPreviewRectangle()
+        {
+            if (m_currentInteraction == UserInteraction.Moving && m_delayedReposition)
+            {
+                try
+                {
+                    var isSwapping = IsSwapModifierPressed();
+                    var pt = m_workspace.CursorLocation;
+                    var window = m_workspace.FocusedWindow;
+                    if (window == null)
+                    {
+                        return null;
+                    }
+
+                    lock (m_backend)
+                    {
+                        if (m_backend.HasWindow(window))
+                        {
+                            return m_backend.MockMoveWindow(window, pt, allowNesting: !isSwapping).preArrange;
+                        }
+                    }
+                }
+                catch (TilingFailedException)
+                {
+                }
+                catch (InvalidWindowReferenceException)
+                {
+                }
+            }
+            return null;
         }
 
         private void MoveToParentPanel(TilingNode node)
@@ -975,10 +1009,32 @@ namespace FancyWM
             }
         }
 
+        bool m_delayedReposition = true;
+
+        private void DoWindowMove(IWindow window)
+        {
+            var isSwapping = IsSwapModifierPressed();
+            var pt = m_workspace.CursorLocation;
+            lock (m_backend)
+            {
+                if (m_backend.HasWindow(window))
+                {
+                    m_logger.Debug("Window {Handle}={ProcessName} size is unchanged, attempting to insert window at {Position}", window.Handle, window.GetCachedProcessName(), pt);
+                    m_backend.MoveWindow(window, pt, allowNesting: !isSwapping);
+                    m_backend.SetFocus(window);
+                }
+            }
+        }
+
         private void OnWindowPositionChangeEnd(object? sender, WindowPositionChangedEventArgs e)
         {
             if (!m_active)
                 return;
+
+            if (m_delayedReposition)
+            {
+                DoWindowMove(e.Source);
+            }
 
             m_logger.Information("Window {Handle}={ProcessName} move ended", e.Source.Handle, e.Source.GetCachedProcessName());
             InvalidateLayout();
@@ -1050,16 +1106,9 @@ namespace FancyWM
 
                 if (e.NewPosition.Width == e.OldPosition.Width && e.NewPosition.Height == e.OldPosition.Height)
                 {
-                    var isSwapping = IsSwapModifierPressed();
-                    var pt = m_workspace.CursorLocation;
-                    lock (m_backend)
+                    if (!m_delayedReposition)
                     {
-                        if (m_backend.HasWindow(e.Source))
-                        {
-                            m_logger.Debug("Window {Handle}={ProcessName} size is unchanged, attempting to insert window at {Position}", e.Source.Handle, e.Source.GetCachedProcessName(), pt);
-                            m_backend.MoveWindow(e.Source, pt, allowNesting: !isSwapping);
-                            m_backend.SetFocus(e.Source);
-                        }
+                        DoWindowMove(e.Source);
                     }
                 }
                 else
@@ -1073,7 +1122,6 @@ namespace FancyWM
                         }
                     }
                 }
-
                 InvalidateLayout();
             }
             catch (InvalidWindowReferenceException)

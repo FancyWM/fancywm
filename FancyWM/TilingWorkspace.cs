@@ -7,6 +7,7 @@ using FancyWM.Utilities;
 using WinMan;
 using FancyWM.Layouts;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace FancyWM
 {
@@ -560,6 +561,57 @@ namespace FancyWM
             var state = m_states.FindByTree(window) ?? throw new ArgumentException($"Window must be registered with the backend!", nameof(window));
             var sourceNode = state.DesktopTree.FindNode(window) ?? throw new ArgumentException($"Window must be registered with the backend!", nameof(window));
             MoveNode(sourceNode, pt, allowNesting);
+        }
+
+
+        public (Rectangle preArrange, Rectangle postArrange) MockMoveWindow(IWindow window, Point pt, bool allowNesting)
+        {
+            var state = m_states.FindByTree(window) ?? throw new ArgumentException($"Window must be registered with the backend!", nameof(window));
+            var sourceNode = state.DesktopTree.FindNode(window) ?? throw new ArgumentException($"Window must be registered with the backend!", nameof(window));
+            return MockMoveNode(sourceNode, pt, allowNesting);
+        }
+
+        public (Rectangle preArrange, Rectangle postArrange) MockMoveNode(TilingNode sourceNode, Point pt, bool allowNesting)
+        {
+            var desktop = sourceNode.Desktop!;
+            var rootClone = (PanelNode)desktop.Root!.Clone();
+
+            var sourceNodeClone = rootClone.Nodes.First(x => x.GenerationID == sourceNode.GenerationID);
+            var testTree = new DesktopTree
+            {
+                Root = rootClone,
+                WorkArea = desktop.WorkArea,
+            };
+
+            MoveNode(sourceNodeClone, pt, allowNesting);
+
+            var unconstrainedParentClone = (PanelNode)sourceNodeClone.Parent!.Clone();
+
+            try
+            {
+                testTree.Arrange();
+            }
+            catch (UnsatisfiableFlexConstraintsException)
+            {
+                throw new TilingFailedException(TilingError.NoValidPlacementExists);
+            }
+
+            foreach (var node in unconstrainedParentClone.Nodes)
+            {
+                node.ClearConstraints();
+            }
+            unconstrainedParentClone.Padding = new();
+            try
+            {
+                unconstrainedParentClone.Arrange(new RectangleF(unconstrainedParentClone.ComputedRectangle));
+            }
+            catch (UnsatisfiableFlexConstraintsException)
+            {
+                throw new TilingFailedException(TilingError.NoValidPlacementExists);
+            }
+            var unconstrainedSourceNodeClone = unconstrainedParentClone.Nodes.First(x => x.GenerationID == sourceNode.GenerationID);
+
+            return (unconstrainedSourceNodeClone.ComputedRectangle, sourceNodeClone.ComputedRectangle);
         }
 
         public void ResizeWindow(IWindow window, Rectangle newPosition, Rectangle oldPosition)
