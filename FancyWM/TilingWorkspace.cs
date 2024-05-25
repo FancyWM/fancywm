@@ -159,6 +159,20 @@ namespace FancyWM
                 if (nodeToSplit is WindowNode)
                 {
                     WrapInSplitPanel(nodeToSplit, vertical: parentSplit.Orientation == PanelOrientation.Horizontal);
+
+                    try
+                    {
+                        nodeToSplit.Desktop!.Arrange();
+                    }
+                    catch (UnsatisfiableFlexConstraintsException)
+                    {
+                        nodeToSplit.Parent!.CollapseIfSingle();
+                    }
+
+                    if (!CanFitLossy(nodeToSplit.Parent!, window))
+                    {
+                        nodeToSplit.Parent!.CollapseIfSingle();
+                    }
                 }
                 parent = nodeToSplit.Parent!;
             }
