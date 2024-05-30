@@ -27,7 +27,7 @@
                                                 <Setter Property="Content">
                                                     <Setter.Value>
                                                         <Viewbox Width="{DynamicResource OverlayFontSize}" Height="{DynamicResource OverlayFontSize}" Stretch="Uniform">
-                                                            <local:SvgIcon Icon="hsplit" Color="{DynamicResource TextControlButtonForegroundPressed}" />
+                                                            <local:SvgIcon Icon="hsplit" Color="{DynamicResource SystemControlForegroundAltHighBrush}" />
                                                         </Viewbox>
                                                     </Setter.Value>
                                                 </Setter>
@@ -42,7 +42,7 @@
                                                 <Setter Property="Content">
                                                     <Setter.Value>
                                                         <Viewbox Width="{DynamicResource OverlayFontSize}" Height="{DynamicResource OverlayFontSize}" Stretch="Uniform">
-                                                            <local:SvgIcon Icon="vsplit" Color="{DynamicResource TextControlButtonForegroundPressed}" />
+                                                            <local:SvgIcon Icon="vsplit" Color="{DynamicResource SystemControlForegroundAltHighBrush}" />
                                                         </Viewbox>
                                                     </Setter.Value>
                                                 </Setter>
@@ -52,7 +52,7 @@
                                             <Setter Property="Content">
                                                 <Setter.Value>
                                                     <Viewbox Width="{DynamicResource OverlayFontSize}" Height="{DynamicResource OverlayFontSize}" Stretch="Uniform">
-                                                        <local:SvgIcon Icon="stack" Color="{DynamicResource TextControlButtonForegroundPressed}" />
+                                                        <local:SvgIcon Icon="stack" Color="{DynamicResource SystemControlForegroundAltHighBrush}" />
                                                     </Viewbox>
                                                 </Setter.Value>
                                             </Setter>
