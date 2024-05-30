@@ -189,6 +189,18 @@
             <Border Style="{DynamicResource SettingsItemStyle}">
                 <StackPanel>
                     <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ShowFocus, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_ShowFocus}" Margin="0,0,16,0" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}">
+                    <Run Text="{x:Static res:Strings.General_ShowFocus_Description}" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
                         <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ShowFocusDuringAction, Mode=TwoWay}" />
                         <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_ShowFocusDuringAction}" Margin="0,0,16,0" />
                     </DockPanel>

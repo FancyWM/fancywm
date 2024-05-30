@@ -61,6 +61,8 @@ namespace FancyWM.Models
 
         public int PanelFontSize { get; set; } = 12;
 
+        public bool ShowFocus { get; set; } = false;
+
         public bool ShowFocusDuringAction { get; set; } = true;
 
         public bool OverrideAccentColor { get; set; } = false;
@@ -109,6 +111,7 @@ namespace FancyWM.Models
                    WindowPadding == settings.WindowPadding &&
                    PanelHeight == settings.PanelHeight &&
                    PanelFontSize == settings.PanelFontSize &&
+                   ShowFocus == settings.ShowFocus &&
                    ShowFocusDuringAction == settings.ShowFocusDuringAction;
         }
 
@@ -130,6 +133,7 @@ namespace FancyWM.Models
             hash.Add(WindowPadding);
             hash.Add(PanelHeight);
             hash.Add(PanelFontSize);
+            hash.Add(ShowFocus);
             hash.Add(ShowFocusDuringAction);
             hash.Add(ProcessIgnoreList);
             hash.Add(ClassIgnoreList);

@@ -85,6 +85,16 @@ namespace FancyWM
             }
         }
 
+        public bool ShowFocus
+        {
+            get => m_showFocus;
+            set
+            {
+                m_showFocus = value;
+                PropagateShowFocusChange();
+            }
+        }
+
         public bool ShowPreviewFocus
         {
             get => m_showPreviewFocus;
@@ -156,6 +166,7 @@ namespace FancyWM
         private readonly IAnimationThread m_animationThread;
         private int m_panelHeight = 20;
         private int m_windowPadding = 2;
+        private bool m_showFocus = false;
         private bool m_showPreviewFocus = false;
 
         private bool m_active = false;

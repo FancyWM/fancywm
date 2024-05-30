@@ -538,6 +538,24 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show border around the focused window.
+        /// </summary>
+        public static string General_ShowFocus {
+            get {
+                return ResourceManager.GetString("General.ShowFocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highlights the focused window..
+        /// </summary>
+        public static string General_ShowFocus_Description {
+            get {
+                return ResourceManager.GetString("General.ShowFocus.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show focused window reminder.
         /// </summary>
         public static string General_ShowFocusDuringAction {

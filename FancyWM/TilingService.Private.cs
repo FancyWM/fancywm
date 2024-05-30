@@ -259,7 +259,7 @@ namespace FancyWM
 
         private Rectangle? GetFocusRectangle()
         {
-            if (m_currentInteraction == UserInteraction.None && m_movingPanelNode == null)
+            if (m_showFocus && m_currentInteraction == UserInteraction.None && m_movingPanelNode == null)
             {
                 lock (m_backend)
                 {
@@ -1707,6 +1707,11 @@ namespace FancyWM
                 }
             }
             UpdateGuiNodeOptions();
+        }
+
+        private void PropagateShowFocusChange()
+        {
+            InvalidateLayout();
         }
 
         private void PropagateShowPreviewFocusChange()

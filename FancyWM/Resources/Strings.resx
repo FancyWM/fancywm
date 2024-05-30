@@ -414,6 +414,12 @@
   <data name="General.ShowContextHints.Description" xml:space="preserve">
     <value>Shows the list of available keybindings after 1s of inactivity. The command pop-up stays on-screen for longer, but you can close it with</value>
   </data>
+  <data name="General.ShowFocus" xml:space="preserve">
+    <value>Show border around the focused window</value>
+  </data>
+  <data name="General.ShowFocus.Description" xml:space="preserve">
+    <value>Highlights the focused window.</value>
+  </data>
   <data name="General.ShowFocusDuringAction" xml:space="preserve">
     <value>Show focused window reminder</value>
   </data>

@@ -39,17 +39,29 @@ namespace FancyWM
                 m_exclusionMatchers = value;
             }
         }
-
-        public bool ShowPreviewFocus
+        public bool ShowFocus
         {
             get => m_showFocus;
             set
             {
                 foreach (var tiling in m_tilingServices.Values)
                 {
-                    tiling.ShowPreviewFocus = value;
+                    tiling.ShowFocus = value;
                 }
                 m_showFocus = value;
+            }
+        }
+
+        public bool ShowPreviewFocus
+        {
+            get => m_showPreviewFocus;
+            set
+            {
+                foreach (var tiling in m_tilingServices.Values)
+                {
+                    tiling.ShowPreviewFocus = value;
+                }
+                m_showPreviewFocus = value;
             }
         }
 
@@ -104,6 +116,7 @@ namespace FancyWM
         private readonly ILogger m_logger;
         private IDisplay m_activeDisplay;
         private bool m_showFocus;
+        private bool m_showPreviewFocus;
         private bool m_autoCollapse;
         private int m_autoSplitCount;
         private bool m_delayReposition;
@@ -126,7 +139,7 @@ namespace FancyWM
                 var tiling = new TilingService(Workspace, display, animationThread, settings, true)
                 {
                     ExclusionMatchers = m_exclusionMatchers,
-                    ShowPreviewFocus = m_showFocus,
+                    ShowPreviewFocus = m_showPreviewFocus,
                 };
                 tiling.PlacementFailed += OnTilingFailed;
                 tiling.Start();
@@ -186,7 +199,7 @@ namespace FancyWM
                     m_logger.Debug($"Added display {e.Source}");
                     var tiling = new TilingService(Workspace, e.Source, AnimationThread, m_settings, true)
                     {
-                        ShowPreviewFocus = m_showFocus,
+                        ShowPreviewFocus = m_showPreviewFocus,
                         ExclusionMatchers = m_exclusionMatchers,
                     };
                     tiling.PlacementFailed += OnTilingFailed;

@@ -152,6 +152,8 @@ namespace FancyWM.ViewModels
             set => SetField(ref m_windowPadding, value);
         }
 
+        public bool ShowFocus { get => m_showFocus; set => SetField(ref m_showFocus, value); }
+
         public bool ShowFocusDuringAction { get => m_showFocusDuringAction; set => SetField(ref m_showFocusDuringAction, value); }
 
         public ObservableCollection<KeybindingViewModel>? Keybindings
@@ -200,6 +202,7 @@ namespace FancyWM.ViewModels
         private bool m_multiMonitorSupport;
         private bool m_showContextHints;
         private bool m_soundOnFailure;
+        private bool m_showFocus;
         private bool m_showFocusDuringAction;
         private readonly ILogger m_logger = App.Current.Logger;
 
@@ -236,6 +239,7 @@ namespace FancyWM.ViewModels
                     MultiMonitorSupport = settings.MultiMonitorSupport;
                     ShowContextHints = settings.ShowContextHints;
                     SoundOnFailure = settings.SoundOnFailure;
+                    ShowFocus = settings.ShowFocus;
                     ShowFocusDuringAction = settings.ShowFocusDuringAction;
 
                     var newKeybindings = KeybindingViewModel.FromDictionary(settings.Keybindings);
@@ -360,6 +364,7 @@ namespace FancyWM.ViewModels
                 x.ClassIgnoreList = [.. ClassIgnoreList!];
                 x.MultiMonitorSupport = MultiMonitorSupport;
                 x.SoundOnFailure = SoundOnFailure;
+                x.ShowFocus = ShowFocus;
                 x.ShowFocusDuringAction = ShowFocusDuringAction;
 
                 return x;

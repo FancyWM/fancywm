@@ -25,6 +25,8 @@ namespace FancyWM
 
         IReadOnlyCollection<IWindowMatcher> ExclusionMatchers { get; set; }
 
+        bool ShowFocus { get; set; }
+
         bool ShowPreviewFocus { get; set; }
 
         bool AutoCollapse { get; set; }
