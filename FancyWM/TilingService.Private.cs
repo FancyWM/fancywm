@@ -126,7 +126,7 @@ namespace FancyWM
                 m_gui.PreviewRectangle = GetPreviewRectangle();
                 m_gui.UpdateOverlay(snapshot, focusedPath);
 
-                if (m_showFocus)
+                if (m_showPreviewFocus)
                 {
                     var previewWindows = m_workspace.VirtualDesktopManager.Desktops
                         .Select(desktop => m_backend.GetFocus(desktop))
@@ -1709,7 +1709,7 @@ namespace FancyWM
             UpdateGuiNodeOptions();
         }
 
-        private void PropagateShowFocusChange()
+        private void PropagateShowPreviewFocusChange()
         {
             InvalidateLayout();
         }

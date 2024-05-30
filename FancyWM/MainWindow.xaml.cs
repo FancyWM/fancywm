@@ -972,7 +972,7 @@ namespace FancyWM
                 bool showFocus = m_showFocusDuringAction;
                 if (showFocus)
                 {
-                    m_tiling.ShowFocus = true;
+                    m_tiling.ShowPreviewFocus = true;
                 }
                 await toast;
                 if (showFocus)
@@ -980,7 +980,7 @@ namespace FancyWM
                     await Task.Delay(TimeSpan.FromMilliseconds(300));
                     if (m_cmdSequenceId == currentId)
                     {
-                        m_tiling.ShowFocus = false;
+                        m_tiling.ShowPreviewFocus = false;
                     }
                 }
                 m_logger.Debug($"Command sequence {currentId} ended");

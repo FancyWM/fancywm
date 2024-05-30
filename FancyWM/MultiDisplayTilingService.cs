@@ -40,14 +40,14 @@ namespace FancyWM
             }
         }
 
-        public bool ShowFocus
+        public bool ShowPreviewFocus
         {
             get => m_showFocus;
             set
             {
                 foreach (var tiling in m_tilingServices.Values)
                 {
-                    tiling.ShowFocus = value;
+                    tiling.ShowPreviewFocus = value;
                 }
                 m_showFocus = value;
             }
@@ -126,7 +126,7 @@ namespace FancyWM
                 var tiling = new TilingService(Workspace, display, animationThread, settings, true)
                 {
                     ExclusionMatchers = m_exclusionMatchers,
-                    ShowFocus = m_showFocus,
+                    ShowPreviewFocus = m_showFocus,
                 };
                 tiling.PlacementFailed += OnTilingFailed;
                 tiling.Start();
@@ -186,7 +186,7 @@ namespace FancyWM
                     m_logger.Debug($"Added display {e.Source}");
                     var tiling = new TilingService(Workspace, e.Source, AnimationThread, m_settings, true)
                     {
-                        ShowFocus = m_showFocus,
+                        ShowPreviewFocus = m_showFocus,
                         ExclusionMatchers = m_exclusionMatchers,
                     };
                     tiling.PlacementFailed += OnTilingFailed;
