@@ -1376,22 +1376,38 @@ namespace FancyWM
             var formattedTitle = window.Title.Length > 15
                 ? $"{window.Title[..15]}..."
                 : window.Title;
-            if (display.Bounds.Contains(window.Position.Center))
+            try
             {
-                PlayBeepSound();
-                await ShowToastAsync($"\"{formattedTitle}\" {Strings.Messages_IsAlreadyOn} {Strings.Common_Display} {display.Index() + 1}!", ToastDurationShort);
+                if (display.Bounds.Contains(window.Position.Center))
+                {
+                    PlayBeepSound();
+                    await ShowToastAsync($"\"{formattedTitle}\" {Strings.Messages_IsAlreadyOn} {Strings.Common_Display} {display.Index() + 1}!", ToastDurationShort);
+                }
+                else
+                {
+                    m_logger.Debug("Moving window to designated display...");
+                    var position = window.Position;
+                    var displayCenter = display.Bounds.Center;
+
+                    if (window.State != WinMan.WindowState.Restored)
+                    {
+                        window.SetState(WinMan.WindowState.Restored);
+                    }
+                    window.SetPosition(Rectangle.OffsetAndSize(displayCenter.X - position.Width / 2, displayCenter.Y - position.Height / 2, position.Width, position.Height));
+
+                    m_tiling.Refresh();
+                    OnCurrentDisplayChanged(display);
+
+                    await ShowToastAsync($"{Strings.Common_Moved} \"{formattedTitle}\" {Strings.Common_To} {Strings.Common_Display} {display.Index() + 1}.", ToastDurationShort);
+                }
             }
-            else
+            catch (InvalidWindowReferenceException)
             {
-                m_logger.Debug("Moving window to designated display...");
-                var position = window.Position;
-                var displayCenter = display.Bounds.Center;
-                window.SetPosition(Rectangle.OffsetAndSize(displayCenter.X - position.Width / 2, displayCenter.Y - position.Height / 2, position.Width, position.Height));
-
-                m_tiling.Refresh();
-                OnCurrentDisplayChanged(display);
-
-                await ShowToastAsync($"{Strings.Common_Moved} \"{formattedTitle}\" {Strings.Common_To} {Strings.Common_Display} {display.Index() + 1}.", ToastDurationShort);
+                m_logger.Error("Failed to move window to displa: the window was destroyed");
+            }
+            catch (InvalidOperationException e)
+            {
+                m_logger.Error($"Failed to move window to display: {e.Message}");
             }
         }
 
