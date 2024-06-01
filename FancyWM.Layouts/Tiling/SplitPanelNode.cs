@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using WinMan;
@@ -68,8 +69,9 @@ namespace FancyWM.Layouts.Tiling
                     width = Math.Max(width, childRect.X);
                 }
             }
-            MinSize = new Point(width, height);
-            MaxSize = new Point(short.MaxValue, short.MaxValue);
+            var spacing = (m_children.OfType<WindowNode>().Count() + 1) * Spacing / 2;
+            ContentMinSize = new Point(width + spacing + Padding.Left + Padding.Right, height + spacing + Padding.Top + Padding.Bottom);
+            ContentMaxSize = new Point(short.MaxValue, short.MaxValue);
         }
 
         internal override void ArrangeCore(RectangleF rect)
@@ -92,6 +94,11 @@ namespace FancyWM.Layouts.Tiling
                 var minWidth = Orientation == PanelOrientation.Horizontal
                     ? m_children[i].MinSize.X
                     : m_children[i].MinSize.Y;
+                if (m_children[i] is WindowNode)
+                {
+                    minWidth += Spacing;
+                }
+
                 var maxWidth = Orientation == PanelOrientation.Horizontal
                     ? m_children[i].MaxSize.X
                     : m_children[i].MaxSize.Y;
@@ -189,13 +196,30 @@ namespace FancyWM.Layouts.Tiling
             return copy;
         }
 
-        public override Point ComputeFreeSize()
+        public override Point GetMaxChildSize(TilingNode node)
         {
+            if (!Children.Contains(node))
+            {
+                throw new InvalidOperationException($"Node {node} is not a child of {this}");
+            }
+
+            var maxReclaim = (int)(m_constraints.ContainerWidth - m_constraints.MinWidth);
+            if (Orientation == PanelOrientation.Horizontal)
+            {
+                return new Point(node.ComputedRectangle.Width + maxReclaim, node.ComputedRectangle.Height);
+            }
+            return new Point(node.ComputedRectangle.Width, node.ComputedRectangle.Height + maxReclaim);
+        }
+
+        public override Point GetMaxSizeForInsert(TilingNode node)
+        {
+            var spacing = node is WindowNode ? Spacing : 0;
             var contentRectangle = new Rectangle(
-                ComputedRectangle.Left + Padding.Left + Spacing / 2,
-                ComputedRectangle.Top + Padding.Top + Spacing / 2,
-                ComputedRectangle.Right - Padding.Right - Spacing / 2,
-                ComputedRectangle.Bottom - Padding.Bottom - Spacing / 2);
+                ComputedRectangle.Left + Padding.Left + spacing / 2,
+                ComputedRectangle.Top + Padding.Top + spacing / 2,
+                ComputedRectangle.Right - Padding.Right - spacing / 2,
+                ComputedRectangle.Bottom - Padding.Bottom - spacing / 2);
+
             if (Orientation == PanelOrientation.Horizontal)
             {
                 return new Point(contentRectangle.Width - (int)m_constraints.MinWidth, contentRectangle.Height);

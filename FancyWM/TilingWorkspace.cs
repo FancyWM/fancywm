@@ -187,33 +187,10 @@ namespace FancyWM
 
             WindowNode newNode = new(window);
             // Try to fit in the same panel as the target
-            if (parent is StackPanelNode || CanFitLossy(parent, window))
+            if (parent is StackPanelNode || CanFitLossy(parent, newNode))
             {
                 parent.Attach(newNode);
                 parent.RemovePlaceholders();
-            }
-            else if (anchor is WindowNode windowChild)
-            {
-                if (anchor.Parent is StackPanelNode)
-                {
-                    anchor.Parent.Attach(newNode);
-                }
-                else
-                {
-                    // Could we fit the window by stacking with the target?
-                    var freeSizeInParent = windowChild.Parent!.ComputeFreeSize();
-                    var minSize = window.MinSize.GetValueOrDefault();
-                    if (freeSizeInParent.X + windowChild.ComputedRectangle.Width >= minSize.X
-                        && freeSizeInParent.Y + windowChild.ComputedRectangle.Height >= minSize.Y)
-                    {
-                        windowChild.Embed(new StackPanelNode());
-                        windowChild.Parent!.Attach(newNode);
-                    }
-                    else
-                    {
-                        throw new NoValidPlacementExistsException();
-                    }
-                }
             }
             else
             {
@@ -233,29 +210,22 @@ namespace FancyWM
                 return true;
             }
 
-            var minSize = window.MinSize;
-            if (minSize.HasValue)
-            {
-                return CanFitLossy(parent, minSize.Value);
-            }
-
-            return true;
+            var node = new WindowNode(window);
+            node.Measure();
+            return CanFitLossy(parent, node);
         }
 
-        private static bool CanFitLossy(PanelNode parent, Point minSize)
+        private static bool CanFitLossy(PanelNode parent, TilingNode node)
         {
             if (parent.ComputedRectangle == default)
             {
                 return true;
             }
 
-            var maxSize = parent.ComputeFreeSize();
-            if (minSize.X > maxSize.X || minSize.Y > maxSize.Y)
-            {
-                return false;
-            }
+            var minSize = node.MinSize;
+            var maxSize = parent.GetMaxSizeForInsert(node);
 
-            return true;
+            return minSize.X <= maxSize.X && minSize.Y <= maxSize.Y;
         }
 
         public void UnregisterWindow(IWindow window)
@@ -772,7 +742,7 @@ namespace FancyWM
             }
             else
             {
-                return CanFitLossy(parent, child.MinSize);
+                return CanFitLossy(parent, child);
             }
         }
 

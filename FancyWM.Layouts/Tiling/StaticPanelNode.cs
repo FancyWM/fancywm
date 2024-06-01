@@ -56,17 +56,22 @@ namespace FancyWM.Layouts.Tiling
             return copy;
         }
 
-        public override Point ComputeFreeSize()
-        {
-            throw new NotImplementedException();
-        }
-
         internal override void MeasureCore()
         {
             throw new NotImplementedException();
         }
 
         public override void Move(int fromIndex, int toIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Point GetMaxChildSize(TilingNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Point GetMaxSizeForInsert(TilingNode node)
         {
             throw new NotImplementedException();
         }

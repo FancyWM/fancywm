@@ -19,6 +19,9 @@ namespace FancyWM.Layouts.Tiling
 
     public abstract class PanelNode : TilingNode
     {
+        /// <summary>
+        /// Spacing applied around WindowNode nodes.
+        /// </summary>
         public int Spacing { get; set; }
 
         public abstract IReadOnlyList<TilingNode> Children { get; }
@@ -94,7 +97,15 @@ namespace FancyWM.Layouts.Tiling
         protected abstract void AttachCore(int index, TilingNode node);
         protected abstract void DetachCore(TilingNode node);
 
-        public abstract Point ComputeFreeSize();
+        /// <summary>
+        /// The maximum size that this child can have.
+        /// </summary>
+        public abstract Point GetMaxChildSize(TilingNode node);
+
+        /// <summary>
+        /// The maximum size that this node can have, if it becomes a child.
+        /// </summary>
+        public abstract Point GetMaxSizeForInsert(TilingNode node);
 
         public abstract void Move(int fromIndex, int toIndex);
 

@@ -57,9 +57,23 @@ namespace FancyWM.Layouts.Tiling
             return copy;
         }
 
-        public override Point ComputeFreeSize()
+        public override Point GetMaxChildSize(TilingNode node)
         {
-            return new(ComputedRectangle.Width, ComputedRectangle.Height);
+            if (!Children.Contains(node))
+            {
+                throw new InvalidOperationException($"Node {node} is not a child of {this}");
+            }
+
+            return GetMaxSizeForInsert(node);
+        }
+
+        public override Point GetMaxSizeForInsert(TilingNode node)
+        {
+            if (node is WindowNode)
+            {
+                return new Point(ComputedRectangle.Width - Spacing, ComputedRectangle.Height - Spacing);
+            }
+            return ComputedRectangle.Size;
         }
 
         internal override void MeasureCore()
@@ -72,7 +86,8 @@ namespace FancyWM.Layouts.Tiling
                 width = Math.Max(width, minChild.X);
                 height = Math.Max(height, minChild.Y);
             }
-            MinSize = new Point(width, height);
+            var spacing = Children.OfType<WindowNode>().Any() ? Spacing : 0;
+            ContentMinSize = new Point(width + spacing, height + spacing);
         }
 
         public override void Move(int fromIndex, int toIndex)

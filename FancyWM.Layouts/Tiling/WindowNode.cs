@@ -27,16 +27,16 @@ namespace FancyWM.Layouts.Tiling
                 var minSize = WindowReference.MinSize;
                 if (minSize.HasValue)
                 {
-                    MinSize = minSize.Value;
+                    ContentMinSize = new Point(minSize.Value.X + Padding.Left + Padding.Right, minSize.Value.Y + Padding.Top + Padding.Bottom);
                 }
                 else
                 {
-                    MinSize = new Point(0, 0);
+                    ContentMinSize = new Point(Padding.Left + Padding.Right, Padding.Top + Padding.Bottom);
                 }
             }
             catch
             {
-                MinSize = new Point(0, 0);
+                ContentMinSize = new Point(Padding.Left + Padding.Right, Padding.Top + Padding.Bottom);
             }
         }
 

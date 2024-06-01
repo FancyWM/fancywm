@@ -603,10 +603,10 @@ namespace FancyWM
                     {
                         case PanelOrientation.Horizontal:
                             newSize = oldSize.Width + horizontalDelta / 2;
-                            return focusedNode.Parent!.ComputeFreeSize().X - focusedNode.MinSize.X + newSize > 0;
+                            return focusedNode.Parent!.GetMaxChildSize(focusedNode).X > newSize;
                         case PanelOrientation.Vertical:
                             newSize = oldSize.Height + verticalDelta / 2;
-                            return focusedNode.Parent!.ComputeFreeSize().Y - focusedNode.MinSize.Y + newSize > 0;
+                            return focusedNode.Parent!.GetMaxChildSize(focusedNode).Y > newSize;
                         default:
                             throw new NotImplementedException();
                     }

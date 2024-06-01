@@ -71,12 +71,35 @@ namespace FancyWM.Layouts.Tiling
 
         public abstract IEnumerable<TilingNode> Nodes { get; }
 
-        public Point MinSize { get; protected set; }
+        /// <summary>
+        /// Content minimum size.
+        /// </summary>
+        public Point ContentMinSize { get; protected set; }
 
-        public Point MaxSize { get; protected set; } = new Point(short.MaxValue, short.MaxValue);
+        /// <summary>
+        /// Border minimum size (content + padding).
+        /// </summary>
+        public Point MinSize => new(ContentMinSize.X + Padding.Left + Padding.Right, ContentMinSize.Y + Padding.Top + Padding.Bottom);
 
+        /// <summary>
+        /// Content maximum size.
+        /// </summary>
+
+        public Point ContentMaxSize { get; protected set; } = new Point(short.MaxValue, short.MaxValue);
+
+        /// <summary>
+        /// Border maximum size (content + padding).
+        /// </summary>
+        public Point MaxSize => new(ContentMaxSize.X + Padding.Left + Padding.Right, ContentMaxSize.Y + Padding.Top + Padding.Bottom);
+
+        /// <summary>
+        /// Padding around the content.
+        /// </summary>
         public Rectangle Padding { get; set; }
 
+        /// <summary>
+        /// Border rectangle computed by Arrange().
+        /// </summary>
         public Rectangle ComputedRectangle => Rectangle.ToRectangle();
 
         internal RectangleF Rectangle { get; private set; }
@@ -84,6 +107,11 @@ namespace FancyWM.Layouts.Tiling
         private DesktopTree? m_desktop;
 
         internal TilingNode() { }
+
+        public Point ComputeActualMaxSize()
+        {
+            throw new NotImplementedException();
+        }
 
         public void Swap(TilingNode otherNode)
         {
@@ -181,8 +209,8 @@ namespace FancyWM.Layouts.Tiling
 
         public void ClearConstraints()
         {
-            MinSize = new();
-            MaxSize = new Point(short.MaxValue, short.MaxValue);
+            ContentMinSize = new();
+            ContentMaxSize = new Point(short.MaxValue, short.MaxValue);
         }
 
         public void Measure()
