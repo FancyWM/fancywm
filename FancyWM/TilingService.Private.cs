@@ -61,6 +61,33 @@ namespace FancyWM
 
         private TimeSpan m_lastUpdateLayout = TimeSpan.Zero;
 
+        private void UpdateTree(DesktopTree tree)
+        {
+            tree.WorkArea = m_display.WorkArea;
+
+            bool constraintsSatisfied = false;
+            while (!constraintsSatisfied)
+            {
+                tree.Measure();
+                try
+                {
+                    tree.Arrange();
+                    constraintsSatisfied = true;
+                }
+                catch (UnsatisfiableFlexConstraintsException)
+                {
+                    var largestWindow = tree.Root!.Windows.OrderByDescending(x => x.GenerationID).First();
+                    m_logger.Warning($"The arrange pass failed! Floating window {largestWindow.WindowReference.GetSanitizedString()} in an attempt to find a permissible arrangement!");
+                    lock (m_floatingSet)
+                    {
+                        m_floatingSet.Add(largestWindow.WindowReference);
+                    }
+                    DetectChanges(largestWindow.WindowReference);
+                    PlacementFailed?.Invoke(this, new TilingFailedEventArgs(TilingError.NoValidPlacementExists, largestWindow.WindowReference));
+                }
+            }
+        }
+
         private async Task UpdateLayoutAsync()
         {
             if (!Active)
@@ -71,7 +98,6 @@ namespace FancyWM
                 return;
             }
             m_lastUpdateLayout = m_sw.Elapsed;
-
 
             List<TilingNode> snapshot;
             IVirtualDesktop desktop;
@@ -93,30 +119,7 @@ namespace FancyWM
                     return;
                 }
 
-                tree.WorkArea = m_display.WorkArea;
-
-                bool constraintsSatisfied = false;
-                while (!constraintsSatisfied)
-                {
-                    tree.Measure();
-                    try
-                    {
-                        tree.Arrange();
-                        constraintsSatisfied = true;
-                    }
-                    catch (UnsatisfiableFlexConstraintsException)
-                    {
-                        var largestWindow = tree.Root!.Windows.OrderByDescending(x => x.GenerationID).First();
-                        m_logger.Warning($"The arrange pass failed! Floating window {largestWindow.WindowReference.GetSanitizedString()} in an attempt to find a permissible arrangement!");
-                        lock (m_floatingSet)
-                        {
-                            m_floatingSet.Add(largestWindow.WindowReference);
-                        }
-                        DetectChanges(largestWindow.WindowReference);
-                        PlacementFailed?.Invoke(this, new TilingFailedEventArgs(TilingError.NoValidPlacementExists, largestWindow.WindowReference));
-                    }
-                }
-
+                UpdateTree(tree);
 
                 snapshot = tree.Root!.Nodes.Skip(1).ToList();
                 var focusedNode = m_backend.GetFocus(desktop);

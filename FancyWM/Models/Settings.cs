@@ -16,6 +16,7 @@ namespace FancyWM.Models
         bool AnimateWindowMovement { get; }
         int WindowPadding { get; }
         int PanelHeight { get; }
+        int AutoSplitCount { get; }
     }
 
     [AttributeUsage(AttributeTargets.Field)]

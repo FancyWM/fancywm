@@ -219,13 +219,6 @@ namespace FancyWM
 
             m_display.ScalingChanged += OnDisplayScalingChanged;
 
-            OnCurrentDesktopChanged(this, new CurrentDesktopChangedEventArgs(m_workspace.VirtualDesktopManager.CurrentDesktop, m_workspace.VirtualDesktopManager.CurrentDesktop));
-
-            foreach (var w in m_workspace.GetSnapshot())
-            {
-                OnWindowAdded(w, new WindowChangedEventArgs(w));
-            }
-
             m_workspace.WindowAdded += OnWindowAdded;
             m_workspace.WindowRemoved += OnWindowRemoved;
 
@@ -234,6 +227,20 @@ namespace FancyWM
 
             m_subscriptions.Add(m_gui);
             m_subscriptions.Add(settings.Subscribe(OnSettingsChanged));
+
+            var currentDesktop = m_workspace.VirtualDesktopManager.CurrentDesktop;
+            OnCurrentDesktopChanged(this, new CurrentDesktopChangedEventArgs(currentDesktop, currentDesktop));
+
+            var tree = m_backend.GetTree(currentDesktop)!;
+            foreach (var w in m_workspace.GetSnapshot())
+            {
+                OnWindowAdded(w, new WindowChangedEventArgs(w));
+                if (m_backend.HasWindow(w))
+                {
+                    m_backend.SetFocus(w);
+                    UpdateTree(tree);
+                }
+            }
 
             m_sw.Start();
         }
@@ -246,6 +253,7 @@ namespace FancyWM
                 AnimateWindowMovement = x.AnimateWindowMovement;
                 WindowPadding = x.WindowPadding;
                 PanelHeight = x.PanelHeight;
+                AutoSplitCount = x.AutoSplitCount;
             });
         }
 
