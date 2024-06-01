@@ -1076,7 +1076,7 @@ namespace FancyWM
             if (!m_active)
                 return;
 
-            if (DelayReposition)
+            if (DelayReposition && m_currentInteraction == UserInteraction.Moving)
             {
                 try
                 {
