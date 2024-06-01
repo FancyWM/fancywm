@@ -529,32 +529,29 @@ namespace FancyWM
             if (PendingIntent == null)
                 return;
 
-            if (PendingIntent is GroupWithIntent gwi)
+            m_dispatcher.BeginInvoke(() =>
             {
-                m_dispatcher.BeginInvoke(() =>
+                if (PendingIntent is GroupWithIntent gwi)
                 {
                     if (Mouse.LeftButton != MouseButtonState.Pressed)
                     {
                         PendingIntent.Cancel();
                         PendingIntent = null;
                     }
-                });
 
-                lock (m_backend)
-                {
-                    if (m_backend.NodeAtPoint(m_workspace.VirtualDesktopManager.CurrentDesktop, e.NewLocation) is WindowNode targetNode)
+                    lock (m_backend)
                     {
-                        m_dispatcher.BeginInvoke(() =>
+                        if (m_backend.NodeAtPoint(m_workspace.VirtualDesktopManager.CurrentDesktop, e.NewLocation) is WindowNode targetNode)
                         {
                             var newSet = new HashSet<IWindow> { gwi.Source.WindowReference, targetNode.WindowReference };
                             if (!m_gui.PreviewWindows.SetEquals(newSet))
                             {
                                 m_gui.PreviewWindows = newSet;
                             }
-                        });
+                        }
                     }
                 }
-            }
+            });
         }
 
         private void OnPendingIntentChanged(object? sender, EventArgs e)
