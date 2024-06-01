@@ -324,12 +324,12 @@ namespace FancyWM
 
         private void OnSetFocusRectangle(Rectangle? oldValue, Rectangle? newValue)
         {
-            m_viewModel.FocusRectangle = newValue ?? new Rectangle();
+            m_viewModel.FocusRectangle = newValue.HasValue ? AdjustForDisplay(newValue.Value) : new Rectangle();
         }
 
         private void OnSetPreviewRectangle(Rectangle? oldValue, Rectangle? newValue)
         {
-            m_viewModel.PreviewRectangle = newValue ?? new Rectangle();
+            m_viewModel.PreviewRectangle = newValue.HasValue ? AdjustForDisplay(newValue.Value) : new Rectangle();
         }
 
 
