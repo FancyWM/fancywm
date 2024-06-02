@@ -152,7 +152,18 @@ namespace FancyWM.Layouts.Tiling
             }
         }
 
-        public bool Resize(TilingNode node, int newLength, GrowDirection direction)
+        public bool ResizeTo(TilingNode node, double newLength, GrowDirection direction)
+        {
+            if (Children.Count == 1)
+            {
+                return false;
+            }
+
+            int index = m_children.IndexOf(node);
+            return ResizeBy(node, newLength - m_constraints[index].Width, direction);
+        }
+
+        public bool ResizeBy(TilingNode node, double delta, GrowDirection direction)
         {
             if (Children.Count == 1)
             {
@@ -163,9 +174,8 @@ namespace FancyWM.Layouts.Tiling
             {
                 int index = m_children.IndexOf(node);
                 var item = m_children[index];
-                var length = Orientation == PanelOrientation.Horizontal ? Rectangle.Width : Rectangle.Height;
-
-                var newWeight = newLength / length;
+                var length = m_constraints.ContainerWidth;
+                var newWeight = (m_constraints[index].Width + delta) / length;
 
                 double minWeight = 1.0 / 16;
                 double clampedWeight = Math.Min(1.0 - minWeight, Math.Max(minWeight, newWeight));

@@ -619,13 +619,29 @@ namespace FancyWM
 
                 if (p != null)
                 {
-                    GrowDirection direction = newPosition.Left == oldPosition.Left
+                    var leftResizeAmount = Math.Abs(newPosition.Left - oldPosition.Left);
+                    var rightResizeAmount = Math.Abs(newPosition.Right - oldPosition.Right);
+                    GrowDirection direction = leftResizeAmount < rightResizeAmount
                         ? GrowDirection.TowardsEnd
-                        : newPosition.Right == oldPosition.Right
+                        : leftResizeAmount > rightResizeAmount
                             ? GrowDirection.TowardsStart
                             : GrowDirection.Both;
-                    var child = p.Children.First(x => x.Windows.Contains(node));
-                    p.Resize(child, newPosition.Width, direction);
+                    var child = p.Children.First(x => x.Nodes.Contains(node));
+                    var childIndex = p.IndexOf(child);
+                    var sizeDelta = newPosition.Width - oldPosition.Width;
+
+                    if (direction == GrowDirection.TowardsStart && childIndex == 0 && child.GetAdjacentNode(TilingDirection.Left) is TilingNode leftNode)
+                    {
+                        var leftNodePosition = leftNode.ComputedRectangle;
+                        ResizeNode(leftNode, new Rectangle(leftNodePosition.Left, leftNodePosition.Top, leftNodePosition.Right - sizeDelta, leftNodePosition.Bottom), leftNodePosition);
+                    }
+                    else if (direction == GrowDirection.TowardsEnd && childIndex == p.Children.Count - 1 && child.GetAdjacentNode(TilingDirection.Right) is TilingNode rightNode)
+                    {
+                        var rightNodePosition = rightNode.ComputedRectangle;
+                        ResizeNode(rightNode, new Rectangle(rightNodePosition.Left + sizeDelta, rightNodePosition.Top, rightNodePosition.Right, rightNodePosition.Bottom), rightNodePosition);
+                    }
+
+                    p.ResizeBy(child, sizeDelta, direction);
                 }
             }
 
@@ -638,13 +654,29 @@ namespace FancyWM
 
                 if (p != null)
                 {
-                    GrowDirection direction = newPosition.Top == oldPosition.Top
+                    var topResizeAmount = Math.Abs(newPosition.Top - oldPosition.Top);
+                    var bottomResizeAmount = Math.Abs(newPosition.Bottom - oldPosition.Bottom);
+                    GrowDirection direction = topResizeAmount < bottomResizeAmount
                         ? GrowDirection.TowardsEnd
-                        : newPosition.Bottom == oldPosition.Bottom
+                        : topResizeAmount > bottomResizeAmount
                             ? GrowDirection.TowardsStart
                             : GrowDirection.Both;
-                    var child = p.Children.First(x => x.Windows.Contains(node));
-                    p.Resize(child, newPosition.Height, direction);
+                    var child = p.Children.First(x => x.Nodes.Contains(node));
+                    var childIndex = p.IndexOf(child);
+                    var sizeDelta = newPosition.Height - oldPosition.Height;
+
+                    if (direction == GrowDirection.TowardsStart && childIndex == 0 && child.GetAdjacentNode(TilingDirection.Up) is TilingNode topNode)
+                    {
+                        var topNodePosition = topNode.ComputedRectangle;
+                        ResizeNode(topNode, new Rectangle(topNodePosition.Left, topNodePosition.Top, topNodePosition.Right, topNodePosition.Bottom - sizeDelta), topNodePosition);
+                    }
+                    else if (direction == GrowDirection.TowardsEnd && childIndex == p.Children.Count - 1 && child.GetAdjacentNode(TilingDirection.Down) is TilingNode bottomNode)
+                    {
+                        var bottomNodePosition = bottomNode.ComputedRectangle;
+                        ResizeNode(bottomNode, new Rectangle(bottomNodePosition.Left, bottomNodePosition.Top + sizeDelta, bottomNodePosition.Right, bottomNodePosition.Bottom), bottomNodePosition);
+                    }
+
+                    p.ResizeBy(child, sizeDelta, direction);
                 }
             }
         }
