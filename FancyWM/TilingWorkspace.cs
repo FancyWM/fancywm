@@ -604,42 +604,47 @@ namespace FancyWM
             var node = state.DesktopTree.FindNode(window);
             if (node != null)
             {
-                if (newPosition.Width != oldPosition.Width)
-                {
-                    SplitPanelNode? p = node.Ancestors
-                        .Select(x => x as SplitPanelNode)
-                        .Where(x => x != null)
-                        .FirstOrDefault(x => x!.Orientation == PanelOrientation.Horizontal);
+                ResizeNode(node, newPosition, oldPosition);
+            }
+        }
 
-                    if (p != null)
-                    {
-                        GrowDirection direction = newPosition.Left == oldPosition.Left
-                            ? GrowDirection.TowardsEnd
-                            : newPosition.Right == oldPosition.Right
-                                ? GrowDirection.TowardsStart
-                                : GrowDirection.Both;
-                        var child = p.Children.First(x => x.Windows.Contains(node));
-                        p.Resize(child, newPosition.Width, direction);
-                    }
+        public void ResizeNode(TilingNode node, Rectangle newPosition, Rectangle oldPosition)
+        {
+            if (newPosition.Width != oldPosition.Width)
+            {
+                SplitPanelNode? p = node.Ancestors
+                    .Select(x => x as SplitPanelNode)
+                    .Where(x => x != null)
+                    .FirstOrDefault(x => x!.Orientation == PanelOrientation.Horizontal);
+
+                if (p != null)
+                {
+                    GrowDirection direction = newPosition.Left == oldPosition.Left
+                        ? GrowDirection.TowardsEnd
+                        : newPosition.Right == oldPosition.Right
+                            ? GrowDirection.TowardsStart
+                            : GrowDirection.Both;
+                    var child = p.Children.First(x => x.Windows.Contains(node));
+                    p.Resize(child, newPosition.Width, direction);
                 }
+            }
 
-                if (newPosition.Height != oldPosition.Height)
+            if (newPosition.Height != oldPosition.Height)
+            {
+                SplitPanelNode? p = node.Ancestors
+                    .Select(x => x as SplitPanelNode)
+                    .Where(x => x != null)
+                    .FirstOrDefault(x => x!.Orientation == PanelOrientation.Vertical);
+
+                if (p != null)
                 {
-                    SplitPanelNode? p = node.Ancestors
-                        .Select(x => x as SplitPanelNode)
-                        .Where(x => x != null)
-                        .FirstOrDefault(x => x!.Orientation == PanelOrientation.Vertical);
-
-                    if (p != null)
-                    {
-                        GrowDirection direction = newPosition.Top == oldPosition.Top
-                            ? GrowDirection.TowardsEnd
-                            : newPosition.Bottom == oldPosition.Bottom
-                                ? GrowDirection.TowardsStart
-                                : GrowDirection.Both;
-                        var child = p.Children.First(x => x.Windows.Contains(node));
-                        p.Resize(child, newPosition.Height, direction);
-                    }
+                    GrowDirection direction = newPosition.Top == oldPosition.Top
+                        ? GrowDirection.TowardsEnd
+                        : newPosition.Bottom == oldPosition.Bottom
+                            ? GrowDirection.TowardsStart
+                            : GrowDirection.Both;
+                    var child = p.Children.First(x => x.Windows.Contains(node));
+                    p.Resize(child, newPosition.Height, direction);
                 }
             }
         }

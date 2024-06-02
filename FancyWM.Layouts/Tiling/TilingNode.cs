@@ -44,7 +44,7 @@ namespace FancyWM.Layouts.Tiling
 
         public abstract TilingNodeType Type { get; }
 
-        public IEnumerable<TilingNode> Ancestors
+        public IEnumerable<PanelNode> Ancestors
         {
             get
             {
@@ -102,16 +102,17 @@ namespace FancyWM.Layouts.Tiling
         /// </summary>
         public Rectangle ComputedRectangle => Rectangle.ToRectangle();
 
+        public Rectangle ComputedContentRectangle => new(
+            ComputedRectangle.Left + Padding.Left, 
+            ComputedRectangle.Top + Padding.Top, 
+            ComputedRectangle.Right - Padding.Right, 
+            ComputedRectangle.Bottom - Padding.Bottom);
+
         internal RectangleF Rectangle { get; private set; }
 
         private DesktopTree? m_desktop;
 
         internal TilingNode() { }
-
-        public Point ComputeActualMaxSize()
-        {
-            throw new NotImplementedException();
-        }
 
         public void Swap(TilingNode otherNode)
         {

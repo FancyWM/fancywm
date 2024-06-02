@@ -1172,8 +1172,18 @@ namespace FancyWM
                     {
                         if (m_backend.HasWindow(e.Source))
                         {
-                            m_logger.Debug("Window {Handle}={ProcessName} size is different, attempting to resize window from {OldPosition} to {NewPosition}", e.Source.Handle, e.Source.GetCachedProcessName(), e.OldPosition, e.NewPosition);
-                            m_backend.ResizeWindow(e.Source, e.NewPosition, e.OldPosition);
+                            var node = m_backend.FindWindow(e.Source);
+                            var oldPosition = node!.ComputedContentRectangle;
+                            var frame = e.Source.FrameMargins;
+                            var adjustedRect = new Rectangle(
+                                left: oldPosition.Left - frame.Left,
+                                top: oldPosition.Top - frame.Top,
+                                right: oldPosition.Right + frame.Right,
+                                bottom: oldPosition.Bottom + frame.Bottom);
+
+                            m_logger.Debug("Window {Handle}={ProcessName} size is different, attempting to resize window from {OldPosition} to {NewPosition}", e.Source.Handle, e.Source.GetCachedProcessName(), adjustedRect, e.NewPosition);
+                            m_backend.ResizeWindow(e.Source, e.NewPosition, adjustedRect);
+                            UpdateTree(node.Desktop!);
                         }
                     }
                 }
