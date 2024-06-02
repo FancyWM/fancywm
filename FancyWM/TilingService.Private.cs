@@ -192,7 +192,7 @@ namespace FancyWM
             }
             else
             {
-                TransitionTargetGroup.PerformTransition(targets);
+                await TransitionTargetGroup.PerformTransitionAsync(targets);
             }
         }
 

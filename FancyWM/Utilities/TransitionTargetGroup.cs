@@ -93,23 +93,24 @@ namespace FancyWM.Utilities
             await Tasks.WhenAllIgnoreCancelled(tasks);
         }
 
-        public static void PerformTransition(List<TransitionTarget> targets)
+        public static Task PerformTransitionAsync(List<TransitionTarget> targets)
         {
-            foreach (var target in targets)
+            return Task.WhenAll(targets.Select(target => 
             {
-                try
+                return RunOnThreadPool(() =>
                 {
-                    target.Window.SetPosition(target.ComputedPosition);
-                }
-                catch (InvalidWindowReferenceException)
-                {
-                    continue;
-                }
-                catch (InvalidOperationException) when (target.Window.State != WindowState.Restored)
-                {
-                    continue;
-                }
-            }
+                    try
+                    {
+                        target.Window.SetPosition(target.ComputedPosition);
+                    }
+                    catch (InvalidWindowReferenceException)
+                    {
+                    }
+                    catch (InvalidOperationException) when (target.Window.State != WindowState.Restored)
+                    {
+                    }
+                }).AsTask();
+            }).ToArray());
         }
     }
 }
