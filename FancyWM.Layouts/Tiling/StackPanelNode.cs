@@ -83,11 +83,14 @@ namespace FancyWM.Layouts.Tiling
             {
                 child.Measure();
                 var minChild = child.MinSize;
+                if (child is WindowNode) 
+                {
+                    minChild = new Point(minChild.X + Spacing, minChild.Y + Spacing);
+                }
                 width = Math.Max(width, minChild.X);
                 height = Math.Max(height, minChild.Y);
             }
-            var spacing = Children.OfType<WindowNode>().Any() ? Spacing : 0;
-            ContentMinSize = new Point(width + spacing, height + spacing);
+            ContentMinSize = new Point(width, height);
         }
 
         public override void Move(int fromIndex, int toIndex)
