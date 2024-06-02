@@ -31,7 +31,7 @@ namespace FancyWM.Models
 
         private ActivationHotkey(KeyCode[] modifierKeys, KeyCode key, string description)
         {
-            ModifierKeys = [..modifierKeys.OrderBy(x => (int)x)];
+            ModifierKeys = [.. modifierKeys.OrderBy(x => (int)x)];
             Key = key;
             Description = description;
         }

@@ -66,7 +66,7 @@ namespace FancyWM.Utilities
                 }
                 return false;
             }
-            
+
             if (e.IsPressed)
             {
                 // 1. Unless we want the trigger on release.

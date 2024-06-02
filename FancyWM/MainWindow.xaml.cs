@@ -397,7 +397,7 @@ namespace FancyWM
             {
                 yield return ([keys[0]], keys[1]);
                 yield return ([keys[1]], keys[0]);
-            } 
+            }
             else if (hk.ModifierKeys.Length == 2)
             {
                 yield return ([keys[0], keys[1]], keys[2]);

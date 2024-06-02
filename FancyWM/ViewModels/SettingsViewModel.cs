@@ -245,7 +245,7 @@ namespace FancyWM.ViewModels
                     var newKeybindings = KeybindingViewModel.FromDictionary(settings.Keybindings);
                     if (m_keybindings == null)
                     {
-                        Keybindings = [..newKeybindings];
+                        Keybindings = [.. newKeybindings];
                         foreach (var vm in Keybindings)
                         {
                             vm.PropertyChanged += OnKeybindingPropertyChanged;
@@ -456,14 +456,14 @@ namespace FancyWM.ViewModels
                 })
             };
 
-            List<BindableAction> missing = [..Enum.GetValues(typeof(BindableAction)).OfType<BindableAction>().Except(buckets.SelectMany(x => x.Item2))];
+            List<BindableAction> missing = [.. Enum.GetValues(typeof(BindableAction)).OfType<BindableAction>().Except(buckets.SelectMany(x => x.Item2))];
             Debug.Assert(missing.Count == 0);
 
             return buckets.Select((bucket) =>
             {
                 var (group, actions) = bucket;
                 return new KeybindingGroup(
-                    GroupKey: group, 
+                    GroupKey: group,
                     Keybindings: keybindings.Where(x => actions.Contains(x.Action)).ToList());
             }).ToList();
         }

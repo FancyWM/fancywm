@@ -83,7 +83,7 @@ namespace FancyWM.Layouts.Tiling
             {
                 child.Measure();
                 var minChild = child.MinSize;
-                if (child is WindowNode) 
+                if (child is WindowNode)
                 {
                     minChild = new Point(minChild.X + Spacing, minChild.Y + Spacing);
                 }

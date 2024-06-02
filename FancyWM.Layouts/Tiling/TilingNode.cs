@@ -103,9 +103,9 @@ namespace FancyWM.Layouts.Tiling
         public Rectangle ComputedRectangle => Rectangle.ToRectangle();
 
         public Rectangle ComputedContentRectangle => new(
-            ComputedRectangle.Left + Padding.Left, 
-            ComputedRectangle.Top + Padding.Top, 
-            ComputedRectangle.Right - Padding.Right, 
+            ComputedRectangle.Left + Padding.Left,
+            ComputedRectangle.Top + Padding.Top,
+            ComputedRectangle.Right - Padding.Right,
             ComputedRectangle.Bottom - Padding.Bottom);
 
         internal RectangleF Rectangle { get; private set; }

@@ -12,7 +12,7 @@ namespace FancyWM.Converters
     {
         static string Serialize(ActivationHotkey hk)
         {
-            KeyCode[] keys = [..hk.ModifierKeys, hk.Key];
+            KeyCode[] keys = [.. hk.ModifierKeys, hk.Key];
             return TidyString(string.Join('_', keys));
         }
 

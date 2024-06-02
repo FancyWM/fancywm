@@ -310,7 +310,7 @@ namespace FancyWM
                             var spacing = GetPanelSpacing();
                             return new Rectangle(
                                 rect.Left - padding.Left - spacing / 2,
-                                rect.Top - padding.Top - spacing / 2, 
+                                rect.Top - padding.Top - spacing / 2,
                                 rect.Right + padding.Right + spacing / 2,
                                 rect.Bottom + padding.Bottom + spacing / 2);
                         }
