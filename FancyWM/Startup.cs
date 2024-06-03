@@ -77,6 +77,11 @@ namespace FancyWM
                 return 0;
             }
 
+            return AppMain(args);
+        }
+
+        public static int AppMain(string[] args)
+        {
             if (File.Exists("administrator-mode") && !IsAdministrator())
             {
                 try

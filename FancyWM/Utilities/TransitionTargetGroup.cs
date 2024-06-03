@@ -95,7 +95,7 @@ namespace FancyWM.Utilities
 
         public static Task PerformTransitionAsync(List<TransitionTarget> targets)
         {
-            return Task.WhenAll(targets.Select(target => 
+            return Task.WhenAll(targets.Select(target =>
             {
                 return RunOnThreadPool(() =>
                 {
