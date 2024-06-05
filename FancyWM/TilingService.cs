@@ -305,7 +305,9 @@ namespace FancyWM
 
                 if (adjacentWindow.Parent == focusedNode.Parent)
                 {
-                    focusedNode!.Swap(adjacentWindow);
+                    var focusedNodeIndex = focusedNode.Parent.IndexOf(focusedNode);
+                    var adjacentNodeIndex = focusedNode.Parent.IndexOf(adjacentWindow);
+                    focusedNode.Parent.Move(focusedNodeIndex, adjacentNodeIndex);
                 }
                 else
                 {
