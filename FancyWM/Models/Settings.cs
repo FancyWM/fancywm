@@ -48,7 +48,7 @@ namespace FancyWM.Models
 
         public int AutoSplitCount { get; set; } = 2;
 
-        public bool DelayReposition { get; set; } = true;
+        public bool DelayReposition { get; set; } = false;
 
         public bool AnimateWindowMovement { get; set; } = true;
 
