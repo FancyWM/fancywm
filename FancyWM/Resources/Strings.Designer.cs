@@ -466,7 +466,7 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Automatic Split Threshold ᴺᴱᵂ.
+        ///   Looks up a localized string similar to Automatic split threshold ᴺᴱᵂ.
         /// </summary>
         public static string Interaction_AutoSplitCount {
             get {
@@ -493,7 +493,7 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Release window to move.
+        ///   Looks up a localized string similar to Release window to move ᴺᴱᵂ.
         /// </summary>
         public static string Interaction_DelayReposition {
             get {
@@ -619,7 +619,7 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show border around the focused window.
+        ///   Looks up a localized string similar to Show border around the focused window ᴺᴱᵂ.
         /// </summary>
         public static string Interface_ShowFocus {
             get {

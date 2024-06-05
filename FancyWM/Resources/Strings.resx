@@ -412,7 +412,7 @@
     <value>Shows the list of available keybindings after 1s of inactivity. The command pop-up stays on-screen for longer, but you can close it with</value>
   </data>
   <data name="Interface.ShowFocus" xml:space="preserve">
-    <value>Show border around the focused window</value>
+    <value>Show border around the focused window ᴺᴱᵂ</value>
   </data>
   <data name="Interface.ShowFocus.Description" xml:space="preserve">
     <value>Highlights the focused window.</value>
@@ -908,7 +908,7 @@ If you are running a supported non-Insider Windows build and you see this messag
     <value>Use ⇪ Caps Lock as  the Activation hotkey</value>
   </data>
   <data name="Interaction.AutoSplitCount" xml:space="preserve">
-    <value>Automatic Split Threshold ᴺᴱᵂ</value>
+    <value>Automatic split threshold ᴺᴱᵂ</value>
   </data>
   <data name="Interaction.AutoSplitCount.Description" xml:space="preserve">
     <value>Triggers automatic panel creation when the focused panel has more than the specified number of children.</value>
@@ -917,7 +917,7 @@ If you are running a supported non-Insider Windows build and you see this messag
     <value>FancyWM is free and open-source, but requires the same time and effort as any other software.</value>
   </data>
   <data name="Interaction.DelayReposition" xml:space="preserve">
-    <value>Release window to move</value>
+    <value>Release window to move ᴺᴱᵂ</value>
   </data>
   <data name="Interaction.DelayReposition.Description" xml:space="preserve">
     <value>When enabled, the tiling layout will update once the window has finished moving.</value>
