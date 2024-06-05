@@ -637,6 +637,7 @@ namespace FancyWM
                 };
                 m_backend.ResizeWindow(window, newSize, oldSize);
             }
+            InvalidateLayout();
         }
 
         public IWindow? GetFocus()
