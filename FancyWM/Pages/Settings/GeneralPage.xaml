@@ -3,12 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:FancyWM.Pages.Settings" 
-    xmlns:ui="http://schemas.modernwpf.com/2019" 
-    xmlns:controls="clr-namespace:FancyWM.Controls" 
-    xmlns:viewmodels="clr-namespace:FancyWM.ViewModels" 
-    xmlns:res="clr-namespace:FancyWM.Resources" xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
-             d:DataContext="{d:DesignInstance Type=viewmodels:SettingsViewModel}"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:viewmodels="clr-namespace:FancyWM.ViewModels"
+    xmlns:res="clr-namespace:FancyWM.Resources"
+    d:DataContext="{d:DesignInstance Type=viewmodels:SettingsViewModel}"
     mc:Ignorable="d"
     d:DesignHeight="900" d:DesignWidth="800">
     <Grid>
@@ -70,232 +68,15 @@
                 </StackPanel>
             </Border>
 
-            <TextBlock Text="{x:Static res:Strings.General_TilingBehavior}" Style="{DynamicResource SubtitleTextBlockStyle}" Margin="0, 20" />
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <StackPanel>
-                    <DockPanel LastChildFill="True">
-                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=AllocateNewPanelSpace, Mode=TwoWay}" />
-                        <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_AllocateNewPanelSpace}" Margin="0,0,16,0" />
-                    </DockPanel>
-                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Text="{x:Static res:Strings.General_AllocateNewPanelSpace_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
-                </StackPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <StackPanel>
-                    <DockPanel LastChildFill="True">
-                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=AutoCollapsePanels, Mode=TwoWay}" />
-                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="{x:Static res:Strings.General_AutoCollapsePanels}" />
-                    </DockPanel>
-                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Text="{x:Static res:Strings.General_AutoCollapsePanels_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
-                </StackPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <StackPanel>
-                    <DockPanel LastChildFill="True">
-                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=DelayReposition, Mode=TwoWay}" />
-                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="{x:Static res:Strings.General_DelayReposition}" />
-                    </DockPanel>
-                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Text="{x:Static res:Strings.General_DelayReposition_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
-                </StackPanel>
-            </Border>
+            <TextBlock Text="{x:Static res:Strings.General_Displays}" Style="{DynamicResource SubtitleTextBlockStyle}" Margin="0, 20" />
 
             <Border Style="{DynamicResource SettingsItemStyle}">
                 <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal">
-                        <Slider
-                            x:Name="AutoSplitCountSlider"
-                            ui:ControlHelper.Header="{x:Static res:Strings.General_AutoSplitCount}"
-                            HorizontalAlignment="Left"
-                            Maximum="10"
-                            Minimum="2"
-                            IsSnapToTickEnabled="True"
-                            TickFrequency="1"
-                            Value="{Binding AutoSplitCount, Mode=TwoWay}"
-                            Width="200" />
-
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Padding="10,20,0,0"
-                            Text="{Binding Value, ElementName=AutoSplitCountSlider, Mode=OneWay}"  />
-                    </StackPanel>
-
-                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Text="{x:Static res:Strings.General_AutoSplitCount_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
-                </StackPanel>
-            </Border>
-
-            <TextBlock Text="{x:Static res:Strings.General_WindowMovement}" Style="{DynamicResource SubtitleTextBlockStyle}" Margin="0, 20" />
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <DockPanel LastChildFill="True">
-                    <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=AnimateWindowMovement, Mode=TwoWay}" />
-                    <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_AnimateWindowMovement}" Margin="0,0,16,0" />
-                </DockPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <DockPanel LastChildFill="True">
-                    <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ModifierMoveWindow, Mode=TwoWay}" />
-                    <TextBlock VerticalAlignment="Center" Margin="0,0,16,0">
-                        <Run Text="{x:Static res:Strings.General_ModifierMoveWindow}" />
-                        <Run Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Text="&#160;Alt&#160;" />
-                    </TextBlock>
-                </DockPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <StackPanel>
                     <DockPanel LastChildFill="True">
-                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ModifierMoveWindowAutoFocus, Mode=TwoWay}" />
-                        <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_ModifierMoveWindowFocus}" Margin="0,0,16,0" />
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=MultiMonitorSupport, Mode=TwoWay}" />
+                        <TextBlock Margin="0,0,16,0" VerticalAlignment="Center" Text="{x:Static res:Strings.General_MultiMonitorSupport}" />
                     </DockPanel>
-                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}">
-                        <Run Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">
-                            <Run.Style>
-                                <Style>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ModifierMoveWindowAutoFocus}" Value="True">
-                                            <Setter Property="Run.Text" Value="&#160;Alt&#160;+&#160;Click&#160;" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding ModifierMoveWindowAutoFocus}" Value="False">
-                                            <Setter Property="Run.Text" Value="&#160;Ctrl&#160;+&#160;Alt&#160;+&#160;Click&#160;" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Run.Style>
-                        </Run>
-                        <Run Text="{x:Static res:Strings.General_ModifierMoveWindowFocus_Description}" />
-                    </TextBlock>
-                </StackPanel>
-            </Border>
-
-            <TextBlock Text="{x:Static res:Strings.General_Interface}" Style="{DynamicResource SubtitleTextBlockStyle}" Margin="0, 20" />
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <StackPanel>
-                    <DockPanel LastChildFill="True">
-                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ShowContextHints, Mode=TwoWay}" />
-                        <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_ShowContextHints}" Margin="0,0,16,0" />
-                    </DockPanel>
-                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}">
-                    <Run Text="{x:Static res:Strings.General_ShowContextHints_Description}" />
-                    <Run Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">&#160;Esc&#160;</Run>
-                    <Run>.</Run>
-                    </TextBlock>
-                </StackPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <StackPanel>
-                    <DockPanel LastChildFill="True">
-                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ShowFocus, Mode=TwoWay}" />
-                        <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_ShowFocus}" Margin="0,0,16,0" />
-                    </DockPanel>
-                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}">
-                    <Run Text="{x:Static res:Strings.General_ShowFocus_Description}" />
-                    </TextBlock>
-                </StackPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <StackPanel>
-                    <DockPanel LastChildFill="True">
-                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ShowFocusDuringAction, Mode=TwoWay}" />
-                        <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_ShowFocusDuringAction}" Margin="0,0,16,0" />
-                    </DockPanel>
-                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}">
-                    <Run Text="{x:Static res:Strings.General_ShowFocusDuringAction_Description}" />
-                    </TextBlock>
-                </StackPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <StackPanel Orientation="Horizontal">
-                    <Slider
-                        x:Name="WindowPaddingSlider"
-                        ui:ControlHelper.Header="{x:Static res:Strings.General_WindowPadding}"
-                        HorizontalAlignment="Left"
-                        Maximum="32"
-                        Minimum="0"
-                        IsSnapToTickEnabled="True"
-                        TickFrequency="2"
-                        Value="{Binding WindowPadding, Mode=TwoWay}"
-                        Width="200" />
-
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        Padding="10,20,0,0"
-                        Text="{Binding Value, ElementName=WindowPaddingSlider, Mode=OneWay}"  />
-                </StackPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <StackPanel Orientation="Horizontal">
-                    <Slider
-                        x:Name="PanelHeightSlider"
-                        ui:ControlHelper.Header="{x:Static res:Strings.General_PanelHeight}"
-                        HorizontalAlignment="Left"
-                        Maximum="32"
-                        Minimum="16"
-                        IsSnapToTickEnabled="True"
-                        TickFrequency="2"
-                        Value="{Binding PanelHeight, Mode=TwoWay}"
-                        Width="200" />
-
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        Padding="10,20,0,0"
-                        Text="{Binding Value, ElementName=PanelHeightSlider, Mode=OneWay}"  />
-                </StackPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}">
-                <StackPanel Orientation="Horizontal">
-                    <Slider
-                        x:Name="PanelFontSizeSlider"
-                        ui:ControlHelper.Header="{x:Static res:Strings.General_PanelFontSize}"
-                        HorizontalAlignment="Left"
-                        Maximum="{Binding PanelHeight, Mode=OneWay}"
-                        Minimum="10"
-                        IsSnapToTickEnabled="True"
-                        TickFrequency="2"
-                        Value="{Binding PanelFontSize, Mode=TwoWay}"
-                        Width="200" />
-
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        Padding="10,20,0,0"
-                        Text="{Binding Value, ElementName=PanelFontSizeSlider, Mode=OneWay}"  />
-                </StackPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}" Margin="0,0,0,-4" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource ControlCornerRadiusTop}">
-                <DockPanel LastChildFill="True">
-                    <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=OverrideAccentColor, Mode=TwoWay}" />
-                    <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_OverrideAccentColor}" />
-                </DockPanel>
-            </Border>
-
-            <Border Style="{DynamicResource SettingsItemStyle}" CornerRadius="{DynamicResource ControlCornerRadiusBottom}">
-                <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                        <TextBlock VerticalAlignment="Center" Text="R" Margin="0, 0, 10, 0" />
-                        <TextBox Text="{Binding Path=CustomAccentColorR, Mode=TwoWay}" Width="96" Margin="0, 0, 10, 0" />
-                        <TextBlock VerticalAlignment="Center" Text="G" Margin="0, 0, 10, 0" />
-                        <TextBox Text="{Binding Path=CustomAccentColorG, Mode=TwoWay}" Width="96" Margin="0, 0, 10, 0" />
-                        <TextBlock VerticalAlignment="Center" Text="B" Margin="0, 0, 10, 0" />
-                        <TextBox Text="{Binding Path=CustomAccentColorB, Mode=TwoWay}" Width="96" Margin="0, 0, 10, 0" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="A" Margin="0, 0, 10, 0" />
-                        <TextBox Text="{Binding Path=CustomAccentColorA, Mode=TwoWay}" Width="96" Margin="0, 0, 10, 0" />
-                        <Border Width="32" Height="32" BorderBrush="{DynamicResource SystemControlBackgroundBaseHighBrush}" BorderThickness="1">
-                            <Border.Background>
-                                <SolidColorBrush Color="{Binding Path=CustomAccentColor}" />
-                            </Border.Background>
-                        </Border>
-                    </StackPanel>
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.General_MultiMonitorSupport_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
                 </StackPanel>
             </Border>
 

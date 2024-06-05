@@ -223,42 +223,6 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Displays.
-        /// </summary>
-        public static string Displays_Caption {
-            get {
-                return ResourceManager.GetString("Displays.Caption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enable tiling on all connected displays.
-        /// </summary>
-        public static string Displays_MultiMonitorSupport {
-            get {
-                return ResourceManager.GetString("Displays.MultiMonitorSupport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Restart FancyWM for changes to take effect!.
-        /// </summary>
-        public static string Displays_MultiMonitorSupport_Description {
-            get {
-                return ResourceManager.GetString("Displays.MultiMonitorSupport.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tiling on multiple displays.
-        /// </summary>
-        public static string Displays_TilingOnMultipleDisplays {
-            get {
-                return ResourceManager.GetString("Displays.TilingOnMultipleDisplays", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A fatal error has occurred in FancyWM!.
         /// </summary>
         public static string ErrorMessageBox_Caption {
@@ -313,69 +277,6 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reserve empty space in new panels.
-        /// </summary>
-        public static string General_AllocateNewPanelSpace {
-            get {
-                return ResourceManager.GetString("General.AllocateNewPanelSpace", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New panels have will have empty space until a second window is added..
-        /// </summary>
-        public static string General_AllocateNewPanelSpace_Description {
-            get {
-                return ResourceManager.GetString("General.AllocateNewPanelSpace.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Animate window movement.
-        /// </summary>
-        public static string General_AnimateWindowMovement {
-            get {
-                return ResourceManager.GetString("General.AnimateWindowMovement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Automatically collapse panels.
-        /// </summary>
-        public static string General_AutoCollapsePanels {
-            get {
-                return ResourceManager.GetString("General.AutoCollapsePanels", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Panels with a single window will be removed automatically..
-        /// </summary>
-        public static string General_AutoCollapsePanels_Description {
-            get {
-                return ResourceManager.GetString("General.AutoCollapsePanels.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Automatic Split Threshold ᴺᴱᵂ.
-        /// </summary>
-        public static string General_AutoSplitCount {
-            get {
-                return ResourceManager.GetString("General.AutoSplitCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Triggers automatic panel creation when the focused panel has more than the specified number of children..
-        /// </summary>
-        public static string General_AutoSplitCount_Description {
-            get {
-                return ResourceManager.GetString("General.AutoSplitCount.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         public static string General_Caption {
@@ -385,56 +286,29 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Release window to move.
+        ///   Looks up a localized string similar to Displays.
         /// </summary>
-        public static string General_DelayReposition {
+        public static string General_Displays {
             get {
-                return ResourceManager.GetString("General.DelayReposition", resourceCulture);
+                return ResourceManager.GetString("General.Displays", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When enabled, the tiling layout will update once the window has finished moving..
+        ///   Looks up a localized string similar to Enable tiling on all connected displays.
         /// </summary>
-        public static string General_DelayReposition_Description {
+        public static string General_MultiMonitorSupport {
             get {
-                return ResourceManager.GetString("General.DelayReposition.Description", resourceCulture);
+                return ResourceManager.GetString("General.MultiMonitorSupport", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interface.
+        ///   Looks up a localized string similar to Restart FancyWM for changes to take effect!.
         /// </summary>
-        public static string General_Interface {
+        public static string General_MultiMonitorSupport_Description {
             get {
-                return ResourceManager.GetString("General.Interface", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Move windows by holding.
-        /// </summary>
-        public static string General_ModifierMoveWindow {
-            get {
-                return ResourceManager.GetString("General.ModifierMoveWindow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Automatically activate the moved window.
-        /// </summary>
-        public static string General_ModifierMoveWindowFocus {
-            get {
-                return ResourceManager.GetString("General.ModifierMoveWindowFocus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to will activate the window.
-        /// </summary>
-        public static string General_ModifierMoveWindowFocus_Description {
-            get {
-                return ResourceManager.GetString("General.ModifierMoveWindowFocus.Description", resourceCulture);
+                return ResourceManager.GetString("General.MultiMonitorSupport.Description", resourceCulture);
             }
         }
         
@@ -453,33 +327,6 @@ namespace FancyWM.Resources {
         public static string General_NotifyVirtualDesktopServiceIncompatibility_Description {
             get {
                 return ResourceManager.GetString("General.NotifyVirtualDesktopServiceIncompatibility.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Override accent color.
-        /// </summary>
-        public static string General_OverrideAccentColor {
-            get {
-                return ResourceManager.GetString("General.OverrideAccentColor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Panel font size.
-        /// </summary>
-        public static string General_PanelFontSize {
-            get {
-                return ResourceManager.GetString("General.PanelFontSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Panel height.
-        /// </summary>
-        public static string General_PanelHeight {
-            get {
-                return ResourceManager.GetString("General.PanelHeight", resourceCulture);
             }
         }
         
@@ -516,60 +363,6 @@ namespace FancyWM.Resources {
         public static string General_RunsAtStartup {
             get {
                 return ResourceManager.GetString("General.RunsAtStartup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show contextual hints in pop-up.
-        /// </summary>
-        public static string General_ShowContextHints {
-            get {
-                return ResourceManager.GetString("General.ShowContextHints", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Shows the list of available keybindings after 1s of inactivity. The command pop-up stays on-screen for longer, but you can close it with.
-        /// </summary>
-        public static string General_ShowContextHints_Description {
-            get {
-                return ResourceManager.GetString("General.ShowContextHints.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show border around the focused window.
-        /// </summary>
-        public static string General_ShowFocus {
-            get {
-                return ResourceManager.GetString("General.ShowFocus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Highlights the focused window..
-        /// </summary>
-        public static string General_ShowFocus_Description {
-            get {
-                return ResourceManager.GetString("General.ShowFocus.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show focused window reminder.
-        /// </summary>
-        public static string General_ShowFocusDuringAction {
-            get {
-                return ResourceManager.GetString("General.ShowFocusDuringAction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Highlights the focused window when the command pop-up is shown..
-        /// </summary>
-        public static string General_ShowFocusDuringAction_Description {
-            get {
-                return ResourceManager.GetString("General.ShowFocusDuringAction.Description", resourceCulture);
             }
         }
         
@@ -619,38 +412,272 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string Help_Caption {
+            get {
+                return ResourceManager.GetString("Help.Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reserve empty space in new panels.
+        /// </summary>
+        public static string Interaction_AllocateNewPanelSpace {
+            get {
+                return ResourceManager.GetString("Interaction.AllocateNewPanelSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New panels have will have empty space until a second window is added..
+        /// </summary>
+        public static string Interaction_AllocateNewPanelSpace_Description {
+            get {
+                return ResourceManager.GetString("Interaction.AllocateNewPanelSpace.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Animate window movement.
+        /// </summary>
+        public static string Interaction_AnimateWindowMovement {
+            get {
+                return ResourceManager.GetString("Interaction.AnimateWindowMovement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatically collapse panels.
+        /// </summary>
+        public static string Interaction_AutoCollapsePanels {
+            get {
+                return ResourceManager.GetString("Interaction.AutoCollapsePanels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Panels with a single window will be removed automatically..
+        /// </summary>
+        public static string Interaction_AutoCollapsePanels_Description {
+            get {
+                return ResourceManager.GetString("Interaction.AutoCollapsePanels.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic Split Threshold ᴺᴱᵂ.
+        /// </summary>
+        public static string Interaction_AutoSplitCount {
+            get {
+                return ResourceManager.GetString("Interaction.AutoSplitCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Triggers automatic panel creation when the focused panel has more than the specified number of children..
+        /// </summary>
+        public static string Interaction_AutoSplitCount_Description {
+            get {
+                return ResourceManager.GetString("Interaction.AutoSplitCount.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interaction.
+        /// </summary>
+        public static string Interaction_Caption {
+            get {
+                return ResourceManager.GetString("Interaction.Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release window to move.
+        /// </summary>
+        public static string Interaction_DelayReposition {
+            get {
+                return ResourceManager.GetString("Interaction.DelayReposition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled, the tiling layout will update once the window has finished moving..
+        /// </summary>
+        public static string Interaction_DelayReposition_Description {
+            get {
+                return ResourceManager.GetString("Interaction.DelayReposition.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move windows by holding.
+        /// </summary>
+        public static string Interaction_ModifierMoveWindow {
+            get {
+                return ResourceManager.GetString("Interaction.ModifierMoveWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatically activate the moved window.
+        /// </summary>
+        public static string Interaction_ModifierMoveWindowFocus {
+            get {
+                return ResourceManager.GetString("Interaction.ModifierMoveWindowFocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to will activate the window.
+        /// </summary>
+        public static string Interaction_ModifierMoveWindowFocus_Description {
+            get {
+                return ResourceManager.GetString("Interaction.ModifierMoveWindowFocus.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tiling behavior.
         /// </summary>
-        public static string General_TilingBehavior {
+        public static string Interaction_TilingBehavior {
             get {
-                return ResourceManager.GetString("General.TilingBehavior", resourceCulture);
+                return ResourceManager.GetString("Interaction.TilingBehavior", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Window movement.
         /// </summary>
-        public static string General_WindowMovement {
+        public static string Interaction_WindowMovement {
             get {
-                return ResourceManager.GetString("General.WindowMovement", resourceCulture);
+                return ResourceManager.GetString("Interaction.WindowMovement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interface.
+        /// </summary>
+        public static string Interface_Caption {
+            get {
+                return ResourceManager.GetString("Interface.Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colors.
+        /// </summary>
+        public static string Interface_Colors {
+            get {
+                return ResourceManager.GetString("Interface.Colors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override accent color.
+        /// </summary>
+        public static string Interface_OverrideAccentColor {
+            get {
+                return ResourceManager.GetString("Interface.OverrideAccentColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Panel font size.
+        /// </summary>
+        public static string Interface_PanelFontSize {
+            get {
+                return ResourceManager.GetString("Interface.PanelFontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Panel height.
+        /// </summary>
+        public static string Interface_PanelHeight {
+            get {
+                return ResourceManager.GetString("Interface.PanelHeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show contextual hints in pop-up.
+        /// </summary>
+        public static string Interface_ShowContextHints {
+            get {
+                return ResourceManager.GetString("Interface.ShowContextHints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows the list of available keybindings after 1s of inactivity. The command pop-up stays on-screen for longer, but you can close it with.
+        /// </summary>
+        public static string Interface_ShowContextHints_Description {
+            get {
+                return ResourceManager.GetString("Interface.ShowContextHints.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show border around the focused window.
+        /// </summary>
+        public static string Interface_ShowFocus {
+            get {
+                return ResourceManager.GetString("Interface.ShowFocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highlights the focused window..
+        /// </summary>
+        public static string Interface_ShowFocus_Description {
+            get {
+                return ResourceManager.GetString("Interface.ShowFocus.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show focused window reminder.
+        /// </summary>
+        public static string Interface_ShowFocusDuringAction {
+            get {
+                return ResourceManager.GetString("Interface.ShowFocusDuringAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highlights the focused window when the command pop-up is shown..
+        /// </summary>
+        public static string Interface_ShowFocusDuringAction_Description {
+            get {
+                return ResourceManager.GetString("Interface.ShowFocusDuringAction.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sizes &amp; margins.
+        /// </summary>
+        public static string Interface_Sizes {
+            get {
+                return ResourceManager.GetString("Interface.Sizes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Visuals.
+        /// </summary>
+        public static string Interface_Visuals {
+            get {
+                return ResourceManager.GetString("Interface.Visuals", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Window gap.
         /// </summary>
-        public static string General_WindowPadding {
+        public static string Interface_WindowPadding {
             get {
-                return ResourceManager.GetString("General.WindowPadding", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Help.
-        /// </summary>
-        public static string Help_Caption {
-            get {
-                return ResourceManager.GetString("Help.Caption", resourceCulture);
+                return ResourceManager.GetString("Interface.WindowPadding", resourceCulture);
             }
         }
         

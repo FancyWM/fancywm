@@ -369,31 +369,28 @@
   <data name="Keybinding.MoveToDesktop9.Description" xml:space="preserve">
     <value>Move the focused window from the current virtual desktop to virtual desktop 9</value>
   </data>
-  <data name="General.AllocateNewPanelSpace" xml:space="preserve">
+  <data name="Interaction.AllocateNewPanelSpace" xml:space="preserve">
     <value>Reserve empty space in new panels</value>
   </data>
-  <data name="General.AllocateNewPanelSpace.Description" xml:space="preserve">
+  <data name="Interaction.AllocateNewPanelSpace.Description" xml:space="preserve">
     <value>New panels have will have empty space until a second window is added.</value>
   </data>
-  <data name="General.AnimateWindowMovement" xml:space="preserve">
+  <data name="Interaction.AnimateWindowMovement" xml:space="preserve">
     <value>Animate window movement</value>
   </data>
   <data name="General.Caption" xml:space="preserve">
     <value>General</value>
   </data>
-  <data name="General.Interface" xml:space="preserve">
-    <value>Interface</value>
-  </data>
   <data name="General.ShowSettingsConfig" xml:space="preserve">
     <value>Show settings.json in containing folder</value>
   </data>
-  <data name="General.OverrideAccentColor" xml:space="preserve">
+  <data name="Interface.OverrideAccentColor" xml:space="preserve">
     <value>Override accent color</value>
   </data>
-  <data name="General.PanelFontSize" xml:space="preserve">
+  <data name="Interface.PanelFontSize" xml:space="preserve">
     <value>Panel font size</value>
   </data>
-  <data name="General.PanelHeight" xml:space="preserve">
+  <data name="Interface.PanelHeight" xml:space="preserve">
     <value>Panel height</value>
   </data>
   <data name="General.RunsAsAdmin" xml:space="preserve">
@@ -408,22 +405,22 @@
   <data name="General.RunsAtStartup" xml:space="preserve">
     <value>Run automatically at system startup</value>
   </data>
-  <data name="General.ShowContextHints" xml:space="preserve">
+  <data name="Interface.ShowContextHints" xml:space="preserve">
     <value>Show contextual hints in pop-up</value>
   </data>
-  <data name="General.ShowContextHints.Description" xml:space="preserve">
+  <data name="Interface.ShowContextHints.Description" xml:space="preserve">
     <value>Shows the list of available keybindings after 1s of inactivity. The command pop-up stays on-screen for longer, but you can close it with</value>
   </data>
-  <data name="General.ShowFocus" xml:space="preserve">
+  <data name="Interface.ShowFocus" xml:space="preserve">
     <value>Show border around the focused window</value>
   </data>
-  <data name="General.ShowFocus.Description" xml:space="preserve">
+  <data name="Interface.ShowFocus.Description" xml:space="preserve">
     <value>Highlights the focused window.</value>
   </data>
-  <data name="General.ShowFocusDuringAction" xml:space="preserve">
+  <data name="Interface.ShowFocusDuringAction" xml:space="preserve">
     <value>Show focused window reminder</value>
   </data>
-  <data name="General.ShowFocusDuringAction.Description" xml:space="preserve">
+  <data name="Interface.ShowFocusDuringAction.Description" xml:space="preserve">
     <value>Highlights the focused window when the command pop-up is shown.</value>
   </data>
   <data name="General.ShowStartupWindow" xml:space="preserve">
@@ -438,20 +435,17 @@
   <data name="General.Startup" xml:space="preserve">
     <value>Startup</value>
   </data>
-  <data name="General.TilingBehavior" xml:space="preserve">
+  <data name="Interaction.TilingBehavior" xml:space="preserve">
     <value>Tiling behavior</value>
   </data>
-  <data name="General.WindowPadding" xml:space="preserve">
+  <data name="Interface.WindowPadding" xml:space="preserve">
     <value>Window gap</value>
   </data>
-  <data name="Displays.Caption" xml:space="preserve">
+  <data name="General.Displays" xml:space="preserve">
     <value>Displays</value>
   </data>
-  <data name="Displays.MultiMonitorSupport" xml:space="preserve">
+  <data name="General.MultiMonitorSupport" xml:space="preserve">
     <value>Enable tiling on all connected displays</value>
-  </data>
-  <data name="Displays.TilingOnMultipleDisplays" xml:space="preserve">
-    <value>Tiling on multiple displays</value>
   </data>
   <data name="About.AppVersion" xml:space="preserve">
     <value>App version:</value>
@@ -483,7 +477,7 @@
   <data name="Details" xml:space="preserve">
     <value>Details</value>
   </data>
-  <data name="Displays.MultiMonitorSupport.Description" xml:space="preserve">
+  <data name="General.MultiMonitorSupport.Description" xml:space="preserve">
     <value>Restart FancyWM for changes to take effect!</value>
   </data>
   <data name="ErrorMessageBox.Caption" xml:space="preserve">
@@ -717,10 +711,10 @@
   <data name="Overlay.Window.DragActionDetail" xml:space="preserve">
     <value>Drag over another window to group</value>
   </data>
-  <data name="General.AutoCollapsePanels" xml:space="preserve">
+  <data name="Interaction.AutoCollapsePanels" xml:space="preserve">
     <value>Automatically collapse panels</value>
   </data>
-  <data name="General.AutoCollapsePanels.Description" xml:space="preserve">
+  <data name="Interaction.AutoCollapsePanels.Description" xml:space="preserve">
     <value>Panels with a single window will be removed automatically.</value>
   </data>
   <data name="Messages.NoPreviousDisplay" xml:space="preserve">
@@ -889,16 +883,16 @@ If you are running a supported non-Insider Windows build and you see this messag
   <data name="Keybindings.DirectMode.Checkbox" xml:space="preserve">
     <value>Use without Activation hotkey?</value>
   </data>
-  <data name="General.ModifierMoveWindow" xml:space="preserve">
+  <data name="Interaction.ModifierMoveWindow" xml:space="preserve">
     <value>Move windows by holding</value>
   </data>
-  <data name="General.ModifierMoveWindowFocus" xml:space="preserve">
+  <data name="Interaction.ModifierMoveWindowFocus" xml:space="preserve">
     <value>Automatically activate the moved window</value>
   </data>
-  <data name="General.ModifierMoveWindowFocus.Description" xml:space="preserve">
+  <data name="Interaction.ModifierMoveWindowFocus.Description" xml:space="preserve">
     <value>will activate the window</value>
   </data>
-  <data name="General.WindowMovement" xml:space="preserve">
+  <data name="Interaction.WindowMovement" xml:space="preserve">
     <value>Window movement</value>
   </data>
   <data name="General.NotifyVirtualDesktopServiceIncompatibility" xml:space="preserve">
@@ -913,19 +907,34 @@ If you are running a supported non-Insider Windows build and you see this messag
   <data name="Keybindings.ActivateOnCapsLock.Checkbox" xml:space="preserve">
     <value>Use ⇪ Caps Lock as  the Activation hotkey</value>
   </data>
-  <data name="General.AutoSplitCount" xml:space="preserve">
+  <data name="Interaction.AutoSplitCount" xml:space="preserve">
     <value>Automatic Split Threshold ᴺᴱᵂ</value>
   </data>
-  <data name="General.AutoSplitCount.Description" xml:space="preserve">
+  <data name="Interaction.AutoSplitCount.Description" xml:space="preserve">
     <value>Triggers automatic panel creation when the focused panel has more than the specified number of children.</value>
   </data>
   <data name="About.FOSS" xml:space="preserve">
     <value>FancyWM is free and open-source, but requires the same time and effort as any other software.</value>
   </data>
-  <data name="General.DelayReposition" xml:space="preserve">
+  <data name="Interaction.DelayReposition" xml:space="preserve">
     <value>Release window to move</value>
   </data>
-  <data name="General.DelayReposition.Description" xml:space="preserve">
+  <data name="Interaction.DelayReposition.Description" xml:space="preserve">
     <value>When enabled, the tiling layout will update once the window has finished moving.</value>
+  </data>
+  <data name="Interaction.Caption" xml:space="preserve">
+    <value>Interaction</value>
+  </data>
+  <data name="Interface.Caption" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="Interface.Colors" xml:space="preserve">
+    <value>Colors</value>
+  </data>
+  <data name="Interface.Sizes" xml:space="preserve">
+    <value>Sizes &amp; margins</value>
+  </data>
+  <data name="Interface.Visuals" xml:space="preserve">
+    <value>Visuals</value>
   </data>
 </root>

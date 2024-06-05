@@ -1,0 +1,120 @@
+﻿<UserControl x:Class="FancyWM.Pages.Settings.InteractionPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:viewmodels="clr-namespace:FancyWM.ViewModels"
+    xmlns:res="clr-namespace:FancyWM.Resources"
+    d:DataContext="{d:DesignInstance Type=viewmodels:SettingsViewModel}"
+    mc:Ignorable="d"
+    d:DesignHeight="900" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MaxWidth="1024"/>
+        </Grid.ColumnDefinitions>
+        <ui:SimpleStackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Margin="12" Spacing="4">
+            <TextBlock Text="{x:Static res:Strings.Interaction_Caption}" Style="{DynamicResource TitleTextBlockStyle}" Margin="0, 0, 0, 20" />
+
+            <TextBlock Text="{x:Static res:Strings.Interaction_TilingBehavior}" Style="{DynamicResource SubtitleTextBlockStyle}" Margin="0, 20" />
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=AllocateNewPanelSpace, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.Interaction_AllocateNewPanelSpace}" Margin="0,0,16,0" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Text="{x:Static res:Strings.Interaction_AllocateNewPanelSpace_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=AutoCollapsePanels, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="{x:Static res:Strings.Interaction_AutoCollapsePanels}" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Text="{x:Static res:Strings.Interaction_AutoCollapsePanels_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=DelayReposition, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="{x:Static res:Strings.Interaction_DelayReposition}" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Text="{x:Static res:Strings.Interaction_DelayReposition_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Slider
+                            x:Name="AutoSplitCountSlider"
+                            ui:ControlHelper.Header="{x:Static res:Strings.Interaction_AutoSplitCount}"
+                            HorizontalAlignment="Left"
+                            Maximum="10"
+                            Minimum="2"
+                            IsSnapToTickEnabled="True"
+                            TickFrequency="1"
+                            Value="{Binding AutoSplitCount, Mode=TwoWay}"
+                            Width="200" />
+
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Padding="10,20,0,0"
+                            Text="{Binding Value, ElementName=AutoSplitCountSlider, Mode=OneWay}"  />
+                    </StackPanel>
+
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Text="{x:Static res:Strings.Interaction_AutoSplitCount_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="{x:Static res:Strings.Interaction_WindowMovement}" Style="{DynamicResource SubtitleTextBlockStyle}" Margin="0, 20" />
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <DockPanel LastChildFill="True">
+                    <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=AnimateWindowMovement, Mode=TwoWay}" />
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.Interaction_AnimateWindowMovement}" Margin="0,0,16,0" />
+                </DockPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <DockPanel LastChildFill="True">
+                    <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ModifierMoveWindow, Mode=TwoWay}" />
+                    <TextBlock VerticalAlignment="Center" Margin="0,0,16,0">
+                        <Run Text="{x:Static res:Strings.Interaction_ModifierMoveWindow}" />
+                        <Run Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Text="&#160;Alt&#160;" />
+                    </TextBlock>
+                </DockPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ModifierMoveWindowAutoFocus, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.Interaction_ModifierMoveWindowFocus}" Margin="0,0,16,0" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}">
+                        <Run Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">
+                            <Run.Style>
+                                <Style>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ModifierMoveWindowAutoFocus}" Value="True">
+                                            <Setter Property="Run.Text" Value="&#160;Alt&#160;+&#160;Click&#160;" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ModifierMoveWindowAutoFocus}" Value="False">
+                                            <Setter Property="Run.Text" Value="&#160;Ctrl&#160;+&#160;Alt&#160;+&#160;Click&#160;" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Run.Style>
+                        </Run>
+                        <Run Text="{x:Static res:Strings.Interaction_ModifierMoveWindowFocus_Description}" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </ui:SimpleStackPanel>
+    </Grid>
+</UserControl>

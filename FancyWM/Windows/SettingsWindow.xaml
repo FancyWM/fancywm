@@ -38,11 +38,19 @@
                                 </StackPanel>
                             </viewmodels:PageItem.Header>
                         </viewmodels:PageItem>
-                        <viewmodels:PageItem Page="{x:Type pages:DisplaysPage}">
+                        <viewmodels:PageItem Page="{x:Type pages:InterfacePage}">
                             <viewmodels:PageItem.Header>
                                 <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" />
-                                    <TextBlock Margin="10" Text="{x:Static res:Strings.Displays_Caption}" />
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE771;" />
+                                    <TextBlock Margin="10" Text="{x:Static res:Strings.Interface_Caption}" />
+                                </StackPanel>
+                            </viewmodels:PageItem.Header>
+                        </viewmodels:PageItem>
+                        <viewmodels:PageItem Page="{x:Type pages:InteractionPage}">
+                            <viewmodels:PageItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7C9;" />
+                                    <TextBlock Margin="10" Text="{x:Static res:Strings.Interaction_Caption}" />
                                 </StackPanel>
                             </viewmodels:PageItem.Header>
                         </viewmodels:PageItem>

@@ -5,14 +5,14 @@ using FancyWM.ViewModels;
 namespace FancyWM.Pages.Settings
 {
     /// <summary>
-    /// Interaction logic for DisplaysPage.xaml
+    /// Interaction logic for InteractionPage.xaml
     /// </summary>
-    public partial class DisplaysPage : UserControl
+    public partial class InteractionPage : UserControl
     {
-        public DisplaysPage(SettingsViewModel viewModel)
+        public InteractionPage(SettingsViewModel viewModel)
         {
-            InitializeComponent();
             DataContext = viewModel;
+            InitializeComponent();
         }
     }
 }
