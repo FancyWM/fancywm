@@ -44,23 +44,11 @@ namespace FancyWM.Controls
         {
             MoreContextMenu.IsOpen = true;
             MoreContextMenu.DataContext = ViewModel;
-            var child = (UIElement)VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(MoreContextMenu, 0), 0);
-            child.MouseEnter -= OnContextMenuMouseEnter;
-            child.MouseEnter += OnContextMenuMouseEnter;
+            MoreContextMenu.LostFocus += OnContextMenuLostFocus;
         }
 
-        private void OnContextMenuMouseEnter(object sender, MouseEventArgs e)
+        private void OnContextMenuLostFocus(object sender, RoutedEventArgs e)
         {
-            var child = (UIElement)sender;
-            child.MouseEnter -= OnContextMenuMouseEnter;
-            child.MouseLeave -= OnContextMenuMouseLeave;
-            child.MouseLeave += OnContextMenuMouseLeave;
-        }
-
-        private void OnContextMenuMouseLeave(object sender, MouseEventArgs e)
-        {
-            var child = (UIElement)sender;
-            child.MouseLeave -= OnContextMenuMouseLeave;
             MoreContextMenu.IsOpen = false;
         }
 
