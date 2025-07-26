@@ -1308,11 +1308,11 @@ namespace FancyWM
                             }
                             if (splitPanel.Orientation == PanelOrientation.Horizontal)
                             {
-                                splitPanel.ResizeBy(window, savedLocation.ComputedRectangle.Width, GrowDirection.Both);
+                                splitPanel.ResizeTo(window, savedLocation.ComputedRectangle.Width, GrowDirection.Both);
                             }
                             else
                             {
-                                splitPanel.ResizeBy(window, savedLocation.ComputedRectangle.Height, GrowDirection.Both);
+                                splitPanel.ResizeTo(window, savedLocation.ComputedRectangle.Height, GrowDirection.Both);
                             }
                         }
                     }
