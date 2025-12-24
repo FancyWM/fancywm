@@ -81,7 +81,8 @@ namespace FancyWM.Models
 
         public List<string> ClassIgnoreList { get; set; } =
         [
-            "OperationStatusWindow"
+            "OperationStatusWindow",
+            "RAIL_WINDOW",
         ];
 
         public bool RemindToRateReview { get; set; } = true;
