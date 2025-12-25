@@ -78,7 +78,7 @@ namespace FancyWM.Converters
                 try
                 {
                     var key = (BindableAction)Enum.Parse(typeof(BindableAction), keyName, ignoreCase: true);
-                    defaultDict[key] = keyBinds == null ? null : new Keybinding(new HashSet<KeyCode>(keyBinds.Keys.Select(x => (KeyCode)Enum.Parse(typeof(KeyCode), x))), keyBinds.IsDirectMode);
+                    defaultDict[key] = keyBinds == null ? null : new Keybinding(new HashSet<KeyCode>(keyBinds.Keys.Select(x => (KeyCode)Enum.Parse(typeof(KeyCode), x, ignoreCase: true))), keyBinds.IsDirectMode);
                 }
                 catch (ArgumentException)
                 {
