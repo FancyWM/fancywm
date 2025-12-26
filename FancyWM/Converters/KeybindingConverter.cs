@@ -65,7 +65,7 @@ namespace FancyWM.Converters
                     keybinding.IsDirectMode,
                     Keys = keys,
                 });
-            };
+            }
             JsonSerializer.Serialize(writer, dict, options);
         }
 
