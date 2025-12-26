@@ -22,6 +22,7 @@ namespace FancyWM.Models
                     PropertyNamingPolicy = null,
                     PropertyNameCaseInsensitive = true,
                     ReadCommentHandling = JsonCommentHandling.Skip,
+                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     Converters =
                     {
                         new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
