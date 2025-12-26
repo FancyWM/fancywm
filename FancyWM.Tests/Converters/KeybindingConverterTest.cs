@@ -263,18 +263,17 @@ namespace FancyWM.Tests.Converters
         }
 
         [TestMethod]
-        public void TestEmptyKeysArray()
+        public void TestNull()
         {
             var original = new KeybindingDictionary(useDefaults: false)
             {
-                { BindableAction.MoveFocusDown, new Keybinding(new HashSet<KeyCode>(), isDirectMode: false) },
+                { BindableAction.MoveFocusDown, null },
             };
 
             var json = WriteString(original);
             var deserialized = ReadString(json);
 
-            Assert.IsNotNull(deserialized[BindableAction.MoveFocusDown]);
-            Assert.AreEqual(0, deserialized[BindableAction.MoveFocusDown].Keys.Count);
+            Assert.IsNull(deserialized[BindableAction.MoveFocusDown]);
         }
 
         [TestMethod]
@@ -329,6 +328,7 @@ namespace FancyWM.Tests.Converters
             var original = new KeybindingDictionary(useDefaults: false)
             {
                 { BindableAction.ToggleManager, new Keybinding(new[] { KeyCode.F11 }.ToHashSet(), isDirectMode: true) },
+                { BindableAction.CreateHorizontalPanel, new Keybinding(new[] { KeyCode.H, KeyCode.A }.ToHashSet(), isDirectMode: false) },
             };
 
             var json = WriteString(original);
@@ -337,11 +337,10 @@ namespace FancyWM.Tests.Converters
             var root = doc.RootElement;
 
             Assert.IsTrue(root.TryGetProperty("ToggleManager", out var toggleManager));
-            Assert.IsTrue(toggleManager.TryGetProperty("IsDirectMode", out var isDirectMode));
-            Assert.IsTrue(toggleManager.TryGetProperty("Keys", out var keys));
+            Assert.AreEqual(toggleManager.GetString(), "F11");
 
-            Assert.IsTrue(isDirectMode.GetBoolean());
-            Assert.AreEqual(1, keys.GetArrayLength());
+            Assert.IsTrue(root.TryGetProperty("CreateHorizontalPanel", out var createPanel));
+            Assert.AreEqual(createPanel.GetString(), "Activation H+A");
         }
 
         [TestMethod]

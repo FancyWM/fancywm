@@ -39,18 +39,25 @@ namespace FancyWM.Converters
             {
                 try
                 {
-                    return Read2dot3dot5Compatible(ref reader, options);
+                    return Read_2_15_0(ref reader, options);
                 }
                 catch (Exception exCompat)
                 {
-                    throw new AggregateException(ex, exCompat);
+                    try
+                    {
+                        return Read_2_3_5(ref reader, options);
+                    }
+                    catch (Exception ex2dot3dot5Compat)
+                    {
+                        throw new AggregateException(ex, exCompat, ex2dot3dot5Compat);
+                    }
                 }
             }
         }
 
         public override void Write(Utf8JsonWriter writer, KeybindingDictionary value, JsonSerializerOptions options)
         {
-            var dict = new Dictionary<string, object?>();
+            var dict = new Dictionary<string, string?>();
             foreach (var (action, keybinding) in value)
             {
                 if (keybinding == null)
@@ -59,17 +66,73 @@ namespace FancyWM.Converters
                     continue;
                 }
 
-                var keys = keybinding.Keys.Select(x => x.ToString()).ToArray();
-                dict.Add(action.ToString(), new
+                var keys = string.Join('+', keybinding.Keys.Select(x => x.ToString()));
+                if (!keybinding.IsDirectMode)
                 {
-                    keybinding.IsDirectMode,
-                    Keys = keys,
-                });
+                    keys = "Activation " + keys;
+                }
+                dict.Add(action.ToString(), keys);
             }
             JsonSerializer.Serialize(writer, dict, options);
         }
 
+        const KeyCode Activation = unchecked((KeyCode)0xFFFFFFFF);
+
+        private KeyCode ParseKey(string s)
+        {
+            if (s.ToLowerInvariant() == "activation")
+            {
+                return Activation;
+            }
+            return (KeyCode)Enum.Parse(typeof(KeyCode), s, ignoreCase: true);
+        }
+
         private KeybindingDictionary ReadLatest(ref Utf8JsonReader reader, JsonSerializerOptions options)
+        {
+            var defaultDict = new KeybindingDictionary(m_useDefaults);
+            var dict = JsonSerializer.Deserialize<IDictionary<string, string?>>(ref reader, options) ?? throw new InvalidOperationException();
+            foreach (var (actionName, keyBinds) in dict)
+            {
+                try
+                {
+                    var action = (BindableAction)Enum.Parse(typeof(BindableAction), actionName, ignoreCase: true);
+                    if (keyBinds == null)
+                    {
+                        defaultDict[action] = null;
+                        continue;
+                    }
+
+                    var chordStrings = keyBinds.Split(' ');
+
+                    var chords = chordStrings.Select(chord => chord.Split('+').Select(ParseKey).ToHashSet()).ToArray();
+
+                    // Allowed forms:
+                    // - keyA+keyB
+                    // - activation keyA+keyB
+                    if (chords.Length == 0)
+                    {
+                        continue;
+                    }
+                    if (chords.Length == 1 && !chords[0].Contains(Activation))
+                    {
+                        defaultDict[action] = new Keybinding(chords[0], isDirectMode: true);
+                    }
+                    else if (chords.Length == 2 && chords[0].Count == 1 && chords[0].Contains(Activation) && !chords[1].Contains(Activation))
+                    {
+                        defaultDict[action] = new Keybinding(chords[1], isDirectMode: false);
+                    }
+                }
+                catch (ArgumentException)
+                {
+                    // Probably revereted from a newer version
+                    continue;
+                }
+            }
+
+            return defaultDict;
+        }
+
+        private KeybindingDictionary Read_2_15_0(ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
             var defaultDict = new KeybindingDictionary(m_useDefaults);
             var dict = JsonSerializer.Deserialize<IDictionary<string, KeybindingModel?>>(ref reader, options) ?? throw new InvalidOperationException();
@@ -90,7 +153,7 @@ namespace FancyWM.Converters
             return defaultDict;
         }
 
-        private KeybindingDictionary Read2dot3dot5Compatible(ref Utf8JsonReader reader, JsonSerializerOptions options)
+        private KeybindingDictionary Read_2_3_5(ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
             var defaultDict = new KeybindingDictionary(m_useDefaults);
             var dict = JsonSerializer.Deserialize<IDictionary<string, string[]>>(ref reader, options) ?? throw new InvalidOperationException();

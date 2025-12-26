@@ -217,7 +217,7 @@ namespace FancyWM.Models
             var oldValueBytes = await ReadAllAsync(oldValueStream);
 
             var readerOptions = new JsonReaderOptions { CommentHandling = JsonCommentHandling.Allow, AllowTrailingCommas = true };
-            var writerOptions = new JsonWriterOptions { Indented = Options.WriteIndented };
+            var writerOptions = new JsonWriterOptions { Indented = Options.WriteIndented, Encoder = Options.Encoder };
 
             using var writer = new Utf8JsonWriter(outputStream, writerOptions);
             void Merge()
