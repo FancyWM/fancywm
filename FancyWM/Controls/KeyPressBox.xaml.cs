@@ -22,9 +22,9 @@ namespace FancyWM.Controls
             typeof(KeyPressBox),
             new PropertyMetadata(null));
 
-        public IReadOnlySet<KeyCode> Pattern
+        public IReadOnlySet<KeyCode>? Pattern
         {
-            get => (IReadOnlySet<KeyCode>)GetValue(PatternProperty);
+            get => (IReadOnlySet<KeyCode>?)GetValue(PatternProperty);
             set => SetValue(PatternProperty, value);
         }
 
@@ -74,6 +74,7 @@ namespace FancyWM.Controls
             if (string.IsNullOrEmpty(InputBox.Text))
             {
                 InputBox.Text = EmptyPlaceholder;
+                Pattern = null;
                 PatternChanged?.Invoke(this, new KeyPatternChangedEventArgs(new HashSet<KeyCode>()));
             }
         }
