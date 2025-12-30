@@ -148,10 +148,11 @@ namespace FancyWM
                 }
             }
 
+            m_gui.FocusRectangle = GetFocusRectangle(focusedNode);
+
             var repositionTask = RepositionAsync();
 
             m_gui.UpdateOverlay(snapshot, focusedPath);
-            m_gui.FocusRectangle = GetFocusRectangle(focusedNode);
             m_gui.PreviewRectangle = GetPreviewRectangle();
 
             if (m_showPreviewFocus)
