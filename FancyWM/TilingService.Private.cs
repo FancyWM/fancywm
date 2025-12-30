@@ -191,13 +191,33 @@ namespace FancyWM
                 }
             }
 
-            var transitionGroup = new TransitionTargetGroup(m_animationThread, targets);
+            HashSet<IWindow>? newWindows = null;
+            lock (m_newWindowSet)
+            {
+                if (m_newWindowSet.Count > 0)
+                {
+                    newWindows = [.. m_newWindowSet];
+                    m_newWindowSet.Clear();
+                }
+            }
 
             if (useSmoothing)
             {
                 var focusRectangle = m_gui.FocusRectangle;
                 m_gui.FocusRectangle = null;
+
+                TransitionTargetGroup transitionGroup;
+                if (newWindows != null)
+                {
+                    await TransitionTargetGroup.PerformTransitionAsync(targets.Where(x => newWindows!.Contains(x.Window)).ToList());
+                    transitionGroup = new TransitionTargetGroup(m_animationThread, targets.Where(x => !newWindows!.Contains(x.Window)));
+                }
+                else
+                {
+                    transitionGroup = new TransitionTargetGroup(m_animationThread, targets);
+                }
                 await transitionGroup.PerformSmoothTransitionAsync(TimeSpan.FromMilliseconds(100));
+
                 m_gui.FocusRectangle = focusRectangle;
             }
             else
@@ -977,6 +997,10 @@ namespace FancyWM
                 {
                     m_windowSet.Add(e.Source);
                 }
+                lock (m_newWindowSet)
+                {
+                    m_newWindowSet.Add(e.Source);
+                }
 
                 if (m_exclusionMatchers.Any(x => x.Matches(e.Source)))
                 {
@@ -1043,6 +1067,10 @@ namespace FancyWM
             {
                 m_windowSet.Remove(e.Source);
             }
+            lock (m_newWindowSet)
+            {
+                m_newWindowSet.Remove(e.Source);
+            }    
             lock (m_floatingSet)
             {
                 m_floatingSet.Remove(e.Source);
