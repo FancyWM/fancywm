@@ -1600,14 +1600,14 @@ namespace FancyWM
                 return false;
             }
 
-            // GetWindowStyle
-            if (!x.CanResize)
+            // GetWindowPos + Lookup
+            if (!IsOnCurrentDisplay())
             {
                 return false;
             }
 
-            // GetWindowPos + Lookup
-            if (!IsOnCurrentDisplay())
+            // GetWindowStyle + OpenProcess
+            if (!x.CanResize)
             {
                 return false;
             }
