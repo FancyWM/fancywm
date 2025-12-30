@@ -157,6 +157,7 @@ namespace FancyWM
         private readonly TilingOverlayRenderer m_gui;
         private readonly TilingWorkspace m_backend;
         private readonly IDisplay m_display;
+        private readonly HashSet<IWindow> m_newWindowSet = [];
         private readonly HashSet<IWindow> m_windowSet = [];
         private readonly HashSet<IWindow> m_floatingSet = [];
         private readonly HashSet<IWindow> m_ignoreRepositionSet = [];
