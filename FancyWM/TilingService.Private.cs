@@ -994,29 +994,32 @@ namespace FancyWM
                 if (CanManage(e.Source) && e.Source.State == WindowState.Restored)
                 {
                     m_logger.Information("Window {Handle}={ProcessName} can be managed, registering with backend", e.Source.Handle, e.Source.GetCachedProcessName());
-                    try
+                    m_dispatcher.BeginInvoke(() =>
                     {
                         try
                         {
-                            lock (m_backend)
+                            try
                             {
-                                var node = m_backend.RegisterWindow(e.Source, maxTreeWidth: AutoSplitCount);
-                                node.Parent!.Padding = GetPanelPaddingRect();
-                                node.Parent!.Spacing = GetPanelSpacing();
+                                lock (m_backend)
+                                {
+                                    var node = m_backend.RegisterWindow(e.Source, maxTreeWidth: AutoSplitCount);
+                                    node.Parent!.Padding = GetPanelPaddingRect();
+                                    node.Parent!.Spacing = GetPanelSpacing();
+                                }
+                            }
+                            catch (NoValidPlacementExistsException)
+                            {
+                                PlacementFailed?.Invoke(this, new TilingFailedEventArgs(
+                                    TilingError.NoValidPlacementExists, e.Source));
                             }
                         }
-                        catch (NoValidPlacementExistsException)
+                        catch
                         {
-                            PlacementFailed?.Invoke(this, new TilingFailedEventArgs(
-                                TilingError.NoValidPlacementExists, e.Source));
+                            return;
                         }
-                    }
-                    catch
-                    {
-                        return;
-                    }
 
-                    InvalidateLayout();
+                        InvalidateLayout();
+                    }, System.Windows.Threading.DispatcherPriority.DataBind);
                 }
 
                 if (Equals(m_workspace.FocusedWindow, sender))
@@ -1636,14 +1639,13 @@ namespace FancyWM
             {
                 return;
             }
-            m_dispatcher.InvokeAsync(new Action(async () =>
+            m_dispatcher.InvokeAsync(new Action(() =>
             {
                 if (!m_dirty || m_frozen.IsPositive())
                     return;
                 m_dirty = false;
-
-                await UpdateLayoutAsync();
-            }));
+                _ = UpdateLayoutAsync();
+            }), System.Windows.Threading.DispatcherPriority.DataBind);
         }
 
         private void Freeze()
