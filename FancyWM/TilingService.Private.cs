@@ -100,6 +100,8 @@ namespace FancyWM
             m_lastUpdateLayout = m_sw.Elapsed;
 
             List<TilingNode> snapshot;
+            IReadOnlyCollection<TilingNode> focusedPath;
+            TilingNode? focusedNode;
             IVirtualDesktop desktop;
             DesktopTree tree;
 
@@ -122,44 +124,52 @@ namespace FancyWM
                 UpdateTree(tree);
 
                 snapshot = tree.Root!.Nodes.Skip(1).ToList();
-                var focusedNode = m_backend.GetFocus(desktop);
-                var focusedPath = (IReadOnlyCollection<TilingNode>?)focusedNode?.PathToRoot?.ToList() ?? [];
-
-                m_gui.FocusRectangle = GetFocusRectangle();
-                m_gui.PreviewRectangle = GetPreviewRectangle();
-                m_gui.UpdateOverlay(snapshot, focusedPath);
-
-                if (m_showPreviewFocus)
-                {
-                    var previewWindows = m_workspace.VirtualDesktopManager.Desktops
-                        .Select(desktop => m_backend.GetFocus(desktop))
-                        .OfType<WindowNode>()
-                        .Select(x => x.WindowReference)
-                        .ToHashSet();
-                    m_gui.PreviewWindows = previewWindows;
-                }
-                else
-                {
-                    m_gui.PreviewWindows = EmptyWindowSet;
-                }
+                focusedNode = m_backend.GetFocus(desktop);
+                focusedPath = (IReadOnlyCollection<TilingNode>?)focusedNode?.PathToRoot?.ToList() ?? [];
             }
 
-            try
+            async ValueTask RepositionAsync()
             {
-                Freeze();
-                IList<WindowNode> snapshotWindows;
-                lock (m_ignoreRepositionSet)
+                try
                 {
-                    snapshotWindows = snapshot.OfType<WindowNode>().Where(x => !m_ignoreRepositionSet.Contains(x.WindowReference)).ToList();
-                }
+                    Freeze();
+                    IList<WindowNode> snapshotWindows;
+                    lock (m_ignoreRepositionSet)
+                    {
+                        snapshotWindows = snapshot.OfType<WindowNode>().Where(x => !m_ignoreRepositionSet.Contains(x.WindowReference)).ToList();
+                    }
 
-                bool useSmoothing = AnimateWindowMovement && m_currentInteraction != UserInteraction.Resizing;
-                await UpdateWindowPositionsAsync(snapshotWindows, useSmoothing);
+                    bool useSmoothing = AnimateWindowMovement && m_currentInteraction != UserInteraction.Resizing;
+                    await UpdateWindowPositionsAsync(snapshotWindows, useSmoothing);
+                }
+                finally
+                {
+                    Unfreeze();
+                }
             }
-            finally
+
+            var repositionTask = RepositionAsync();
+
+            m_gui.UpdateOverlay(snapshot, focusedPath);
+            m_gui.FocusRectangle = GetFocusRectangle(focusedNode);
+            m_gui.PreviewRectangle = GetPreviewRectangle();
+
+            if (m_showPreviewFocus)
             {
-                Unfreeze();
+                // TODO: Can we just use focusedNode here?
+                var previewWindows = m_workspace.VirtualDesktopManager.Desktops
+                    .Select(desktop => m_backend.GetFocus(desktop))
+                    .OfType<WindowNode>()
+                    .Select(x => x.WindowReference)
+                    .ToHashSet();
+                m_gui.PreviewWindows = previewWindows;
             }
+            else
+            {
+                m_gui.PreviewWindows = EmptyWindowSet;
+            }
+
+            await repositionTask;
         }
 
         private async Task UpdateWindowPositionsAsync(IEnumerable<WindowNode> snapshot, bool useSmoothing)
@@ -260,18 +270,16 @@ namespace FancyWM
             return targets;
         }
 
-        private Rectangle? GetFocusRectangle()
+        private bool CanShowFocusRectangle()
         {
-            if (m_showFocus && m_currentInteraction == UserInteraction.None && m_movingPanelNode == null)
-            {
-                lock (m_backend)
-                {
-                    var focusedNode = m_backend.GetFocus(m_workspace.VirtualDesktopManager.CurrentDesktop);
-                    if (focusedNode is not WindowNode focusedWindow)
-                        return null;
+            return m_showFocus && m_currentInteraction == UserInteraction.None && m_movingPanelNode == null;
+        }
 
-                    return focusedWindow.ComputedRectangle;
-                }
+        private Rectangle? GetFocusRectangle(TilingNode? focusedNode)
+        {
+            if (focusedNode is WindowNode focusedWindow && CanShowFocusRectangle())
+            {
+                return focusedWindow.ComputedRectangle;
             }
             return null;
         }
