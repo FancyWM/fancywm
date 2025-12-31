@@ -23,7 +23,7 @@ jobs:
     - name: Install .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
 
     - name: Setup Windows SDK
       uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.11
@@ -60,7 +60,7 @@ jobs:
 
     - name: Generate archive
       run: |
-        Compress-Archive -Path FancyWM/bin/${{ matrix.configuration }}/net8.0-windows10.0.18362.0/*.* -DestinationPath FancyWM.${{ matrix.configuration }}.x64.zip
+        Compress-Archive -Path FancyWM/bin/${{ matrix.configuration }}/net10.0-windows10.0.18362.0/*.* -DestinationPath FancyWM.${{ matrix.configuration }}.x64.zip
         (Get-FileHash FancyWM.${{ matrix.configuration }}.x64.zip -Algorithm SHA256).Hash | Out-File FancyWM.${{ matrix.configuration }}.x64.zip.sha256sum
 
     - name: Release
