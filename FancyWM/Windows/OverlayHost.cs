@@ -1,15 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-using WinMan;
-
 using FancyWM.DllImports;
-using System.Reactive.Linq;
+
+using Windows.System;
+
+using WinMan;
 
 namespace FancyWM.Windows
 {
@@ -19,6 +23,25 @@ namespace FancyWM.Windows
     /// </summary>
     class OverlayHost : DependencyObject
     {
+
+        [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr", SetLastError = true)]
+        private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, GetWindowLongPtr_nIndex nIndex, IntPtr dwNewLong);
+
+        [DllImport("user32.dll", EntryPoint = "SetWindowLong", SetLastError = true)]
+        private static extern IntPtr SetWindowLong32(IntPtr hWnd, GetWindowLongPtr_nIndex nIndex, IntPtr dwNewLong);
+
+        private static IntPtr SetWindowLongPtr(IntPtr hWnd, GetWindowLongPtr_nIndex nIndex, IntPtr dwNewLong)
+        {
+            if (IntPtr.Size == 8)
+            {
+                return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
+            }
+            else
+            {
+                return SetWindowLong32(hWnd, nIndex, dwNewLong);
+            }
+        }
+
         [Flags()]
         internal enum SetWindowPosFlags : uint
         {
@@ -182,9 +205,12 @@ namespace FancyWM.Windows
             m_hwnd = new WindowInteropHelper(m_window).EnsureHandle();
             m_nonHitTestableHwnd = new WindowInteropHelper(m_nonHitTestableWindow).EnsureHandle();
 
-            _ = PInvoke.SetWindowLong(new(m_hwnd), GetWindowLongPtr_nIndex.GWL_EXSTYLE,
+            // Set an owner relationship so that m_hwnd is always rendered on top of m_nonHitTestableHwnd.
+            _ = SetWindowLongPtr(new(m_hwnd), GetWindowLongPtr_nIndex.GWLP_HWNDPARENT, m_nonHitTestableHwnd);
+
+            _ = SetWindowLongPtr(new(m_hwnd), GetWindowLongPtr_nIndex.GWL_EXSTYLE,
                 (int)(WINDOWS_EX_STYLE.WS_EX_TOOLWINDOW | WINDOWS_EX_STYLE.WS_EX_NOACTIVATE));
-            _ = PInvoke.SetWindowLong(new(m_nonHitTestableHwnd), GetWindowLongPtr_nIndex.GWL_EXSTYLE,
+            _ = SetWindowLongPtr(new(m_nonHitTestableHwnd), GetWindowLongPtr_nIndex.GWL_EXSTYLE,
                 (int)(WINDOWS_EX_STYLE.WS_EX_TOOLWINDOW | WINDOWS_EX_STYLE.WS_EX_TRANSPARENT | WINDOWS_EX_STYLE.WS_EX_NOACTIVATE));
 
             DisableWindow(m_hwnd);
@@ -245,38 +271,27 @@ namespace FancyWM.Windows
             // Reorder front .. back (front is drawn on top)
             // Goal: beforeAnchor -> m_hwnd -> m_nonHitTestableHwnd -> anchor
             var beforeAnchor = PInvoke.GetWindow(new(anchor), GetWindow_uCmdFlags.GW_HWNDPREV);
+            if (PInvoke.GetWindow(new(m_hwnd), GetWindow_uCmdFlags.GW_HWNDNEXT).Value == beforeAnchor)
+            {
+                return;
+            }
+
+            var swpFlags = SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING;
             if (beforeAnchor.Value == default)
             {
                 if (PInvoke.IsWindow(new(anchor)))
                 {
-                    // anchor -> m_hwnd
-                    PInvoke.SetWindowPos(new(m_hwnd), new(anchor), 0, 0, 0, 0,
-                        SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
-                    // anchor -> m_nonHitTestableHwnd -> m_hwnd
-                    PInvoke.SetWindowPos(new(m_nonHitTestableHwnd), new(anchor), 0, 0, 0, 0,
-                        SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
-                    // m_nonHitTestableHwnd -> m_hwnd -> anchor
-                    PInvoke.SetWindowPos(new(anchor), new(m_hwnd), 0, 0, 0, 0,
-                        SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
+                    PInvoke.SetWindowPos(new(m_hwnd), new(anchor), 0, 0, 0, 0, swpFlags);
+                    PInvoke.SetWindowPos(new(anchor), new(m_hwnd), 0, 0, 0, 0, swpFlags);
                 }
                 else
                 {
-                    // m_hwnd -> top
-                    PInvoke.SetWindowPos(new(m_hwnd), new(), 0, 0, 0, 0,
-                        SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
-                    // m_nonHitTestableHwnd -> m_hwnd -> top
-                    PInvoke.SetWindowPos(new(m_nonHitTestableHwnd), new(), 0, 0, 0, 0,
-                        SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
+                    PInvoke.SetWindowPos(new(m_hwnd), new(), 0, 0, 0, 0, swpFlags);
                 }
             }
             else
             {
-                // beforeAnchor -> m_hwnd -> anchor
-                PInvoke.SetWindowPos(new(m_hwnd), new(beforeAnchor), 0, 0, 0, 0,
-                    SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
-                // beforeAnchor -> m_hwnd -> m_nonHitTestableHwnd -> anchor
-                PInvoke.SetWindowPos(new(m_nonHitTestableHwnd), new(m_hwnd), 0, 0, 0, 0,
-                    SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
+                PInvoke.SetWindowPos(new(m_hwnd), new(beforeAnchor), 0, 0, 0, 0, swpFlags);
             }
         }
 
@@ -305,7 +320,7 @@ namespace FancyWM.Windows
             var newValue = oldValue & ~(int)WINDOWS_STYLE.WS_DISABLED;
             if (oldValue != newValue)
             {
-                _ = PInvoke.SetWindowLong(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE, newValue);
+                _ = SetWindowLongPtr(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE, newValue);
             }
         }
 
@@ -315,7 +330,7 @@ namespace FancyWM.Windows
             var newValue = oldValue | (int)WINDOWS_STYLE.WS_DISABLED;
             if (oldValue != newValue)
             {
-                _ = PInvoke.SetWindowLong(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE, newValue);
+                _ = SetWindowLongPtr(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE, newValue);
             }
         }
 
