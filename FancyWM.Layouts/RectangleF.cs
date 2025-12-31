@@ -12,8 +12,8 @@ namespace FancyWM.Layouts
         public double Top { get; }
         public double Right { get; }
         public double Bottom { get; }
-        public readonly double Width => Right - Left;
-        public readonly double Height => Bottom - Top;
+        public readonly double Width => Math.Abs(Right - Left);
+        public readonly double Height => Math.Abs(Bottom - Top);
 
         public double Area => Width * Height;
 
