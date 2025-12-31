@@ -242,34 +242,39 @@ namespace FancyWM.Windows
                 ? AnchorSource()
                 : new IntPtr(-1);
 
+            // Reorder front .. back (front is drawn on top)
+            // Goal: beforeAnchor -> m_hwnd -> m_nonHitTestableHwnd -> anchor
             var beforeAnchor = PInvoke.GetWindow(new(anchor), GetWindow_uCmdFlags.GW_HWNDPREV);
             if (beforeAnchor.Value == default)
             {
                 if (PInvoke.IsWindow(new(anchor)))
                 {
+                    // anchor -> m_hwnd
                     PInvoke.SetWindowPos(new(m_hwnd), new(anchor), 0, 0, 0, 0,
                         SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
+                    // anchor -> m_nonHitTestableHwnd -> m_hwnd
                     PInvoke.SetWindowPos(new(m_nonHitTestableHwnd), new(anchor), 0, 0, 0, 0,
                         SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
-                    PInvoke.SetWindowPos(new(m_nonHitTestableHwnd), new(m_hwnd), 0, 0, 0, 0,
-                        SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
-                    PInvoke.SetWindowPos(new(anchor), new(m_nonHitTestableHwnd), 0, 0, 0, 0,
+                    // m_nonHitTestableHwnd -> m_hwnd -> anchor
+                    PInvoke.SetWindowPos(new(anchor), new(m_hwnd), 0, 0, 0, 0,
                         SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
                 }
                 else
                 {
+                    // m_hwnd -> top
                     PInvoke.SetWindowPos(new(m_hwnd), new(), 0, 0, 0, 0,
                         SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
-                    PInvoke.SetWindowPos(new(m_nonHitTestableHwnd), new(), 0, 0, 0, 0,
-                        SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
+                    // m_nonHitTestableHwnd -> m_hwnd -> top
                     PInvoke.SetWindowPos(new(m_nonHitTestableHwnd), new(), 0, 0, 0, 0,
                         SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
                 }
             }
             else
             {
+                // beforeAnchor -> m_hwnd -> anchor
                 PInvoke.SetWindowPos(new(m_hwnd), new(beforeAnchor), 0, 0, 0, 0,
                     SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
+                // beforeAnchor -> m_hwnd -> m_nonHitTestableHwnd -> anchor
                 PInvoke.SetWindowPos(new(m_nonHitTestableHwnd), new(m_hwnd), 0, 0, 0, 0,
                     SetWindowPos_uFlags.SWP_NOMOVE | SetWindowPos_uFlags.SWP_NOSIZE | SetWindowPos_uFlags.SWP_NOACTIVATE | SetWindowPos_uFlags.SWP_NOSENDCHANGING);
             }
