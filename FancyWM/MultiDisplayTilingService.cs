@@ -240,7 +240,7 @@ namespace FancyWM
 
             _ = Dispatcher.InvokeAsync(() =>
             {
-                UpdateActiveDisplay($"the focused window has changed to {e.NewFocusedWindow.Handle}={e.NewFocusedWindow.GetCachedProcessName()}");
+                UpdateActiveDisplay($"the focused window has changed to {e.NewFocusedWindow.DebugString()}");
             });
         }
 

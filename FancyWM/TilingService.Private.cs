@@ -77,7 +77,7 @@ namespace FancyWM
                 catch (UnsatisfiableFlexConstraintsException)
                 {
                     var largestWindow = tree.Root!.Windows.OrderByDescending(x => x.GenerationID).First();
-                    m_logger.Warning($"The arrange pass failed! Floating window {largestWindow.WindowReference.GetSanitizedString()} in an attempt to find a permissible arrangement!");
+                    m_logger.Warning($"The arrange pass failed! Floating window {largestWindow.WindowReference.DebugString()} in an attempt to find a permissible arrangement!");
                     lock (m_floatingSet)
                     {
                         m_floatingSet.Add(largestWindow.WindowReference);
@@ -180,14 +180,14 @@ namespace FancyWM
             {
                 if (target.OriginalPosition != target.ComputedPosition)
                 {
-                    m_logger.Information("Relocating window {Handle}={ProcessName} from {OriginalPosition} to {ComputedPosition}",
-                        target.Window.Handle, target.Window.GetCachedProcessName(),
+                    m_logger.Information("Relocating window {Window} from {OriginalPosition} to {ComputedPosition}",
+                        target.Window.DebugString(),
                         target.OriginalPosition, target.ComputedPosition);
                 }
                 else
                 {
-                    m_logger.Information("Window {Handle}={ProcessName} location is {ComputedPosition}",
-                        target.Window.Handle, target.Window.GetCachedProcessName(),
+                    m_logger.Information("Window {Window} location is {ComputedPosition}",
+                        target.Window.DebugString(),
                         target.ComputedPosition);
                 }
             }
@@ -237,7 +237,7 @@ namespace FancyWM
                     var currentPosition = window.WindowReference.Position;
                     if (!window.WindowReference.CanResize)
                     {
-                        m_logger.Warning("Unresizable window {Handle}={ProcessName} will be moved only", window.WindowReference.Handle, window.WindowReference.GetCachedProcessName());
+                        m_logger.Warning("Unresizable window {Window} will be moved only", window.WindowReference.DebugString());
                         var targetRect = ShrinkTo(window.ComputedRectangle, currentPosition.Width, currentPosition.Height);
                         if (targetRect == currentPosition)
                         {
@@ -247,7 +247,7 @@ namespace FancyWM
                     }
                     else
                     {
-                        m_logger.Information("Updating position of window {Handle}={ProcessName}", window.WindowReference.Handle, window.WindowReference.GetCachedProcessName());
+                        m_logger.Information("Updating position of window {Window}", window.WindowReference.DebugString());
                         var rect = window.ComputedRectangle;
                         var frame = window.WindowReference.FrameMargins;
                         var adjustedRect = new Rectangle(
@@ -268,13 +268,13 @@ namespace FancyWM
                         {
                             if (minSize.Value.X > adjustedRect.Width)
                             {
-                                m_logger.Warning("New width for {Handle}={ProcessName} is smaller than the value reported by WM_GETMINMAXINFO ({ComputedWidth} < {MinimumWidth})",
-                                    window.WindowReference.Handle, window.WindowReference.GetCachedProcessName(), adjustedRect.Width, minSize.Value.X);
+                                m_logger.Warning("New width for {Window} is smaller than the value reported by WM_GETMINMAXINFO ({ComputedWidth} < {MinimumWidth})",
+                                    window.WindowReference.DebugString(), adjustedRect.Width, minSize.Value.X);
                             }
                             if (minSize.Value.Y > adjustedRect.Height)
                             {
-                                m_logger.Warning("New height for {window.WindowReference} is smaller than the value reported by WM_GETMINMAXINFO ({ComputedHeight} < {MinimumHeight})",
-                                    window.WindowReference.Handle, window.WindowReference.GetCachedProcessName(), adjustedRect.Height, minSize.Value.Y);
+                                m_logger.Warning("New height for {Window} is smaller than the value reported by WM_GETMINMAXINFO ({ComputedHeight} < {MinimumHeight})",
+                                    window.WindowReference.DebugString(), adjustedRect.Height, minSize.Value.Y);
                             }
                         }
                     }
@@ -907,16 +907,16 @@ namespace FancyWM
 
         private void OnWindowGotFocus(object? sender, WindowFocusChangedEventArgs e)
         {
-            m_logger.Information("Got focus on {Handle}={ProcessName}", e.Source.Handle, e.Source.GetCachedProcessName());
+            m_logger.Information("Got focus on {Window}", e.Source.DebugString());
             try
             {
-                m_logger.Information("Focus moved to window {Handle}={ProcessName}", e.Source.Handle, e.Source.GetCachedProcessName());
+                m_logger.Information("Focus moved to window {Window}", e.Source.DebugString());
                 bool hideMaximised = false;
                 lock (m_backend)
                 {
                     if (m_backend.HasWindow(e.Source))
                     {
-                        m_logger.Debug("Window {Handle}={ProcessName} is managed by backend, need to hide all obstructing windows", e.Source.Handle, e.Source.GetCachedProcessName());
+                        m_logger.Debug("Window {Window} is managed by backend, need to hide all obstructing windows", e.Source.DebugString());
                         // Focused restored windows that are in the tree cause all maximised windows
                         // to be send to the back
                         hideMaximised = true;
@@ -938,7 +938,7 @@ namespace FancyWM
                         .Where(x => x.State == WindowState.Maximized && m_display.Bounds.Contains(x.Position.Center))
                         .OrderBy(x => x, comparer))
                     {
-                        m_logger.Information("Moving maximised window {Handle}={ProcessName} to back", maximisedWindow.Handle, maximisedWindow.GetCachedProcessName());
+                        m_logger.Information("Moving maximised window {Window} to back", maximisedWindow.DebugString());
                         try
                         {
                             if (maximisedWindow.CanReorder)
@@ -952,7 +952,7 @@ namespace FancyWM
                         }
                         catch (Win32Exception ex)
                         {
-                            m_logger.Error(ex, "Moving window {Handle}={ProcessName} to back failed ({@Metadata})", maximisedWindow.Handle, maximisedWindow.GetCachedProcessName(), maximisedWindow.GetMetadata());
+                            m_logger.Error(ex, "Moving window {Window} to back failed ({@Metadata})", maximisedWindow.DebugString(), maximisedWindow.GetMetadata());
                             continue;
                         }
                     }
@@ -990,7 +990,7 @@ namespace FancyWM
 
         private void OnWindowAdded(object? sender, WindowChangedEventArgs e)
         {
-            m_logger.Debug("Window {Handle}={ProcessName} added to workspace", e.Source.Handle, e.Source.GetCachedProcessName());
+            m_logger.Debug("Window {Window} added to workspace", e.Source.DebugString());
             try
             {
                 BindEventHandlers(e.Source);
@@ -1018,7 +1018,7 @@ namespace FancyWM
 
                 if (CanManage(e.Source) && e.Source.State == WindowState.Restored)
                 {
-                    m_logger.Information("Window {Handle}={ProcessName} can be managed, registering with backend", e.Source.Handle, e.Source.GetCachedProcessName());
+                    m_logger.Information("Window {Window} can be managed, registering with backend", e.Source.DebugString());
                     m_dispatcher.BeginInvoke(() =>
                     {
                         try
@@ -1049,7 +1049,7 @@ namespace FancyWM
 
                 if (Equals(m_workspace.FocusedWindow, sender))
                 {
-                    m_logger.Debug("Window {Handle}={ProcessName} also has focus", e.Source.Handle, e.Source.GetCachedProcessName());
+                    m_logger.Debug("Window {Window} also has focus", e.Source.DebugString());
                     OnWindowGotFocus(sender, new WindowFocusChangedEventArgs(e.Source, true));
                 }
             }
@@ -1061,7 +1061,7 @@ namespace FancyWM
 
         private void OnWindowRemoved(object? sender, WindowChangedEventArgs e)
         {
-            m_logger.Information("Window {Handle}={ProcessName} removed from workspace", e.Source.Handle, e.Source.GetCachedProcessName());
+            m_logger.Information("Window {Window} removed from workspace", e.Source.DebugString());
 
             UnbindEventHandlers(e.Source);
             lock (m_windowSet)
@@ -1089,7 +1089,7 @@ namespace FancyWM
             {
                 if (m_backend.HasWindow(e.Source))
                 {
-                    m_logger.Debug("Unregistering window {Handle}={ProcessName} from backend", e.Source.Handle, e.Source.GetCachedProcessName());
+                    m_logger.Debug("Unregistering window {Window} from backend", e.Source.DebugString());
                     m_backend.UnregisterWindow(e.Source);
                     InvalidateLayout();
                 }
@@ -1104,7 +1104,7 @@ namespace FancyWM
             {
                 if (m_backend.HasWindow(window))
                 {
-                    m_logger.Debug("Window {Handle}={ProcessName} size is unchanged, attempting to insert window at {Position}", window.Handle, window.GetCachedProcessName(), pt);
+                    m_logger.Debug("Window {Window} size is unchanged, attempting to insert window at {Position}", window.DebugString(), pt);
                     m_backend.MoveWindow(window, pt, allowNesting: !isSwapping);
                     m_backend.SetFocus(window);
                 }
@@ -1131,7 +1131,7 @@ namespace FancyWM
                 }
             }
 
-            m_logger.Information("Window {Handle}={ProcessName} move ended", e.Source.Handle, e.Source.GetCachedProcessName());
+            m_logger.Information("Window {Window} move ended", e.Source.DebugString());
             InvalidateLayout();
             lock (m_ignoreRepositionSet)
             {
@@ -1221,7 +1221,7 @@ namespace FancyWM
                                 right: oldPosition.Right + frame.Right,
                                 bottom: oldPosition.Bottom + frame.Bottom);
 
-                            m_logger.Debug("Window {Handle}={ProcessName} size is different, attempting to resize window from {OldPosition} to {NewPosition}", e.Source.Handle, e.Source.GetCachedProcessName(), adjustedRect, e.NewPosition);
+                            m_logger.Debug("Window {Window} size is different, attempting to resize window from {OldPosition} to {NewPosition}", e.Source.DebugString(), adjustedRect, e.NewPosition);
                             m_backend.ResizeWindow(e.Source, e.NewPosition, adjustedRect);
                             UpdateTree(node.Desktop!);
                         }
@@ -1255,7 +1255,7 @@ namespace FancyWM
 
             try
             {
-                m_logger.Verbose("Changed topmost of window {Handle}={ProcessName}", e.Source.Handle, e.Source.GetCachedProcessName());
+                m_logger.Verbose("Changed topmost of window {Window}", e.Source.DebugString());
                 DetectChanges(e.Source);
             }
             catch (InvalidWindowReferenceException)
@@ -1389,7 +1389,7 @@ namespace FancyWM
 
             try
             {
-                m_logger.Information("Changed state of window {Handle}={ProcessName} to {NewState}", e.Source.Handle, e.Source.GetCachedProcessName(), e.NewState);
+                m_logger.Information("Changed state of window {Window} to {NewState}", e.Source.DebugString(), e.NewState);
 
                 try
                 {
@@ -1425,7 +1425,7 @@ namespace FancyWM
 
                 if (Equals(m_workspace.FocusedWindow, sender))
                 {
-                    m_logger.Debug("Window {Handle}={ProcessName} is also focused, calling OnWindowGotFocus", e.Source.Handle, e.Source.GetCachedProcessName());
+                    m_logger.Debug("Window {Window} is also focused, calling OnWindowGotFocus", e.Source.DebugString());
                     // This is to update focus when a maximised window is restored.
                     OnWindowGotFocus(e.Source, new WindowFocusChangedEventArgs(e.Source, true));
                 }
@@ -1530,7 +1530,7 @@ namespace FancyWM
 
         private bool DetectChanges(IWindow window)
         {
-            m_logger.Verbose("Dirty checking for changes with window {Handle}={ProcessName}", window.Handle, window.GetCachedProcessName());
+            m_logger.Verbose("Dirty checking for changes with window {Window}", window.DebugString());
             try
             {
                 if (window.State == WindowState.Restored && CanManage(window))
@@ -1548,7 +1548,7 @@ namespace FancyWM
                             {
                                 if (!m_backend.HasWindow(window))
                                 {
-                                    m_logger.Debug("Window {Handle}={ProcessName} can be managed, but is not registered with backend, registering now", window.Handle, window.GetCachedProcessName());
+                                    m_logger.Debug("Window {Window} can be managed, but is not registered with backend, registering now", window.DebugString());
                                     var newNode = m_backend.RegisterWindow(window, maxTreeWidth: AutoSplitCount);
                                     newNode.Parent!.Padding = GetPanelPaddingRect();
                                     newNode.Parent!.Spacing = GetPanelSpacing();
@@ -1575,7 +1575,7 @@ namespace FancyWM
                     {
                         if (m_backend.HasWindow(window))
                         {
-                            m_logger.Verbose("Window {Handle}={ProcessName} can no longer be managed, but is registered with backend, unregistering now", window.Handle, window.GetCachedProcessName());
+                            m_logger.Verbose("Window {Window} can no longer be managed, but is registered with backend, unregistering now", window.DebugString());
                             m_backend.UnregisterWindow(window);
 
                             InvalidateLayout();
