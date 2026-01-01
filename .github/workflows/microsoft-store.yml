@@ -40,12 +40,17 @@ jobs:
       - name: Install .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
 
-      - name: Setup Windows SDK
+      - name: Setup Windows SDK 18362
         uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.11
         with:
           sdk-version: 18362
+
+      - name: Setup Windows SDK 19041
+        uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.11
+        with:
+          sdk-version: 19041
 
       # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
       - name: Setup MSBuild.exe
