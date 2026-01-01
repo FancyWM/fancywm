@@ -198,7 +198,7 @@ namespace FancyWM
             }
 
             // It is important to use []= here, because the window might have been present on a different virtual desktop
-            // and added here before it is removed from there (I think). 
+            // and added here before it is removed from there (I think).
             m_originalPositions[window] = window.Position;
             return newNode;
         }
