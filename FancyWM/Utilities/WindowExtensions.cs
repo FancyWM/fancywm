@@ -17,7 +17,13 @@ namespace FancyWM.Utilities
 {
     internal static class WindowExtensions
     {
-        private static readonly ConditionalWeakTable<IWindow, string> m_processNames = [];
+        private class ProcessInfo(int id, string name)
+        {
+            public int ID = id;
+            public string Name = name ?? throw new ArgumentNullException(nameof(name));
+        }
+
+        private static readonly ConditionalWeakTable<IWindow, ProcessInfo> m_processCache = [];
         private static readonly ConditionalWeakTable<IWindow, BitmapSource?> m_icons = [];
 
         [DllImport("User32", EntryPoint = "GetClassLongW", SetLastError = true)]
@@ -169,43 +175,56 @@ namespace FancyWM.Utilities
 
         public static string GetCachedProcessName(this IWindow window)
         {
-            string processName;
-            if (m_processNames.TryGetValue(window, out processName!))
+            return GetCachedProcessInfo(window).name;
+        }
+
+        public static string DebugString(this IWindow window)
+        {
+            var (id, name) = GetCachedProcessInfo(window);
+            return $"{window.Handle:X8}={name}({id})";
+        }
+
+        private static (int id, string name) GetCachedProcessInfo(IWindow window)
+        {
+            var info = GetCachedProcessInfoInternal(window);
+            return (info.ID, info.Name);
+        }
+
+        private static ProcessInfo GetCachedProcessInfoInternal(IWindow window)
+        {
+            ProcessInfo? info;
+            if (m_processCache.TryGetValue(window, out info!))
             {
-                return processName;
+                return info;
             }
 
             try
             {
-                processName = window.GetProcess().ProcessName;
-                if (processName == "ApplicationFrameHost" && window is Win32Window win32Window && win32Window.ClassName == "ApplicationFrameWindow")
+                var process = window.GetProcess();
+                info = new(process.Id, process.ProcessName);
+                if (info.Name == "ApplicationFrameHost" && window is Win32Window win32Window && win32Window.ClassName == "ApplicationFrameWindow")
                 {
                     HWND hwndChild = PInvoke.FindWindowEx(new(window.Handle), new HWND(), "Windows.UI.Core.CoreWindow", null);
                     if (hwndChild.Value != IntPtr.Zero)
                     {
-                        return window.Workspace.UnsafeCreateFromHandle(hwndChild.Value).GetCachedProcessName();
+                        info = GetCachedProcessInfoInternal(window.Workspace.UnsafeCreateFromHandle(hwndChild.Value));
                     }
                 }
             }
             catch (InvalidWindowReferenceException)
             {
-                processName = "Invalid handle";
+                info = new(0, "Invalid handle");
             }
             catch (ExternalException)
             {
-                processName = "Inaccessible process";
+                info = new(0, "Inaccessible process");
             }
             catch (Exception e) when (e is InvalidOperationException || e is ArgumentException)
             {
-                processName = "Dead process";
+                info = new(0, "Dead process");
             }
-            m_processNames.AddOrUpdate(window, processName);
-            return processName;
-        }
-
-        public static string GetSanitizedString(this IWindow window)
-        {
-            return $"{window}({window.GetCachedProcessName()})";
+            m_processCache.AddOrUpdate(window, info);
+            return info;
         }
 
         public static object GetMetadata(this IWindow window)

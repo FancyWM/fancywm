@@ -364,7 +364,7 @@ namespace FancyWM
                     {
                         if (!m_backend.HasWindow(window) && window.State == WindowState.Restored && CanManage(window))
                         {
-                            m_logger.Debug("Discovered window {Handle}={ProcessName}", window.Handle, window.GetCachedProcessName());
+                            m_logger.Debug("Discovered window {Window}", window.DebugString());
                             var newNode = m_backend.RegisterWindow(window, maxTreeWidth: AutoSplitCount);
                             newNode.Parent!.Padding = GetPanelPaddingRect();
                             newNode.Parent!.Spacing = GetPanelSpacing();
