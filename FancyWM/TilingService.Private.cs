@@ -907,62 +907,64 @@ namespace FancyWM
 
         private void OnWindowGotFocus(object? sender, WindowFocusChangedEventArgs e)
         {
-            m_logger.Information("Got focus on {Window}", e.Source.DebugString());
-            try
+            m_dispatcher.BeginInvoke(() =>
             {
-                m_logger.Information("Focus moved to window {Window}", e.Source.DebugString());
-                bool hideMaximised = false;
-                lock (m_backend)
+                m_logger.Information("Got focus on {Window}", e.Source.DebugString());
+                try
                 {
-                    if (m_backend.HasWindow(e.Source))
+                    m_logger.Information("Focus moved to window {Window}", e.Source.DebugString());
+                    bool hideMaximised = false;
+                    lock (m_backend)
                     {
-                        m_logger.Debug("Window {Window} is managed by backend, need to hide all obstructing windows", e.Source.DebugString());
-                        // Focused restored windows that are in the tree cause all maximised windows
-                        // to be send to the back
-                        hideMaximised = true;
-                        m_backend.SetFocus(e.Source);
-                    }
-                    else
-                    {
-                        // m_logger.Debug("Removing focus for current desktop {Desktop}", m_workspace.VirtualDesktopManager.CurrentDesktop);
-                        // Focused non-restored windows disable the overlay
-                        // m_backend.UnsetFocus(m_workspace.VirtualDesktopManager.CurrentDesktop);
-                    }
-                }
-
-                if (hideMaximised)
-                {
-                    m_logger.Information("Moving all obstructing maximised windows to back");
-                    var comparer = m_workspace.CreateSnapshotZOrderComparer();
-                    foreach (var maximisedWindow in m_workspace.GetCurrentDesktopSnapshot()
-                        .Where(x => x.State == WindowState.Maximized && m_display.Bounds.Contains(x.Position.Center))
-                        .OrderBy(x => x, comparer))
-                    {
-                        m_logger.Information("Moving maximised window {Window} to back", maximisedWindow.DebugString());
-                        try
+                        if (m_backend.HasWindow(e.Source))
                         {
-                            if (maximisedWindow.CanReorder)
+                            m_logger.Debug("Window {Window} is managed by backend, need to hide all obstructing windows", e.Source.DebugString());
+                            // Focused restored windows that are in the tree cause all maximised windows
+                            // to be send to the back
+                            hideMaximised = true;
+                            m_backend.SetFocus(e.Source);
+                        }
+                        else
+                        {
+                            m_logger.Debug("Window {Window} is not managed by backend", e.Source.DebugString());
+                            return;
+                        }
+                    }
+
+                    if (hideMaximised)
+                    {
+                        m_logger.Information("Moving all obstructing maximised windows to back");
+                        var comparer = m_workspace.CreateSnapshotZOrderComparer();
+                        foreach (var maximisedWindow in m_workspace.GetCurrentDesktopSnapshot()
+                            .Where(x => x.State == WindowState.Maximized && m_display.Bounds.Contains(x.Position.Center))
+                            .OrderBy(x => x, comparer))
+                        {
+                            m_logger.Information("Moving maximised window {Window} to back", maximisedWindow.DebugString());
+                            try
                             {
-                                maximisedWindow.SendToBack();
+                                if (maximisedWindow.CanReorder)
+                                {
+                                    maximisedWindow.SendToBack();
+                                }
+                            }
+                            catch (InvalidWindowReferenceException)
+                            {
+                                continue;
+                            }
+                            catch (Win32Exception ex)
+                            {
+                                m_logger.Error(ex, "Moving window {Window} to back failed ({@Metadata})", maximisedWindow.DebugString(), maximisedWindow.GetMetadata());
+                                continue;
                             }
                         }
-                        catch (InvalidWindowReferenceException)
-                        {
-                            continue;
-                        }
-                        catch (Win32Exception ex)
-                        {
-                            m_logger.Error(ex, "Moving window {Window} to back failed ({@Metadata})", maximisedWindow.DebugString(), maximisedWindow.GetMetadata());
-                            continue;
-                        }
                     }
+                    InvalidateLayout();
                 }
-                InvalidateLayout();
-            }
-            catch (InvalidWindowReferenceException)
-            {
-                return;
-            }
+                catch (InvalidWindowReferenceException)
+                {
+                    return;
+                }
+            }, System.Windows.Threading.DispatcherPriority.DataBind);
         }
 
         private void OnWindowLostFocus(object? sender, WindowFocusChangedEventArgs e)
@@ -1045,12 +1047,6 @@ namespace FancyWM
 
                         InvalidateLayout();
                     }, System.Windows.Threading.DispatcherPriority.DataBind);
-                }
-
-                if (Equals(m_workspace.FocusedWindow, sender))
-                {
-                    m_logger.Debug("Window {Window} also has focus", e.Source.DebugString());
-                    OnWindowGotFocus(sender, new WindowFocusChangedEventArgs(e.Source, true));
                 }
             }
             catch (InvalidWindowReferenceException)
