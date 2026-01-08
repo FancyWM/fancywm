@@ -6,9 +6,8 @@ using FancyWM.DllImports;
 
 namespace FancyWM.Utilities
 {
-    internal class WindowCopyDataHelper
+    public class WindowCopyDataHelper
     {
-
         internal static byte[] Receive(IntPtr lParam)
         {
             unsafe
@@ -31,7 +30,7 @@ namespace FancyWM.Utilities
             }
         }
 
-        internal static void Send(IntPtr hwnd, byte[] bytes)
+        public static void Send(IntPtr hwnd, byte[] bytes)
         {
             unsafe
             {
