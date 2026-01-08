@@ -57,10 +57,20 @@ namespace FancyWM.Models
                     using var stream = File.OpenRead(FullPath);
                     return await ReadAsync(stream);
                 }
-                catch (Exception e) when (e is FileNotFoundException || e is JsonException || e is FormatException)
+                catch (Exception e) when (IsFileOrFormatException(e))
                 {
                     var defaultValue = defaultFactory();
                     m_currentValue = defaultValue;
+                    try
+                    {
+                        // Try to preserve the old configuration, if any.
+                        File.Copy(FullPath, $"{FullPath}.{DateTime.UtcNow}.bak");
+                        File.Delete(FullPath);
+                    }
+                    catch
+                    {
+                        // continue
+                    }
                     await SaveAsync(_ => _, notify: false);
                     return defaultValue;
                 }
@@ -76,6 +86,8 @@ namespace FancyWM.Models
             m_value = lastValue;
             m_initTask = lastValue.FirstOrDefaultAsync().ToTask();
         }
+
+        private static bool IsFileOrFormatException(Exception? e) => e is FileNotFoundException || e is JsonException || e is FormatException || IsFileOrFormatException(e?.InnerException);
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
@@ -269,6 +281,7 @@ namespace FancyWM.Models
                 case JsonTokenType.True:
                 case JsonTokenType.False:
                 case JsonTokenType.Null:
+                    oldReader.Skip();
                     CopyToken(writer, ref newReader);
                     break;
             }
