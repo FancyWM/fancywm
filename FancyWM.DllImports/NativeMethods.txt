@@ -42,6 +42,8 @@ PrintWindow
 GetWindowRect
 FindWindowEx
 EnumWindows
+GetConsoleWindow
+FreeConsole
 
 WINDOWS_EX_STYLE
 WM_KEYDOWN

@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Security.Principal;
+using System.Text;
+using System.Windows;
+
+using FancyWM.Utilities;
+using FancyWM.DllImports;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Serilog;
 using Serilog.Events;
-using System.IO;
-using Microsoft.Extensions.DependencyInjection;
-using FancyWM.Utilities;
-using System.Text;
-using System.Security.Principal;
-using System.Runtime.InteropServices;
-using System.Reflection;
 
 namespace FancyWM
 {
@@ -20,6 +22,7 @@ namespace FancyWM
         class Arguments
         {
             public LogEventLevel LogLevel { get; init; }
+            public bool HasConsole { get; init; }
         }
 
         private static event Action? CrashCleanup;
@@ -47,6 +50,48 @@ namespace FancyWM
         [STAThread]
         public static int Main(string[] args)
         {
+            if (args.Contains("--help") || args.Contains("-h"))
+            {
+                Console.WriteLine($@"
+FancyWM - Dynamic Tiling Window Manager
+=======================================
+
+USAGE: FancyWM.exe [OPTIONS] [ACTION]
+
+OPTIONS:
+    -h, --help                Show this help
+    -v, -vv, -vvv             Verbose logging (repeat for more)
+    --version                 Show version info
+    --action NAME             Execute specific action directly
+
+EXAMPLES:
+    FancyWM --action CreateHorizontalPanel
+
+ACTIONS:
+{GenerateActionsHelp()}
+
+Type 'FancyWM --help' from anywhere after installation.
+");
+                return 0;
+            }
+
+            if (args.Contains("--action"))
+            {
+                SendMessage(args[Array.IndexOf(args, "--action") + 1]);
+                return 0;
+            }
+
+            if (args.Contains("--version"))
+            {
+                Console.WriteLine(GetFullVersionString());
+                return 0;
+            }
+
+            return AppMain(args);
+        }
+
+        private static int AppMain(string[] args)
+        {
             // Set the working path
             string roamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string fullPath = $"{roamingPath}\\FancyWM";
@@ -56,32 +101,6 @@ namespace FancyWM
             }
             Directory.SetCurrentDirectory(fullPath);
 
-            if (IsPackaged)
-            {
-                try
-                {
-                    if (global::Windows.ApplicationModel.AppInstance.GetActivatedEventArgs() is global::Windows.ApplicationModel.Activation.CommandLineActivatedEventArgs storeAppArgs)
-                    {
-                        args = storeAppArgs.Operation.Arguments.Split();
-                    }
-                }
-                catch (COMException)
-                {
-                    // not a store packaged app
-                }
-            }
-
-            if (args.Contains("--action"))
-            {
-                ExecuteAction(args[args.IndexOf("--action") + 1]);
-                return 0;
-            }
-
-            return AppMain(args);
-        }
-
-        public static int AppMain(string[] args)
-        {
             if (File.Exists("administrator-mode") && !IsAdministrator())
             {
                 try
@@ -132,6 +151,7 @@ namespace FancyWM
             ConfigureServices(serviceCollection, new Arguments
             {
                 LogLevel = logLevel,
+                HasConsole = PInvoke.GetConsoleWindow() != IntPtr.Zero,
             });
 
             ProgramExit += OnProgramExit;
@@ -174,16 +194,6 @@ namespace FancyWM
                     ProgramExit?.Invoke();
                 }
             }
-        }
-
-        private static void ExecuteAction(string message)
-        {
-            var hwnd = FancyWM.DllImports.PInvoke.FindWindow(null, "FancyWMMainWindow").Value;
-            if (hwnd == IntPtr.Zero)
-            {
-                throw new InvalidOperationException("FancyWM is not running!");
-            }
-            WindowCopyDataHelper.Send(hwnd, Encoding.Default.GetBytes(message));
         }
 
         private static void OnProgramExit()
@@ -249,6 +259,10 @@ namespace FancyWM
             var lineWriter = new LineWriter(logBuffer, '\n');
 
             logConfig.WriteTo.TextWriter(lineWriter, restrictedToMinimumLevel: LogEventLevel.Information);
+            if (args.HasConsole)
+            {
+                logConfig.WriteTo.TextWriter(Console.Out);
+            }
 
             var logger = logConfig.CreateLogger();
 
@@ -272,6 +286,8 @@ namespace FancyWM
             };
         }
 
+        private static string GetFullVersionString() => $"FancyWM v{GetVersionString()} (https://www.microsoft.com/store/apps/9P1741LKHQS9) on {Environment.OSVersion}";
+
         private static string GetVersionString()
         {
             var versionInfo = FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly()!.Location);
@@ -282,6 +298,24 @@ namespace FancyWM
         {
             return (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
                       .IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        private static void SendMessage(string message)
+        {
+            var hwnd = PInvoke.FindWindow(null, "FancyWMMainWindow").Value;
+            if (hwnd == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("FancyWM is not running!");
+            }
+            WindowCopyDataHelper.Send(hwnd, Encoding.Default.GetBytes(message));
+        }
+
+        private static string GenerateActionsHelp()
+        {
+            return string.Join('\n', Enum.GetNames<Models.BindableAction>().Select(action =>
+            {
+                return $"    {action,-25} {Resources.Strings.ResourceManager.GetString($"Keybinding.{action}.Description")}";
+            }));
         }
     }
 }
