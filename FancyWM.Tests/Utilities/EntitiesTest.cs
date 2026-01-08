@@ -507,6 +507,25 @@ namespace FancyWM.Tests.Models
             Assert.IsTrue(content.Contains("{}"));
         }
 
+
+        [TestMethod]
+        public async Task TestObjectAndString()
+        {
+            var filePath = Path.Combine(m_tempDir, "test.json");
+            var originalJson = @"{
+                ""Value"": { ""KeyA"": ""ValueA"" }
+            }";
+            File.WriteAllText(filePath, originalJson);
+
+            var entity = new TestObservableJsonEntityWithComments(filePath, () => new TestModel { Value = "default" });
+
+            await entity.SaveAsync(TestModel.Next);
+
+            var content = File.ReadAllText(filePath);
+            Assert.IsTrue(content.Contains("\"Value\": \"default\""));
+            Assert.IsFalse(content.Contains("\"KeyA\": \"ValueA\""));
+        }
+
         [TestMethod]
         public async Task TestEmptyArrayWithComments()
         {
