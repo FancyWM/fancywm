@@ -15,6 +15,7 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <CetCompat>false</CetCompat>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
