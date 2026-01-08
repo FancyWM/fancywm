@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
 
     <Nullable>enable</Nullable>
+    <CetCompat>false</CetCompat>
   </PropertyGroup>
 
   <ItemGroup>
