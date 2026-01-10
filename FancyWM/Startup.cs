@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Serilog;
 using Serilog.Events;
+using System.Threading;
+using System.Globalization;
 
 namespace FancyWM
 {
@@ -161,6 +163,16 @@ Type 'FancyWM --help' from anywhere after installation.
             // Create logger
             var logger = provider.GetRequiredService<ILogger>();
             logger.Warning($"FancyWM v{GetVersionString()} (https://www.microsoft.com/store/apps/9P1741LKHQS9) on {Environment.OSVersion}");
+
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            }
+            catch (Exception e)
+            {
+                logger.Warning(e, $"Failed to set CurrentCulture!");
+            }
 
             bool exitNormally = false;
             try
