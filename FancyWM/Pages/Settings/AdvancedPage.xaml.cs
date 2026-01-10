@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Windows.Controls;
 
 using FancyWM.Resources;
@@ -52,6 +54,7 @@ namespace FancyWM.Pages.Settings
 
         private async void CreateAhkScriptClick(object sender, System.Windows.RoutedEventArgs e)
         {
+            var script = GetScriptContent();
             SaveFileDialog saveFileDialog = new()
             {
                 AddExtension = true,
@@ -62,7 +65,7 @@ namespace FancyWM.Pages.Settings
             if (saveFileDialog.ShowDialog() == true)
             {
                 using var file = saveFileDialog.OpenFile();
-                await file.WriteAsync(Files.FancyWM_ahk);
+                await file.WriteAsync(script);
 
                 if (sender is Button btn)
                 {
@@ -72,6 +75,19 @@ namespace FancyWM.Pages.Settings
                     }
                 }
             }
+        }
+
+        private static byte[] GetScriptContent()
+        {
+            var content = Encoding.UTF8.GetString(Files.FancyWM_ahk);
+
+            var actionsHelp = string.Join('\n', Enum.GetNames<Models.BindableAction>().Select(static action =>
+            {
+                var actionCode = $"FancyWM(\"{action}\")";
+                return $"; {actionCode,-35} ; {Strings.ResourceManager.GetString($"Keybinding.{action}.Description")}";
+            }));
+
+            return Encoding.UTF8.GetBytes(content + actionsHelp);
         }
     }
 }

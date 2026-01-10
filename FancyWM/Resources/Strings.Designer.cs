@@ -133,7 +133,7 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create script.
+        ///   Looks up a localized string similar to Generate starter script.
         /// </summary>
         public static string Advanced_Scripting_CreateScript {
             get {
@@ -142,7 +142,7 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scripting support is still in preview..
+        ///   Looks up a localized string similar to Easily extend FancyWM with AutoHotkey - free tool for simple Windows shortcuts. No coding needed: generate a ready-to-edit script with all commands listed as examples..
         /// </summary>
         public static string Advanced_Scripting_Description {
             get {
@@ -1285,7 +1285,7 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move window to left desktop.
+        ///   Looks up a localized string similar to Move window to previous desktop.
         /// </summary>
         public static string Keybinding_MoveToLeftDesktop_Caption {
             get {
@@ -1294,11 +1294,11 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move the focused window from the current virtual desktop to the virtual desktop on the left.
+        ///   Looks up a localized string similar to Move the focused window from the current virtual desktop to the previous virtual desktop.
         /// </summary>
-        public static string Keybinding_MoveToLeftDesktop_Description {
+        public static string Keybinding_MoveToLeftDesktop_Description1 {
             get {
-                return ResourceManager.GetString("Keybinding.MoveToLeftDesktop.Description", resourceCulture);
+                return ResourceManager.GetString("Keybinding.MoveToLeftDesktop.Description1", resourceCulture);
             }
         }
         
@@ -1321,6 +1321,15 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move the focused window from the current virtual desktop to the previous virtual desktop.
+        /// </summary>
+        public static string Keybinding_MoveToPreviousDesktop_Description2 {
+            get {
+                return ResourceManager.GetString("Keybinding.MoveToPreviousDesktop.Description2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move window to previous display.
         /// </summary>
         public static string Keybinding_MoveToPreviousDisplay_Caption {
@@ -1339,20 +1348,11 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move window to right desktop.
+        ///   Looks up a localized string similar to Move window to previous desktop.
         /// </summary>
         public static string Keybinding_MoveToRightDesktop_Caption {
             get {
                 return ResourceManager.GetString("Keybinding.MoveToRightDesktop.Caption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Move the focused window from the current virtual desktop to the virtual desktop on the right.
-        /// </summary>
-        public static string Keybinding_MoveToRightDesktop_Description {
-            get {
-                return ResourceManager.GetString("Keybinding.MoveToRightDesktop.Description", resourceCulture);
             }
         }
         

@@ -466,10 +466,10 @@
     <value>Advanced</value>
   </data>
   <data name="Advanced.Scripting.CreateScript" xml:space="preserve">
-    <value>Create script</value>
+    <value>Generate starter script</value>
   </data>
   <data name="Advanced.Scripting.Description" xml:space="preserve">
-    <value>Scripting support is still in preview.</value>
+    <value>Easily extend FancyWM with AutoHotkey - free tool for simple Windows shortcuts. No coding needed: generate a ready-to-edit script with all commands listed as examples.</value>
   </data>
   <data name="ContactTheDeveloper" xml:space="preserve">
     <value>contact the developer</value>
@@ -700,19 +700,13 @@
     <value>Move window to previous desktop</value>
   </data>
   <data name="Keybinding.MoveToRightDesktop.Caption" xml:space="preserve">
-    <value>Move window to right desktop</value>
+    <value>Move window to previous desktop</value>
   </data>
   <data name="Keybinding.MoveToLeftDesktop.Caption" xml:space="preserve">
-    <value>Move window to left desktop</value>
+    <value>Move window to previous desktop</value>
   </data>
   <data name="Keybinding.MoveToPreviousDesktop.Description" xml:space="preserve">
     <value>Move the focused window from the current virtual desktop to the previous virtual desktop</value>
-  </data>
-  <data name="Keybinding.MoveToRightDesktop.Description" xml:space="preserve">
-    <value>Move the focused window from the current virtual desktop to the virtual desktop on the right</value>
-  </data>
-  <data name="Keybinding.MoveToLeftDesktop.Description" xml:space="preserve">
-    <value>Move the focused window from the current virtual desktop to the virtual desktop on the left</value>
   </data>
   <data name="Keybinding.SwitchToPreviousDesktop.Caption" xml:space="preserve">
     <value>Switch to previous desktop</value>
@@ -960,5 +954,11 @@ If you are running a supported non-Insider Windows build and you see this messag
   </data>
   <data name="Keybinding.SwitchToRightDesktop.Description" xml:space="preserve">
     <value>Switch from the current virtual desktop to the virtual desktop on the right</value>
+  </data>
+  <data name="Keybinding.MoveToLeftDesktop.Description1" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to the previous virtual desktop</value>
+  </data>
+  <data name="Keybinding.MoveToPreviousDesktop.Description2" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to the previous virtual desktop</value>
   </data>
 </root>
