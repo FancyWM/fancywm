@@ -68,6 +68,10 @@ namespace FancyWM.Models
         // Group: Virtual Desktops
         [DefaultKeybinding(KeyCode.Q)]
         SwitchToPreviousDesktop,
+        [DefaultKeybinding(KeyCode.Z)]
+        SwitchToLeftDesktop,
+        [DefaultKeybinding(KeyCode.X)]
+        SwitchToRightDesktop,
         [DefaultKeybinding(KeyCode.D1)]
         SwitchToDesktop1,
         [DefaultKeybinding(KeyCode.D2)]
@@ -86,8 +90,13 @@ namespace FancyWM.Models
         SwitchToDesktop8,
         [DefaultKeybinding(KeyCode.D9)]
         SwitchToDesktop9,
+
         [DefaultKeybinding(KeyCode.LeftShift, KeyCode.Q)]
         MoveToPreviousDesktop,
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.Z)]
+        MoveToLeftDesktop,
+        [DefaultKeybinding(KeyCode.LeftShift, KeyCode.X)]
+        MoveToRightDesktop,
         [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D1)]
         MoveToDesktop1,
         [DefaultKeybinding(KeyCode.LeftShift, KeyCode.D2)]

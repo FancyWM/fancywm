@@ -699,8 +699,20 @@
   <data name="Keybinding.MoveToPreviousDesktop.Caption" xml:space="preserve">
     <value>Move window to previous desktop</value>
   </data>
+  <data name="Keybinding.MoveToRightDesktop.Caption" xml:space="preserve">
+    <value>Move window to right desktop</value>
+  </data>
+  <data name="Keybinding.MoveToLeftDesktop.Caption" xml:space="preserve">
+    <value>Move window to left desktop</value>
+  </data>
   <data name="Keybinding.MoveToPreviousDesktop.Description" xml:space="preserve">
     <value>Move the focused window from the current virtual desktop to the previous virtual desktop</value>
+  </data>
+  <data name="Keybinding.MoveToRightDesktop.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to the virtual desktop on the right</value>
+  </data>
+  <data name="Keybinding.MoveToLeftDesktop.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to the virtual desktop on the left</value>
   </data>
   <data name="Keybinding.SwitchToPreviousDesktop.Caption" xml:space="preserve">
     <value>Switch to previous desktop</value>
@@ -936,5 +948,17 @@ If you are running a supported non-Insider Windows build and you see this messag
   </data>
   <data name="Interface.Visuals" xml:space="preserve">
     <value>Visuals</value>
+  </data>
+  <data name="Keybinding.SwitchToLeftDesktop.Caption" xml:space="preserve">
+    <value>Switch to desktop on the left</value>
+  </data>
+  <data name="Keybinding.SwitchToRightDesktop.Caption" xml:space="preserve">
+    <value>Switch to desktop on the right</value>
+  </data>
+  <data name="Keybinding.SwitchToLeftDesktop.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to the virtual desktop on the left</value>
+  </data>
+  <data name="Keybinding.SwitchToRightDesktop.Description" xml:space="preserve">
+    <value>Switch from the current virtual desktop to the virtual desktop on the right</value>
   </data>
 </root>
