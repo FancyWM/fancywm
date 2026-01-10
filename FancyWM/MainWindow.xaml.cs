@@ -754,6 +754,12 @@ namespace FancyWM
                 case BindableAction.SwitchToPreviousDesktop:
                     OnPreviousDesktopHotkeyPressed();
                     return;
+                case BindableAction.SwitchToLeftDesktop:
+                    OnDesktopHotkeyPressed(m_workspace.VirtualDesktopManager.Desktops.IndexOf(m_workspace.VirtualDesktopManager.CurrentDesktop) - 1);
+                    return;
+                case BindableAction.SwitchToRightDesktop:
+                    OnDesktopHotkeyPressed(m_workspace.VirtualDesktopManager.Desktops.IndexOf(m_workspace.VirtualDesktopManager.CurrentDesktop) + 1);
+                    return;
                 case BindableAction.SwitchToDesktop1:
                     OnDesktopHotkeyPressed(0);
                     return;
@@ -783,6 +789,12 @@ namespace FancyWM
                     return;
                 case BindableAction.MoveToPreviousDesktop:
                     OnMoveToPreviousDesktopHotkeyPressed();
+                    return;
+                case BindableAction.MoveToLeftDesktop:
+                    OnMoveToDesktopHotkeyPressed(m_workspace.VirtualDesktopManager.Desktops.IndexOf(m_workspace.VirtualDesktopManager.CurrentDesktop) - 1);
+                    return;
+                case BindableAction.MoveToRightDesktop:
+                    OnMoveToDesktopHotkeyPressed(m_workspace.VirtualDesktopManager.Desktops.IndexOf(m_workspace.VirtualDesktopManager.CurrentDesktop) + 1);
                     return;
                 case BindableAction.MoveToDesktop1:
                     OnMoveToDesktopHotkeyPressed(0);
@@ -1321,7 +1333,7 @@ namespace FancyWM
         {
             m_logger.Debug("Switching to designated desktop...");
             var desktops = m_workspace.VirtualDesktopManager.Desktops;
-            if (desktopIndex < desktops.Count)
+            if (desktopIndex >= 0 && desktopIndex < desktops.Count)
             {
                 SwitchToDesktop(desktops[desktopIndex]);
             }

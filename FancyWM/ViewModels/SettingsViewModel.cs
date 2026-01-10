@@ -412,7 +412,11 @@ namespace FancyWM.ViewModels
                 }),
                 (Strings.Keybindings_VirtualDesktops, new HashSet<BindableAction>{
                     BindableAction.SwitchToPreviousDesktop,
+                    BindableAction.SwitchToLeftDesktop,
+                    BindableAction.SwitchToRightDesktop,
                     BindableAction.MoveToPreviousDesktop,
+                    BindableAction.MoveToLeftDesktop,
+                    BindableAction.MoveToRightDesktop,
                     BindableAction.SwitchToDesktop1,
                     BindableAction.SwitchToDesktop2,
                     BindableAction.SwitchToDesktop3,
