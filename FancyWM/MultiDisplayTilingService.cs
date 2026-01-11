@@ -196,17 +196,19 @@ namespace FancyWM
             {
                 lock (m_syncRoot)
                 {
-                    m_logger.Debug($"Added display {e.Source}");
-                    var tiling = new TilingService(Workspace, e.Source, AnimationThread, m_settings, true)
+                    if (!m_tilingServices.ContainsKey(e.Source))
                     {
-                        ShowPreviewFocus = m_showPreviewFocus,
-                        ExclusionMatchers = m_exclusionMatchers,
-                    };
-                    tiling.PlacementFailed += OnTilingFailed;
-                    tiling.PendingIntentChanged += OnPendingIntentChanged;
-                    tiling.Start();
-                    m_tilingServices.Add(e.Source, tiling);
-
+                        m_logger.Debug($"Added display {e.Source}");
+                        var tiling = new TilingService(Workspace, e.Source, AnimationThread, m_settings, true)
+                        {
+                            ShowPreviewFocus = m_showPreviewFocus,
+                            ExclusionMatchers = m_exclusionMatchers,
+                        };
+                        tiling.PlacementFailed += OnTilingFailed;
+                        tiling.PendingIntentChanged += OnPendingIntentChanged;
+                        tiling.Start();
+                        m_tilingServices.Add(e.Source, tiling);
+                    }
                     UpdateActiveDisplay(reason: $"display {e.Source} was added");
                 }
             });
