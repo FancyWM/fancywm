@@ -67,6 +67,7 @@ namespace FancyWM
         private readonly TaskbarIcon m_notifyIcon;
         private readonly CountdownTimer m_hideCountdownTimer;
         private readonly ContextMenu m_contextMenu;
+        private readonly bool m_explorerHasVirtualDesktopTooltip;
         private readonly LowLevelKeyboardHook m_llkbdHook;
         private KeybindingDictionary m_keybindings;
         private readonly IntPtr m_hwnd;
@@ -282,6 +283,7 @@ namespace FancyWM
 
             m_hideCountdownTimer = new CountdownTimer();
             m_contextMenu = (ContextMenu)FindResource("NotifierContextMenu");
+            m_explorerHasVirtualDesktopTooltip = ExplorerFeature.HasVirtualDesktopTooltip();
 
             m_stopwatch = new Stopwatch();
             m_stopwatch.Start();
@@ -1255,7 +1257,10 @@ namespace FancyWM
         {
             m_logger.Debug("Virtual desktop changed...");
             m_prevDesktop = e.OldDesktop;
-            await ShowToastAsync(e.NewDesktop.Name, ToastDurationShort);
+            if (!ExplorerFeature.HasVirtualDesktopTooltip())
+            {
+                await ShowToastAsync(e.NewDesktop.Name, ToastDurationShort);
+            }
         }
 
         private void OnVirtualDesktopRemoved(object? sender, DesktopChangedEventArgs e)

@@ -44,6 +44,7 @@ FindWindowEx
 EnumWindows
 GetConsoleWindow
 FreeConsole
+GetWINDOWS_EX_STYLE
 
 WINDOWS_EX_STYLE
 WM_KEYDOWN
