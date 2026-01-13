@@ -1,0 +1,962 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Keybinding.Cancel.Caption" xml:space="preserve">
+    <value>Отказ</value>
+  </data>
+  <data name="Keybinding.Cancel.Description" xml:space="preserve">
+    <value>Отмяна на действието</value>
+  </data>
+  <data name="Keybinding.CreateHorizontalPanel.Caption" xml:space="preserve">
+    <value>Обвиване в хоризонтален панел</value>
+  </data>
+  <data name="Keybinding.CreateHorizontalPanel.Description" xml:space="preserve">
+    <value>Създаване на нов хоризонтален панел около фокусирания прозорец</value>
+  </data>
+  <data name="Keybinding.CreateStackPanel.Caption" xml:space="preserve">
+    <value>Обвиване в панел за подреждане</value>
+  </data>
+  <data name="Keybinding.CreateStackPanel.Description" xml:space="preserve">
+    <value>Създаване на нов панел за подреждане около фокусирания прозорец</value>
+  </data>
+  <data name="Keybinding.CreateVerticalPanel.Caption" xml:space="preserve">
+    <value>Обвиване в вертикален панел</value>
+  </data>
+  <data name="Keybinding.CreateVerticalPanel.Description" xml:space="preserve">
+    <value>Създаване на нов вертикален панел около фокусирания прозорец</value>
+  </data>
+  <data name="Keybinding.DecreaseHeight.Caption" xml:space="preserve">
+    <value>Намаляване на височината</value>
+  </data>
+  <data name="Keybinding.DecreaseHeight.Description" xml:space="preserve">
+    <value>Намаляване на височината на фокусирания прозорец</value>
+  </data>
+  <data name="Keybinding.DecreaseWidth.Caption" xml:space="preserve">
+    <value>Намаляване на ширината</value>
+  </data>
+  <data name="Keybinding.DecreaseWidth.Description" xml:space="preserve">
+    <value>Намаляване на ширината на фокусирания прозорец</value>
+  </data>
+  <data name="Keybinding.IncreaseHeight.Caption" xml:space="preserve">
+    <value>Увеличаване на височината</value>
+  </data>
+  <data name="Keybinding.IncreaseHeight.Description" xml:space="preserve">
+    <value>Увеличаване на височината на фокусирания прозорец</value>
+  </data>
+  <data name="Keybinding.IncreaseWidth.Caption" xml:space="preserve">
+    <value>Увеличаване на ширината</value>
+  </data>
+  <data name="Keybinding.IncreaseWidth.Description" xml:space="preserve">
+    <value>Увеличаване на ширината на фокусирания прозорец</value>
+  </data>
+  <data name="Keybinding.MoveDown.Caption" xml:space="preserve">
+    <value>Преместване надолу</value>
+  </data>
+  <data name="Keybinding.MoveDown.Description" xml:space="preserve">
+    <value>Преместване на прозореца до прозореца по-долу</value>
+  </data>
+  <data name="Keybinding.MoveFocusDown.Caption" xml:space="preserve">
+    <value>Преместване на фокуса надолу</value>
+  </data>
+  <data name="Keybinding.MoveFocusDown.Description" xml:space="preserve">
+    <value>Фокусиране на прозореца по-долу от текущия прозорец</value>
+  </data>
+  <data name="Keybinding.MoveFocusLeft.Caption" xml:space="preserve">
+    <value>Преместване на фокуса наляво</value>
+  </data>
+  <data name="Keybinding.MoveFocusLeft.Description" xml:space="preserve">
+    <value>Фокусиране на прозореца вляво от текущия прозорец</value>
+  </data>
+  <data name="Keybinding.MoveFocusRight.Caption" xml:space="preserve">
+    <value>Преместване на фокуса надясно</value>
+  </data>
+  <data name="Keybinding.MoveFocusRight.Description" xml:space="preserve">
+    <value>Фокусиране на прозореца вдясно от текущия прозорец</value>
+  </data>
+  <data name="Keybinding.MoveFocusUp.Caption" xml:space="preserve">
+    <value>Преместване на фокуса нагоре</value>
+  </data>
+  <data name="Keybinding.MoveFocusUp.Description" xml:space="preserve">
+    <value>Фокусиране на прозореца над текущия прозорец</value>
+  </data>
+  <data name="Keybinding.MoveLeft.Caption" xml:space="preserve">
+    <value>Преместване наляво</value>
+  </data>
+  <data name="Keybinding.MoveLeft.Description" xml:space="preserve">
+    <value>Преместване на прозореца до прозореца вляво</value>
+  </data>
+  <data name="Keybinding.MoveRight.Caption" xml:space="preserve">
+    <value>Преместване надясно</value>
+  </data>
+  <data name="Keybinding.MoveRight.Description" xml:space="preserve">
+    <value>Преместване на прозореца до прозореца вдясно</value>
+  </data>
+  <data name="Keybinding.MoveUp.Caption" xml:space="preserve">
+    <value>Преместване нагоре</value>
+  </data>
+  <data name="Keybinding.MoveUp.Description" xml:space="preserve">
+    <value>Преместване на прозореца до прозореца над него</value>
+  </data>
+  <data name="Keybinding.PullWindowUp.Caption" xml:space="preserve">
+    <value>Преместване на по-висок ниво</value>
+  </data>
+  <data name="Keybinding.PullWindowUp.Description" xml:space="preserve">
+    <value>Преместване на прозореца извън съдържащия го панел</value>
+  </data>
+  <data name="Keybinding.RefreshWorkspace.Caption" xml:space="preserve">
+    <value>Принудително опресняване на работното пространство</value>
+  </data>
+  <data name="Keybinding.RefreshWorkspace.Description" xml:space="preserve">
+    <value>Принудително циклус за обнаружаване на промени на цялото работно пространство</value>
+  </data>
+  <data name="Keybinding.SwapDown.Caption" xml:space="preserve">
+    <value>Размяна надолу</value>
+  </data>
+  <data name="Keybinding.SwapDown.Description" xml:space="preserve">
+    <value>Размяна на текущия прозорец с прозореца по-долу</value>
+  </data>
+  <data name="Keybinding.SwapLeft.Caption" xml:space="preserve">
+    <value>Размяна наляво</value>
+  </data>
+  <data name="Keybinding.SwapLeft.Description" xml:space="preserve">
+    <value>Размяна на текущия прозорец с прозореца вляво</value>
+  </data>
+  <data name="Keybinding.SwapRight.Caption" xml:space="preserve">
+    <value>Размяна надясно</value>
+  </data>
+  <data name="Keybinding.SwapRight.Description" xml:space="preserve">
+    <value>Размяна на текущия прозорец с прозореца вдясно</value>
+  </data>
+  <data name="Keybinding.SwapUp.Caption" xml:space="preserve">
+    <value>Размяна нагоре</value>
+  </data>
+  <data name="Keybinding.SwapUp.Description" xml:space="preserve">
+    <value>Размяна на текущия прозорец с прозореца над него</value>
+  </data>
+  <data name="Keybinding.ToggleFloatingMode.Caption" xml:space="preserve">
+    <value>Плаващ прозорец</value>
+  </data>
+  <data name="Keybinding.ToggleFloatingMode.Description" xml:space="preserve">
+    <value>Превключване на режим на плаващ прозорец за фокусирания прозорец</value>
+  </data>
+  <data name="Keybinding.ToggleManager.Caption" xml:space="preserve">
+    <value>Превключване на управление на прозорци</value>
+  </data>
+  <data name="Keybinding.ToggleManager.Description" xml:space="preserve">
+    <value>Превключване на функцията за управление на прозорци на FancyWM</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop1.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот 1</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop1.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуален работен плот 1</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop2.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот 2</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop2.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуален работен плот 2</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop3.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот 3</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop3.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуален работен плот 3</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop4.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот 4</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop4.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуален работен плот 4</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop5.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот 5</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop5.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуален работен плот 5</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop6.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот 6</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop6.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуален работен плот 6</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop7.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот 7</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop7.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуален работен плот 7</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop8.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот 8</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop8.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуален работен плот 8</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop9.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот 9</value>
+  </data>
+  <data name="Keybinding.SwitchToDesktop9.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуален работен плот 9</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop1.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот 1</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop1.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуален работен плот 1</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop2.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот 2</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop2.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуален работен плот 2</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop3.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот 3</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop3.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуален работен плот 3</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop4.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот 4</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop4.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуален работен плот 4</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop5.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот 5</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop5.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуален работен плот 5</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop6.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот 6</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop6.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуален работен плот 6</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop7.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот 7</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop7.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуален работен плот 7</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop8.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот 8</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop8.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуален работен плот 8</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop9.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот 9</value>
+  </data>
+  <data name="Keybinding.MoveToDesktop9.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуален работен плот 9</value>
+  </data>
+  <data name="Interaction.AllocateNewPanelSpace" xml:space="preserve">
+    <value>Запазване на празно място в новите панели</value>
+  </data>
+  <data name="Interaction.AllocateNewPanelSpace.Description" xml:space="preserve">
+    <value>Новите панели ще имат празно място, докато не бъде добавен втори прозорец.</value>
+  </data>
+  <data name="Interaction.AnimateWindowMovement" xml:space="preserve">
+    <value>Анимирано преместване на прозорец</value>
+  </data>
+  <data name="General.Caption" xml:space="preserve">
+    <value>Общо</value>
+  </data>
+  <data name="General.ShowSettingsConfig" xml:space="preserve">
+    <value>Показване на settings.json в папката на приложението</value>
+  </data>
+  <data name="Interface.OverrideAccentColor" xml:space="preserve">
+    <value>Пренаписване на акцентния цвят</value>
+  </data>
+  <data name="Interface.PanelFontSize" xml:space="preserve">
+    <value>Размер на шрифта на панела</value>
+  </data>
+  <data name="Interface.PanelHeight" xml:space="preserve">
+    <value>Височина на панела</value>
+  </data>
+  <data name="General.RunsAsAdmin" xml:space="preserve">
+    <value>Стартиране с привилегии на администратор</value>
+  </data>
+  <data name="General.RunsAsAdmin.AdminDescription" xml:space="preserve">
+    <value>FancyWM се изпълнява с привилегии на администратор и може управлява всичките ви прозорци.</value>
+  </data>
+  <data name="General.RunsAsAdmin.NonAdminDescription" xml:space="preserve">
+    <value>FancyWM не може управлява прозорци от повишени процеси, освен ако се стартира като администратор. Активирайте тази опция и рестартирайте FancyWM, за да поправите това.</value>
+  </data>
+  <data name="General.RunsAtStartup" xml:space="preserve">
+    <value>Автоматично стартиране при запуск на системата</value>
+  </data>
+  <data name="Interface.ShowContextHints" xml:space="preserve">
+    <value>Показване на контекстни подсказки в появяващ се прозорец</value>
+  </data>
+  <data name="Interface.ShowContextHints.Description" xml:space="preserve">
+    <value>Показва списъка на налични клавишни комбинации след 1 секунда неактивност. Командният появяващ се прозорец остава на екрана по-дълго, но можете да го затворите с</value>
+  </data>
+  <data name="Interface.ShowFocus" xml:space="preserve">
+    <value>Показване на рамка около фокусирания прозорец ᴺᴱᵂ</value>
+  </data>
+  <data name="Interface.ShowFocus.Description" xml:space="preserve">
+    <value>Подчертава фокусирания прозорец.</value>
+  </data>
+  <data name="Interface.ShowFocusDuringAction" xml:space="preserve">
+    <value>Показване на напомняне за фокусирания прозорец</value>
+  </data>
+  <data name="Interface.ShowFocusDuringAction.Description" xml:space="preserve">
+    <value>Подчертава фокусирания прозорец, когато се показва командният появяващ се прозорец.</value>
+  </data>
+  <data name="General.ShowStartupWindow" xml:space="preserve">
+    <value>Показване на прозореца при стартиране на програмата</value>
+  </data>
+  <data name="General.SoundOnFailure" xml:space="preserve">
+    <value>Пускане на звук при неудачно действие</value>
+  </data>
+  <data name="General.Sounds" xml:space="preserve">
+    <value>Звукови ефекти</value>
+  </data>
+  <data name="General.Startup" xml:space="preserve">
+    <value>Стартиране</value>
+  </data>
+  <data name="Interaction.TilingBehavior" xml:space="preserve">
+    <value>Поведение на подреждането</value>
+  </data>
+  <data name="Interface.WindowPadding" xml:space="preserve">
+    <value>Разстояние между прозорци</value>
+  </data>
+  <data name="General.Displays" xml:space="preserve">
+    <value>Дисплеи</value>
+  </data>
+  <data name="General.MultiMonitorSupport" xml:space="preserve">
+    <value>Активиране на подреждане на всички свързани дисплеи</value>
+  </data>
+  <data name="About.AppVersion" xml:space="preserve">
+    <value>Версия на приложението:</value>
+  </data>
+  <data name="About.Caption" xml:space="preserve">
+    <value>За приложението</value>
+  </data>
+  <data name="About.Copyright" xml:space="preserve">
+    <value>Copyright © 2024 Vesko Karaganev. Всички права запазени.</value>
+  </data>
+  <data name="About.Credits" xml:space="preserve">
+    <value>Благодарности</value>
+  </data>
+  <data name="About.Credits.Description" xml:space="preserve">
+    <value>Възможно благодарение на следния прекрасен софтуер с отворен код.</value>
+  </data>
+  <data name="Advanced.Caption" xml:space="preserve">
+    <value>Разширени</value>
+  </data>
+  <data name="Advanced.Scripting.CreateScript" xml:space="preserve">
+    <value>Генериране на начален скрипт</value>
+  </data>
+  <data name="Advanced.Scripting.Description" xml:space="preserve">
+    <value>Лесно разширяване на FancyWM с AutoHotkey - безплатен инструмент за прости Windows преки пътища. Не е необходимо програмиране: генерирайте готов за редакция скрипт с всички команди изброени като примери.</value>
+  </data>
+  <data name="ContactTheDeveloper" xml:space="preserve">
+    <value>свързване с разработчика</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Подробности</value>
+  </data>
+  <data name="General.MultiMonitorSupport.Description" xml:space="preserve">
+    <value>Рестартирайте FancyWM, за да се приложат промените!</value>
+  </data>
+  <data name="ErrorMessageBox.Caption" xml:space="preserve">
+    <value>Възникна фатална грешка в FancyWM!</value>
+  </data>
+  <data name="ErrorMessageBox.Description.CheckForSolution" xml:space="preserve">
+    <value>FancyWM сега ще се затвори. Ако този проблем продължи, моля проверете за решение и/или отворете доклад за грешка на</value>
+  </data>
+  <data name="ErrorMessageBox.Description.SubmittingALog" xml:space="preserve">
+    <value>Чрез предаване на дневник можете да помогнете за диагностицирането на проблема. Файлът на дневника съдържа история на събитията, водещи до срива. Чувствителната информация се замъглява.</value>
+  </data>
+  <data name="ErrorMessageBox.SubmitLog" xml:space="preserve">
+    <value>Предаване на дневник</value>
+  </data>
+  <data name="Experimental" xml:space="preserve">
+    <value>ЕКСПЕРИМЕНТАЛНО</value>
+  </data>
+  <data name="Help.Caption" xml:space="preserve">
+    <value>Помощ</value>
+  </data>
+  <data name="Keybinding.ActivationHotkey" xml:space="preserve">
+    <value>Активиращ бърз клавиш</value>
+  </data>
+  <data name="Keybindings.Caption" xml:space="preserve">
+    <value>Клавишни комбинации</value>
+  </data>
+  <data name="Keybindings.DirectMode.About" xml:space="preserve">
+    <value>Регистрира клавишната комбинация като системен бърз клавиш, позволяващ й да бъде използвана без Активиращия бърз клавиш. Клавишната комбинация трябва да използва поне един модификатор (Ctrl, Shift, Alt, Win).</value>
+  </data>
+  <data name="Keybindings.DirectMode.FailModes" xml:space="preserve">
+    <value>Windows няма да позволи на FancyWM да регистрира бърз клавиш, който вече се използва от нея или друго приложение.</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Не</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Изключено</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Включено</value>
+  </data>
+  <data name="Quit" xml:space="preserve">
+    <value>Излез</value>
+  </data>
+  <data name="Rules.Caption" xml:space="preserve">
+    <value>Правила</value>
+  </data>
+  <data name="Rules.ClassIgnoreList" xml:space="preserve">
+    <value>Автоматично плаващ режим по клас на прозорец</value>
+  </data>
+  <data name="Rules.ClassIgnoreList.Description" xml:space="preserve">
+    <value>Режимът на плаващ прозорец ще бъде автоматично активиран за прозорци със съответстващ клас. Съответстването е независимо от главни/малки букви и можете да използвате регулярни изрази.</value>
+  </data>
+  <data name="Rules.FloatingWindows" xml:space="preserve">
+    <value>Плаващи прозорци</value>
+  </data>
+  <data name="Rules.ProcessIgnoreList" xml:space="preserve">
+    <value>Автоматично плаващ режим по име на процес</value>
+  </data>
+  <data name="Rules.ProcessIgnoreList.Description" xml:space="preserve">
+    <value>Режимът на плаващ прозорец ще бъде автоматично активиран за прозорци, принадлежащи на един от процесите. Въведете едно име на процес на ред, без разширението ".exe" (например "explorer"). Съответстването е независимо от главни/малки букви и можете да използвате регулярни изрази.</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Settings.FancyWM" xml:space="preserve">
+    <value>Настройки на FancyWM</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="PleaseSee" xml:space="preserve">
+    <value>Моля, вижте</value>
+  </data>
+  <data name="Startup.Caption" xml:space="preserve">
+    <value>Стартиране на FancyWM</value>
+  </data>
+  <data name="Startup.FancyWMIsRunning" xml:space="preserve">
+    <value>FancyWM сега работи!</value>
+  </data>
+  <data name="Startup.FirstTimeUsers" xml:space="preserve">
+    <value>Първи път потребители:</value>
+  </data>
+  <data name="Startup.InSystemTray" xml:space="preserve">
+    <value>Винаги можете да го намерите в системния панел.</value>
+  </data>
+  <data name="Startup.Paragraph1" xml:space="preserve">
+    <value>За да промените оформлението на фокусирания прозорец, натиснете активиращия бърз клавиш, [⇧ Shift] и [⊞ Win], и когато се покажа съобщението, натиснете [H], [V] или [S].</value>
+  </data>
+  <data name="Startup.Paragraph2" xml:space="preserve">
+    <value>Можете също да преместите мишката над горната граница на фокусирания прозорец, за да промените оформлението.</value>
+  </data>
+  <data name="Startup.ShowThisWindow" xml:space="preserve">
+    <value>Показване на този прозорец при стартиране на FancyWM</value>
+  </data>
+  <data name="AddNew" xml:space="preserve">
+    <value>Добавяне на ново</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Изчистване на всичко</value>
+  </data>
+  <data name="Common.Moved" xml:space="preserve">
+    <value>Преместено</value>
+  </data>
+  <data name="Common.To" xml:space="preserve">
+    <value>към</value>
+  </data>
+  <data name="Common.Window" xml:space="preserve">
+    <value>прозорец</value>
+  </data>
+  <data name="Messages.AskForReview" xml:space="preserve">
+    <value>Ако да, моля отделете време, за да го преценете на Microsoft Store или обмислете спонсориране на развитието на проекта.</value>
+  </data>
+  <data name="Messages.CannotBeResizedToFit" xml:space="preserve">
+    <value>Прозорецът не може да бъде преоразмерен!</value>
+  </data>
+  <data name="Messages.CouldNot" xml:space="preserve">
+    <value>Не можа</value>
+  </data>
+  <data name="Messages.DirectHotkeyRegistrationFailed" xml:space="preserve">
+    <value>Не можа да се регистрира един или повече бързи клавиши като системни!</value>
+  </data>
+  <data name="Messages.EnjoyingFancyWM" xml:space="preserve">
+    <value>Харесвате ли FancyWM?</value>
+  </data>
+  <data name="Messages.FloatingModeEnabledFor" xml:space="preserve">
+    <value>Режим на плаващ прозорец активиран за</value>
+  </data>
+  <data name="Messages.IsAlreadyOn" xml:space="preserve">
+    <value>вече е включено</value>
+  </data>
+  <data name="Messages.NoFocusedWindow" xml:space="preserve">
+    <value>Няма фокусиран прозорец!</value>
+  </data>
+  <data name="Messages.NothingIsAssignedTo" xml:space="preserve">
+    <value>Нищо не е присвоено на</value>
+  </data>
+  <data name="Messages.NothingToDo" xml:space="preserve">
+    <value>Нищо за правене на този работен плот.</value>
+  </data>
+  <data name="Messages.OperationFailed" xml:space="preserve">
+    <value>Операцията не успя!</value>
+  </data>
+  <data name="Messages.PressF12ForHelp" xml:space="preserve">
+    <value>Натиснете F12 за помощ</value>
+  </data>
+  <data name="Messages.ReceivedInvalidCommand" xml:space="preserve">
+    <value>Получена невалидна команда</value>
+  </data>
+  <data name="Messages.StoreCommunicationFailed.Caption" xml:space="preserve">
+    <value>Грешка в FancyWM</value>
+  </data>
+  <data name="Messages.StoreCommunicationFailed.Description" xml:space="preserve">
+    <value>Комуникация с Microsoft Store е невъзможна с код</value>
+  </data>
+  <data name="Messages.UnrecognizedKeybinding" xml:space="preserve">
+    <value>Неразпозната клавишна комбинация!</value>
+  </data>
+  <data name="Messages.UpdateCheck.Caption" xml:space="preserve">
+    <value>Проверка за обновления на FancyWM</value>
+  </data>
+  <data name="Messages.UpdateCheck.UpdateAvailable" xml:space="preserve">
+    <value>Налична е нова версия на FancyWM! Изтеглете последното обновление в заден план?</value>
+  </data>
+  <data name="Messages.UpdateCheck.UpdateDownloadComplete" xml:space="preserve">
+    <value>Изтеглянето на обновлението е завършено! Рестартирайте FancyWM, за да го инсталирате?</value>
+  </data>
+  <data name="Messages.WaitingForAction" xml:space="preserve">
+    <value>Чакане на действие...</value>
+  </data>
+  <data name="TilingError.CausesRecursiveNesting" xml:space="preserve">
+    <value>Не може панелът да бъде вложен в себе си!</value>
+  </data>
+  <data name="TilingError.InvalidTarget" xml:space="preserve">
+    <value>Целевият панел не подържа това действие!</value>
+  </data>
+  <data name="TilingError.MissingAdjacentWindow" xml:space="preserve">
+    <value>Няма съседен прозорец!</value>
+  </data>
+  <data name="TilingError.MissingTarget" xml:space="preserve">
+    <value>Няма фокусиран прозорец!</value>
+  </data>
+  <data name="TilingError.ModifiesTopLevelPanel" xml:space="preserve">
+    <value>Не може да се променя панелът на горното ниво!</value>
+  </data>
+  <data name="TilingError.NestingInStackPanel" xml:space="preserve">
+    <value>Панелът за подреждане не може да съдържа други панели!</value>
+  </data>
+  <data name="TilingError.NoValidPlacementExists" xml:space="preserve">
+    <value>Не съществува валидно място!</value>
+  </data>
+  <data name="TilingError.PullsBeyondTopLevelPanel" xml:space="preserve">
+    <value>Не може да се премести по-нагоре!</value>
+  </data>
+  <data name="TilingError.TargetCannotFit" xml:space="preserve">
+    <value>Не може да се побере в целевия панел!</value>
+  </data>
+  <data name="ErrorMessageBox.RestartFancyWM" xml:space="preserve">
+    <value>Рестартиране на FancyWM</value>
+  </data>
+  <data name="Overlay.Window.AddRuleForClass" xml:space="preserve">
+    <value>Добавяне на правило за плаващ режим по клас на прозорец</value>
+  </data>
+  <data name="Overlay.Window.AddRuleForProcess" xml:space="preserve">
+    <value>Добавяне на правило за плаващ режим по име на процес</value>
+  </data>
+  <data name="Overlay.Window.MoreOptions" xml:space="preserve">
+    <value>Още опции</value>
+  </data>
+  <data name="Overlay.Window.RightClickToPullUp" xml:space="preserve">
+    <value>Десния клик за преместване на по-висок ниво</value>
+  </data>
+  <data name="Overlay.Window.SingleClickToFocus" xml:space="preserve">
+    <value>Един клик за фокусиране</value>
+  </data>
+  <data name="Messages.NoPreviousDesktop" xml:space="preserve">
+    <value>Няма предишен работен плот.</value>
+  </data>
+  <data name="Keybinding.MoveToPreviousDesktop.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към предишния работен плот</value>
+  </data>
+  <data name="Keybinding.MoveToRightDesktop.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот вдясно</value>
+  </data>
+  <data name="Keybinding.MoveToLeftDesktop.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към работния плот вляво</value>
+  </data>
+  <data name="Keybinding.MoveToPreviousDesktop.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към предишния виртуален работен плот</value>
+  </data>
+  <data name="Keybinding.SwitchToPreviousDesktop.Caption" xml:space="preserve">
+    <value>Преминаване към предишния работен плот</value>
+  </data>
+  <data name="Keybinding.SwitchToPreviousDesktop.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към предишния виртуален работен плот</value>
+  </data>
+  <data name="Overlay.Window.DragActionDetail" xml:space="preserve">
+    <value>Влачете над друг прозорец, за да групирате</value>
+  </data>
+  <data name="Interaction.AutoCollapsePanels" xml:space="preserve">
+    <value>Автоматично свиване на панели</value>
+  </data>
+  <data name="Interaction.AutoCollapsePanels.Description" xml:space="preserve">
+    <value>Панелите с един прозорец ще бъдат премахнати автоматично.</value>
+  </data>
+  <data name="Messages.NoPreviousDisplay" xml:space="preserve">
+    <value>Няма предишен дисплей.</value>
+  </data>
+  <data name="Common.Display" xml:space="preserve">
+    <value>дисплей</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay1.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към дисплей 1</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay1.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия дисплей към дисплей 1</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay2.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към дисплей 2</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay2.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия дисплей към дисплей 2</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay3.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към дисплей 3</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay3.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия дисплей към дисплей 3</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay4.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към дисплей 4</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay4.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия дисплей към дисплей 4</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay5.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към дисплей 5</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay5.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия дисплей към дисплей 5</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay6.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към дисплей 6</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay6.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия дисплей към дисплей 6</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay7.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към дисплей 7</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay7.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия дисплей към дисплей 7</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay8.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към дисплей 8</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay8.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия дисплей към дисплей 8</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay9.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към дисплей 9</value>
+  </data>
+  <data name="Keybinding.MoveToDisplay9.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия дисплей към дисплей 9</value>
+  </data>
+  <data name="Keybinding.MoveToPreviousDisplay.Caption" xml:space="preserve">
+    <value>Преместване на прозореца към предишния дисплей</value>
+  </data>
+  <data name="Keybinding.MoveToPreviousDisplay.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия дисплей към предишния дисплей</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay1.Caption" xml:space="preserve">
+    <value>Преминаване към дисплей 1</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay1.Description" xml:space="preserve">
+    <value>Преминаване от текущия дисплей към дисплей 1</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay2.Caption" xml:space="preserve">
+    <value>Преминаване към дисплей 2</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay2.Description" xml:space="preserve">
+    <value>Преминаване от текущия дисплей към дисплей 2</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay3.Caption" xml:space="preserve">
+    <value>Преминаване към дисплей 3</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay3.Description" xml:space="preserve">
+    <value>Преминаване от текущия дисплей към дисплей 3</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay4.Caption" xml:space="preserve">
+    <value>Преминаване към дисплей 4</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay4.Description" xml:space="preserve">
+    <value>Преминаване от текущия дисплей към дисплей 4</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay5.Caption" xml:space="preserve">
+    <value>Преминаване към дисплей 5</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay5.Description" xml:space="preserve">
+    <value>Преминаване от текущия дисплей към дисплей 5</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay6.Caption" xml:space="preserve">
+    <value>Преминаване към дисплей 6</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay6.Description" xml:space="preserve">
+    <value>Преминаване от текущия дисплей към дисплей 6</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay7.Caption" xml:space="preserve">
+    <value>Преминаване към дисплей 7</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay7.Description" xml:space="preserve">
+    <value>Преминаване от текущия дисплей към дисплей 7</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay8.Caption" xml:space="preserve">
+    <value>Преминаване към дисплей 8</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay8.Description" xml:space="preserve">
+    <value>Преминаване от текущия дисплей към дисплей 8</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay9.Caption" xml:space="preserve">
+    <value>Преминаване към дисплей 9</value>
+  </data>
+  <data name="Keybinding.SwitchToDisplay9.Description" xml:space="preserve">
+    <value>Преминаване от текущия дисплей към дисплей 9</value>
+  </data>
+  <data name="Keybinding.SwitchToPreviousDisplay.Caption" xml:space="preserve">
+    <value>Преминаване към предишния дисплей</value>
+  </data>
+  <data name="Keybinding.SwitchToPreviousDisplay.Description" xml:space="preserve">
+    <value>Преминаване от текущия дисплей към предишния дисплей</value>
+  </data>
+  <data name="Keybinding.ShowDesktop.Caption" xml:space="preserve">
+    <value>Показване на работния плот</value>
+  </data>
+  <data name="Keybinding.ShowDesktop.Description" xml:space="preserve">
+    <value>Показване/скриване на работния плот</value>
+  </data>
+  <data name="Keybindings.Focus" xml:space="preserve">
+    <value>Фокус</value>
+  </data>
+  <data name="Keybindings.MultipleDisplays" xml:space="preserve">
+    <value>Дисплеи</value>
+  </data>
+  <data name="Keybindings.Panels" xml:space="preserve">
+    <value>Панели</value>
+  </data>
+  <data name="Keybindings.Sizing" xml:space="preserve">
+    <value>Оразмеряване</value>
+  </data>
+  <data name="Keybindings.VirtualDesktops" xml:space="preserve">
+    <value>Виртуални работни плотове</value>
+  </data>
+  <data name="Keybindings.Windows" xml:space="preserve">
+    <value>Прозорци</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Затваряне</value>
+  </data>
+  <data name="Messages.WindowsVersionNotSupported.Caption" xml:space="preserve">
+    <value>Вашата версия на Windows не се поддържа!</value>
+  </data>
+  <data name="Messages.WindowsVersionNotSupported.Description" xml:space="preserve">
+    <value>FancyWM се опитва да използва вътрешния Windows Virtual Desktop Service, който не се поддържа от Microsoft. Това съобщение може да бъде отключено в Настройки.
+
+Изглежда, че във вашата версия на Windows, Microsoft е променила интерфейса на VDS, и FancyWM не може да открие вашите виртуални работни плотове.... Ако стартирате поддържана версия на Windows без Insider Build и видите това съобщение, моля изберете Да, за да го докладвате.</value>
+  </data>
+  <data name="Keybindings.DirectMode.Checkbox" xml:space="preserve">
+    <value>Използване без Активиращия бърз клавиш?</value>
+  </data>
+  <data name="Interaction.ModifierMoveWindow" xml:space="preserve">
+    <value>Преместване на прозорци чрез задържане</value>
+  </data>
+  <data name="Interaction.ModifierMoveWindowFocus" xml:space="preserve">
+    <value>Автоматично активиране на преместения прозорец</value>
+  </data>
+  <data name="Interaction.ModifierMoveWindowFocus.Description" xml:space="preserve">
+    <value>ще активира прозореца</value>
+  </data>
+  <data name="Interaction.WindowMovement" xml:space="preserve">
+    <value>Преместване на прозорец</value>
+  </data>
+  <data name="General.NotifyVirtualDesktopServiceIncompatibility" xml:space="preserve">
+    <value>Показване на предупреждение при неуспех на Virtual Desktop Service</value>
+  </data>
+  <data name="General.NotifyVirtualDesktopServiceIncompatibility.Description" xml:space="preserve">
+    <value>FancyWM се опитва да използва вътрешния Windows Virtual Desktop Service, който не се поддържа от Microsoft. FancyWM може да ви предупреди, ако той е неподдържан на тази версия на Windows.</value>
+  </data>
+  <data name="Keybindings.ActivateOnCapsLock.About" xml:space="preserve">
+    <value>Не трябва да отпускате клавиша, за да активирате. ⇪ Caps Lock вече няма да функционира нормално</value>
+  </data>
+  <data name="Keybindings.ActivateOnCapsLock.Checkbox" xml:space="preserve">
+    <value>Използване на ⇪ Caps Lock като Активиращия бърз клавиш</value>
+  </data>
+  <data name="Interaction.AutoSplitCount" xml:space="preserve">
+    <value>Прагова стойност за автоматично разделяне ᴺᴱᵂ</value>
+  </data>
+  <data name="Interaction.AutoSplitCount.Description" xml:space="preserve">
+    <value>Активира автоматично създаване на панелите, когато фокусираният панел има повече от указания брой дъщерни панели.</value>
+  </data>
+  <data name="About.FOSS" xml:space="preserve">
+    <value>FancyWM е безплатен и с отворен код, но изисква същото време и усилие, както всеки друг софтуер.</value>
+  </data>
+  <data name="Interaction.DelayReposition" xml:space="preserve">
+    <value>Отпускане на прозореца за преместване ᴺᴱᵂ</value>
+  </data>
+  <data name="Interaction.DelayReposition.Description" xml:space="preserve">
+    <value>Когато е активирано, оформлението на подреждането ще се актуализира, когато прозорецът е завършил да се премества.</value>
+  </data>
+  <data name="Interaction.Caption" xml:space="preserve">
+    <value>Взаимодействие</value>
+  </data>
+  <data name="Interface.Caption" xml:space="preserve">
+    <value>Интерфейс</value>
+  </data>
+  <data name="Interface.Colors" xml:space="preserve">
+    <value>Цветове</value>
+  </data>
+  <data name="Interface.Sizes" xml:space="preserve">
+    <value>Размери и полета</value>
+  </data>
+  <data name="Interface.Visuals" xml:space="preserve">
+    <value>Визуали</value>
+  </data>
+  <data name="Keybinding.SwitchToLeftDesktop.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот вляво</value>
+  </data>
+  <data name="Keybinding.SwitchToRightDesktop.Caption" xml:space="preserve">
+    <value>Преминаване към работния плот вдясно</value>
+  </data>
+  <data name="Keybinding.SwitchToLeftDesktop.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуалния работен плот вляво</value>
+  </data>
+  <data name="Keybinding.SwitchToRightDesktop.Description" xml:space="preserve">
+    <value>Преминаване от текущия виртуален работен плот към виртуалния работен плот вдясно</value>
+  </data>
+  <data name="Keybinding.MoveToLeftDesktop.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуалния работен плот вляво</value>
+  </data>
+  <data name="Keybinding.MoveToRightDesktop.Description" xml:space="preserve">
+    <value>Преместване на фокусирания прозорец от текущия виртуален работен плот към виртуалния работен плот вдясно</value>
+  </data>
+</root>
