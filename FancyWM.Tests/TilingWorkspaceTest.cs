@@ -484,5 +484,17 @@ namespace FancyWM.Tests
 
             workspace.PullUp(node1);
         }
+
+        [TestMethod]
+        public void TestRealWorkspaceInstance()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                using var workspace = new WinMan.Windows.Win32Workspace();
+                workspace.Open();
+                Assert.IsTrue(workspace.VirtualDesktopManager.CanManageVirtualDesktops);
+                Assert.IsTrue(workspace.DisplayManager.Displays.Count > 0);
+            }
+        }
     }
 }
