@@ -1285,7 +1285,7 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move window to previous desktop.
+        ///   Looks up a localized string similar to Move window to left desktop.
         /// </summary>
         public static string Keybinding_MoveToLeftDesktop_Caption {
             get {
@@ -1294,11 +1294,11 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move the focused window from the current virtual desktop to the previous virtual desktop.
+        ///   Looks up a localized string similar to Move the focused window from the current virtual desktop to virtual desktop on the left.
         /// </summary>
-        public static string Keybinding_MoveToLeftDesktop_Description1 {
+        public static string Keybinding_MoveToLeftDesktop_Description {
             get {
-                return ResourceManager.GetString("Keybinding.MoveToLeftDesktop.Description1", resourceCulture);
+                return ResourceManager.GetString("Keybinding.MoveToLeftDesktop.Description", resourceCulture);
             }
         }
         
@@ -1348,11 +1348,20 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move window to previous desktop.
+        ///   Looks up a localized string similar to Move window to right desktop.
         /// </summary>
         public static string Keybinding_MoveToRightDesktop_Caption {
             get {
                 return ResourceManager.GetString("Keybinding.MoveToRightDesktop.Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move the focused window from the current virtual desktop to virtual desktop on the right.
+        /// </summary>
+        public static string Keybinding_MoveToRightDesktop_Description {
+            get {
+                return ResourceManager.GetString("Keybinding.MoveToRightDesktop.Description", resourceCulture);
             }
         }
         
