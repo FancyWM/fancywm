@@ -700,10 +700,10 @@
     <value>Move window to previous desktop</value>
   </data>
   <data name="Keybinding.MoveToRightDesktop.Caption" xml:space="preserve">
-    <value>Move window to previous desktop</value>
+    <value>Move window to right desktop</value>
   </data>
   <data name="Keybinding.MoveToLeftDesktop.Caption" xml:space="preserve">
-    <value>Move window to previous desktop</value>
+    <value>Move window to left desktop</value>
   </data>
   <data name="Keybinding.MoveToPreviousDesktop.Description" xml:space="preserve">
     <value>Move the focused window from the current virtual desktop to the previous virtual desktop</value>
@@ -955,8 +955,11 @@ If you are running a supported non-Insider Windows build and you see this messag
   <data name="Keybinding.SwitchToRightDesktop.Description" xml:space="preserve">
     <value>Switch from the current virtual desktop to the virtual desktop on the right</value>
   </data>
-  <data name="Keybinding.MoveToLeftDesktop.Description1" xml:space="preserve">
-    <value>Move the focused window from the current virtual desktop to the previous virtual desktop</value>
+  <data name="Keybinding.MoveToLeftDesktop.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop on the left</value>
+  </data>
+  <data name="Keybinding.MoveToRightDesktop.Description" xml:space="preserve">
+    <value>Move the focused window from the current virtual desktop to virtual desktop on the right</value>
   </data>
   <data name="Keybinding.MoveToPreviousDesktop.Description2" xml:space="preserve">
     <value>Move the focused window from the current virtual desktop to the previous virtual desktop</value>
