@@ -5,10 +5,17 @@
     <TargetFramework>net10.0-windows10.0.18362.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>$(MSBuildProjectName.Replace(".", "-"))</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FancyWM\FancyWM.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="FancyWM.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
