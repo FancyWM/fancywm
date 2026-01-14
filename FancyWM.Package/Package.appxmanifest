@@ -49,7 +49,7 @@
         </uap5:Extension>
         <uap5:Extension
           Category="windows.appExecutionAlias"
-          Executable="FancyWM.CLI\FancyWM.CLI.exe"
+          Executable="FancyWM.CLI\FancyWM-CLI.exe"
           EntryPoint="Windows.FullTrustApplication">
           <uap5:AppExecutionAlias desktop4:Subsystem="console">
             <uap5:ExecutionAlias Alias="FancyWM.exe" />
