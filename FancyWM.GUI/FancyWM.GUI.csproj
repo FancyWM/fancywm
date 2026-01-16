@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.18362.0</TargetFramework>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>..\FancyWM\Icon4.ico</ApplicationIcon>
+    <Authors>Vesko Karaganev</Authors>
+    <PackageIcon>Icon.png</PackageIcon>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <StartupObject>FancyWM.GUI.Program</StartupObject>
+    <Version>1.2.0</Version>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <Nullable>enable</Nullable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <CetCompat>false</CetCompat>
+    <AssemblyName>$(MSBuildProjectName.Replace(".", "-"))</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FancyWM\FancyWM.csproj" />
+  </ItemGroup>
+
+</Project>

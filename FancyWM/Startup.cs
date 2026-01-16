@@ -52,6 +52,11 @@ namespace FancyWM
         [STAThread]
         public static int Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                PInvoke.FreeConsole();
+            }
+
             if (args.Contains("--help") || args.Contains("-h"))
             {
                 Console.WriteLine($@"

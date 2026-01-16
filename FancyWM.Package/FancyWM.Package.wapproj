@@ -42,13 +42,13 @@
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
-    <EntryPointProjectUniqueName>..\FancyWM\FancyWM.csproj</EntryPointProjectUniqueName>
     <AppInstallerUpdateFrequency>0</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
     <GenerateTestArtifacts>False</GenerateTestArtifacts>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <EntryPointProjectUniqueName>..\FancyWM.GUI\FancyWM.GUI.csproj</EntryPointProjectUniqueName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <AppxBundle>Never</AppxBundle>
@@ -79,11 +79,7 @@
     <Content Include="Package.appinstaller" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FancyWM\FancyWM.csproj">
-      <SkipGetTargetFrameworkProperties>True</SkipGetTargetFrameworkProperties>
-      <TrustLevel>Full</TrustLevel>
-    </ProjectReference>
-    <ProjectReference Include="..\FancyWM.CLI\FancyWM.CLI.csproj">
+    <ProjectReference Include="..\FancyWM.GUI\FancyWM.GUI.csproj">
       <SkipGetTargetFrameworkProperties>True</SkipGetTargetFrameworkProperties>
       <TrustLevel>Full</TrustLevel>
     </ProjectReference>
