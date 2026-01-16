@@ -62,7 +62,7 @@ namespace FancyWM.ViewModels
                 }
                 else
                 {
-                    Autostart.EnableAsync()
+                    Autostart.DisableAsync()
                         .ContinueWith(t =>
                         {
                             Dispatcher.Invoke(() =>
