@@ -40,7 +40,7 @@
       <Extensions>
         <uap5:Extension
           Category="windows.startupTask"
-          Executable="FancyWM\FancyWM.exe"
+          Executable="FancyWM.GUI\FancyWM-GUI.exe"
           EntryPoint="Windows.FullTrustApplication">
           <uap5:StartupTask
             TaskId="FancyWM"
@@ -49,7 +49,7 @@
         </uap5:Extension>
         <uap5:Extension
           Category="windows.appExecutionAlias"
-          Executable="FancyWM.CLI\FancyWM-CLI.exe"
+          Executable="FancyWM.GUI\FancyWM.exe"
           EntryPoint="Windows.FullTrustApplication">
           <uap5:AppExecutionAlias desktop4:Subsystem="console">
             <uap5:ExecutionAlias Alias="FancyWM.exe" />
