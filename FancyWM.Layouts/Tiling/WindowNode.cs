@@ -41,9 +41,4 @@ namespace FancyWM.Layouts.Tiling
         }
 
     }
-
-    //class StackPanel : Panel
-    //{
-    //    public override NodeType Type => NodeType.Stack;
-    //}
 }

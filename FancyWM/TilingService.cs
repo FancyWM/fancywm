@@ -596,10 +596,10 @@ namespace FancyWM
                 var horizontalDelta = (int)(display.WorkArea.Width * displayPercentage);
 
                 var grandparent = focusedNode.Ancestors
-                        .Select(x => x as SplitPanelNode)
+                        .Select(x => x as GridLikeNode)
                         .Where(x => x != null)
-                        .FirstOrDefault(x => x!.Orientation == orientation);
-                if (grandparent is SplitPanelNode s && s.Orientation == orientation)
+                        .FirstOrDefault(x => x!.CanResizeInOrientation(orientation));
+                if (grandparent != null)
                 {
                     double newSize;
                     switch (orientation)

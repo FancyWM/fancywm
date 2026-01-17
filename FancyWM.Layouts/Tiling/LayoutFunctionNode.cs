@@ -6,7 +6,7 @@ using WinMan;
 
 namespace FancyWM.Layouts.Tiling
 {
-    public class StaticPanelNode(ILayoutFunction layoutFunction) : PanelNode
+    public class LayoutFunctionNode(ILayoutFunction layoutFunction) : GridLikeNode
     {
         public override TilingNodeType Type => TilingNodeType.Static;
 
@@ -47,7 +47,7 @@ namespace FancyWM.Layouts.Tiling
 
         public override object Clone()
         {
-            var copy = (StaticPanelNode)base.Clone();
+            var copy = (LayoutFunctionNode)base.Clone();
             copy.m_children = m_children.Select(x => (TilingNode)x.Clone()).ToList();
             foreach (var child in copy.m_children)
             {
@@ -58,22 +58,42 @@ namespace FancyWM.Layouts.Tiling
 
         internal override void MeasureCore()
         {
-            throw new NotImplementedException();
+            foreach (var node in m_children)
+            {
+                node.Measure();
+            }
         }
 
         public override void Move(int fromIndex, int toIndex)
         {
-            throw new NotImplementedException();
+            var n = m_children[fromIndex];
+            m_children.RemoveAt(fromIndex);
+            m_children.Insert(toIndex, n);
         }
 
         public override Point GetMaxChildSize(TilingNode node)
         {
-            throw new NotImplementedException();
+            return ComputedContentRectangle.Size;
         }
 
         public override Point GetMaxSizeForInsert(TilingNode node)
         {
-            throw new NotImplementedException();
+            return ComputedContentRectangle.Size;
+        }
+
+        public override bool CanResizeInOrientation(PanelOrientation orientation)
+        {
+            return false;
+        }
+
+        public override bool ResizeTo(TilingNode node, double newLength, GrowDirection direction)
+        {
+            return false;
+        }
+
+        public override bool ResizeBy(TilingNode node, double delta, GrowDirection direction)
+        {
+            return false;
         }
     }
 }

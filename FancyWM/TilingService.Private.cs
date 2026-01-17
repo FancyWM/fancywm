@@ -1329,7 +1329,7 @@ namespace FancyWM
                     savedLocation.Parent.Attach(index, window);
 
                     // Restore size
-                    if (window.Parent is SplitPanelNode splitPanel)
+                    if (window.Parent is GridLikeNode gridNode)
                     {
                         if (m_backend.GetTree(m_workspace.VirtualDesktopManager.CurrentDesktop) is DesktopTree tree)
                         {
@@ -1342,13 +1342,13 @@ namespace FancyWM
                             catch (UnsatisfiableFlexConstraintsException)
                             {
                             }
-                            if (splitPanel.Orientation == PanelOrientation.Horizontal)
+                            if (gridNode.CanResizeInOrientation(PanelOrientation.Horizontal))
                             {
-                                splitPanel.ResizeTo(window, savedLocation.ComputedRectangle.Width, GrowDirection.Both);
+                                gridNode.ResizeTo(window, savedLocation.ComputedRectangle.Width, GrowDirection.Both);
                             }
                             else
                             {
-                                splitPanel.ResizeTo(window, savedLocation.ComputedRectangle.Height, GrowDirection.Both);
+                                gridNode.ResizeTo(window, savedLocation.ComputedRectangle.Height, GrowDirection.Both);
                             }
                         }
                     }

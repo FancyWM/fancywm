@@ -120,11 +120,18 @@ namespace FancyWM
         {
         }
 
+        public PanelNode CreateRoot(PanelOrientation orientation)
+        {
+            // return new LayoutFunctionNode(new GridLayout(8));
+            // return new LayoutFunctionNode(new RatioLayout(0.5, 8));
+            return new SplitPanelNode { Orientation = orientation };
+        }
+
         public void RegisterDesktop(IVirtualDesktop virtualDesktop, PanelOrientation orientation)
         {
             var tree = new DesktopTree
             {
-                Root = new SplitPanelNode { Orientation = orientation }
+                Root = CreateRoot(orientation)
             };
             m_states.AddState(virtualDesktop, new DesktopState
             {
@@ -378,9 +385,9 @@ namespace FancyWM
         {
             Debug.Assert(nodeAtPoint.Parent != null);
             var insertionIndex = nodeAtPoint.Parent!.IndexOf(nodeAtPoint);
-            if (nodeAtPoint.Parent is SplitPanelNode split)
+            if (nodeAtPoint.Parent is GridLikeNode grid)
             {
-                if (split.Orientation == PanelOrientation.Horizontal)
+                if (grid.CanResizeInOrientation(PanelOrientation.Horizontal))
                 {
                     if (nodeAtPoint.ComputedRectangle.Left + nodeAtPoint.ComputedRectangle.Width / 2 < pt.X)
                     {
@@ -612,10 +619,10 @@ namespace FancyWM
         {
             if (newPosition.Width != oldPosition.Width)
             {
-                SplitPanelNode? p = node.Ancestors
-                    .Select(x => x as SplitPanelNode)
+                GridLikeNode? p = node.Ancestors
+                    .Select(x => x as GridLikeNode)
                     .Where(x => x != null)
-                    .FirstOrDefault(x => x!.Orientation == PanelOrientation.Horizontal);
+                    .FirstOrDefault(x => x!.CanResizeInOrientation(PanelOrientation.Horizontal));
 
                 if (p != null)
                 {
@@ -647,10 +654,10 @@ namespace FancyWM
 
             if (newPosition.Height != oldPosition.Height)
             {
-                SplitPanelNode? p = node.Ancestors
-                    .Select(x => x as SplitPanelNode)
+                GridLikeNode? p = node.Ancestors
+                    .Select(x => x as GridLikeNode)
                     .Where(x => x != null)
-                    .FirstOrDefault(x => x!.Orientation == PanelOrientation.Vertical);
+                    .FirstOrDefault(x => x!.CanResizeInOrientation(PanelOrientation.Vertical));
 
                 if (p != null)
                 {

@@ -9,7 +9,7 @@ using static FancyWM.Layouts.Flex;
 
 namespace FancyWM.Layouts.Tiling
 {
-    public class SplitPanelNode : PanelNode
+    public class SplitPanelNode : GridLikeNode
     {
         public override TilingNodeType Type => TilingNodeType.Split;
 
@@ -152,7 +152,12 @@ namespace FancyWM.Layouts.Tiling
             }
         }
 
-        public bool ResizeTo(TilingNode node, double newLength, GrowDirection direction)
+        public override bool CanResizeInOrientation(PanelOrientation orientation)
+        {
+            return Orientation == orientation;
+        }
+
+        public override bool ResizeTo(TilingNode node, double newLength, GrowDirection direction)
         {
             if (Children.Count == 1)
             {
@@ -163,7 +168,7 @@ namespace FancyWM.Layouts.Tiling
             return ResizeBy(node, newLength - m_constraints[index].Width, direction);
         }
 
-        public bool ResizeBy(TilingNode node, double delta, GrowDirection direction)
+        public override bool ResizeBy(TilingNode node, double delta, GrowDirection direction)
         {
             if (Children.Count == 1)
             {
