@@ -61,6 +61,15 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Another instance of FancyWM is already running!.
+        /// </summary>
+        public static string About_AlreadyRunning {
+            get {
+                return ResourceManager.GetString("About.AlreadyRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to App version:.
         /// </summary>
         public static string About_AppVersion {
@@ -1317,15 +1326,6 @@ namespace FancyWM.Resources {
         public static string Keybinding_MoveToPreviousDesktop_Description {
             get {
                 return ResourceManager.GetString("Keybinding.MoveToPreviousDesktop.Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Move the focused window from the current virtual desktop to the previous virtual desktop.
-        /// </summary>
-        public static string Keybinding_MoveToPreviousDesktop_Description2 {
-            get {
-                return ResourceManager.GetString("Keybinding.MoveToPreviousDesktop.Description2", resourceCulture);
             }
         }
         
