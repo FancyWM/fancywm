@@ -16,6 +16,7 @@ using Serilog;
 using Serilog.Events;
 using System.Threading;
 using System.Globalization;
+using FancyWM.Resources;
 
 namespace FancyWM
 {
@@ -132,7 +133,7 @@ Type 'FancyWM --help' from anywhere after installation.
                 .Any();
             if (exists)
             {
-                MessageBox.Show("Another instance of FancyWM is already running!", "FancyWM", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Strings.About_AlreadyRunning, "FancyWM", MessageBoxButton.OK, MessageBoxImage.Error);
                 return 1;
             }
 
