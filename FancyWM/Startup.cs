@@ -138,17 +138,15 @@ Type 'FancyWM --help' from anywhere after installation.
             }
 
             // Parse command line
-            var logLevel = args.Contains("-vvv") || args.Contains("--verbose")
+            var logLevel = args.Contains("-vv")
                 ? LogEventLevel.Verbose
-                : args.Contains("-vv") || args.Contains("--debug")
+                : args.Contains("-v")
                 ? LogEventLevel.Debug
-                : args.Contains("-v") || args.Contains("--info")
-                ? LogEventLevel.Information
-                : LogEventLevel.Warning;
+                : LogEventLevel.Information;
 #if DEBUG
-            if (logLevel > LogEventLevel.Information)
+            if (logLevel > LogEventLevel.Debug)
             {
-                logLevel = LogEventLevel.Information;
+                logLevel = LogEventLevel.Debug;
             }
 #endif
 

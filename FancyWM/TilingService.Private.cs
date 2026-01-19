@@ -247,7 +247,7 @@ namespace FancyWM
                     }
                     else
                     {
-                        m_logger.Information("Updating position of window {Window}", window.WindowReference.DebugString());
+                        m_logger.Debug("Updating position of window {Window}", window.WindowReference.DebugString());
                         var rect = window.ComputedRectangle;
                         var frame = window.WindowReference.FrameMargins;
                         var adjustedRect = new Rectangle(
@@ -912,7 +912,6 @@ namespace FancyWM
                 m_logger.Information("Got focus on {Window}", e.Source.DebugString());
                 try
                 {
-                    m_logger.Information("Focus moved to window {Window}", e.Source.DebugString());
                     bool hideMaximised = false;
                     lock (m_backend)
                     {
@@ -933,7 +932,7 @@ namespace FancyWM
 
                     if (hideMaximised)
                     {
-                        m_logger.Information("Moving all obstructing maximised windows to back");
+                        m_logger.Debug("Moving all obstructing maximised windows to back");
                         var comparer = m_workspace.CreateSnapshotZOrderComparer();
                         foreach (var maximisedWindow in m_workspace.GetCurrentDesktopSnapshot()
                             .Where(x => x.State == WindowState.Maximized && m_display.Bounds.Contains(x.Position.Center))
@@ -1067,7 +1066,7 @@ namespace FancyWM
             lock (m_newWindowSet)
             {
                 m_newWindowSet.Remove(e.Source);
-            }    
+            }
             lock (m_floatingSet)
             {
                 m_floatingSet.Remove(e.Source);
