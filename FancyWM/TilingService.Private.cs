@@ -1019,7 +1019,7 @@ namespace FancyWM
 
                 if (CanManage(e.Source) && e.Source.State == WindowState.Restored)
                 {
-                    m_logger.Information("Window {Window} can be managed, registering with backend", e.Source.DebugString());
+                    m_logger.Information("Window {Window} can be managed, registering with backend ({Display})", e.Source.DebugString(), m_display);
                     m_dispatcher.BeginInvoke(() =>
                     {
                         try

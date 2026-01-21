@@ -131,11 +131,10 @@ namespace FancyWM
             AnimationThread = animationThread;
             m_settings = settings;
             m_logger = App.Current.Logger;
-            m_logger.Warning($"Using the multi-monitor tiling backend");
+            m_logger.Information($"Using the multi-monitor tiling backend");
 
             foreach (var display in Workspace.DisplayManager.Displays)
             {
-                m_logger.Debug($"Managing display {display}");
                 var tiling = new TilingService(Workspace, display, animationThread, settings, true)
                 {
                     ExclusionMatchers = m_exclusionMatchers,
@@ -171,7 +170,6 @@ namespace FancyWM
             {
                 lock (m_syncRoot)
                 {
-                    m_logger.Debug($"Removed display {e.Source}");
                     if (m_activeDisplay.Equals(e.Source))
                     {
                         UpdateActiveDisplay($"the active display {e.Source} was removed");
@@ -198,7 +196,6 @@ namespace FancyWM
                 {
                     if (!m_tilingServices.ContainsKey(e.Source))
                     {
-                        m_logger.Debug($"Added display {e.Source}");
                         var tiling = new TilingService(Workspace, e.Source, AnimationThread, m_settings, true)
                         {
                             ShowPreviewFocus = m_showPreviewFocus,

@@ -180,6 +180,7 @@ namespace FancyWM
 
         public TilingService(IWorkspace workspace, IDisplay display, IAnimationThread animationThread, IObservable<ITilingServiceSettings> settings, bool autoRegisterWindows)
         {
+            m_logger.Information("Managing display {Display} (Bounds: {Bounds}, Scale: {Scaling})", display, display.Bounds, display.Scaling);
             m_dispatcher = Dispatcher.CurrentDispatcher;
             m_workspace = workspace;
             m_animationThread = animationThread;
@@ -553,6 +554,8 @@ namespace FancyWM
 
         public void Dispose()
         {
+            m_logger.Information("No longer managing display {Display}", m_display);
+
             m_active = false;
             m_subscriptions.Dispose();
 
