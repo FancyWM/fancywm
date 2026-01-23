@@ -81,6 +81,7 @@ namespace FancyWM.Layouts
                 double finalWidth = AllocateUnsafe(minWidth, maxWidth);
                 m_items.Insert(index, new FlexConstraints { Width = finalWidth, MinWidth = minWidth, MaxWidth = maxWidth });
             });
+            Validate();
         }
 
         public void RemoveItem(int index)
@@ -89,11 +90,13 @@ namespace FancyWM.Layouts
             m_items.Remove(item);
             // This should never throw!
             ApplyDeltasUnsafe(item.Width);
+            Validate();
         }
 
         public void UpdateConstraints(int index, double minWidth, double maxWidth)
         {
             InTransaction(() => UpdateConstraintsUnsafe(index, minWidth, maxWidth));
+            Validate();
         }
 
         private void UpdateConstraintsUnsafe(int index, double minWidth, double maxWidth)
@@ -139,11 +142,13 @@ namespace FancyWM.Layouts
                     }
                 }
             });
+            Validate();
         }
 
         public void ResizeItem(int index, double width, GrowDirection direction = GrowDirection.Both, bool resizeUniformly = false)
         {
             InTransaction(() => ResizeItemUnsafe(index, width, direction, resizeUniformly));
+            Validate();
         }
 
         private void ResizeItemUnsafe(int index, double width, GrowDirection direction, bool resizeUniformly)
@@ -201,6 +206,7 @@ namespace FancyWM.Layouts
             }
 
             ResizeContainer(newWidth);
+            Validate();
         }
 
         private BitArray CreateResizeMask(int index, GrowDirection direction, bool resizeUniformly)
@@ -256,6 +262,18 @@ namespace FancyWM.Layouts
             var item = m_items[fromIndex];
             m_items.RemoveAt(fromIndex);
             m_items.Insert(toIndex, item);
+            Validate();
+        }
+
+        private void Validate()
+        {
+#if DEBUG
+            foreach (var item in m_items)
+            {
+                Debug.Assert(item.Width.Gte(item.MinWidth), item.ToString());
+                Debug.Assert(item.Width.Lte(item.MaxWidth), item.ToString());
+            }
+#endif
         }
 
         private double AllocateUnsafe(double minWidth, double maxWidth)
@@ -316,16 +334,33 @@ namespace FancyWM.Layouts
             // Delta as a fraction of the container width
             double normalizedDelta = totalDelta / ContainerWidth;
 
+            double required = CalculateDeltas(constraints, normalizedDelta, done);
+
+            m_items = constraints
+                // Denormalize values
+                .Select(x => (value: x.value * ContainerWidth, boundary: x.boundary * ContainerWidth))
+                .Select((x, i) => new FlexConstraints
+                {
+                    Width = x.value,
+                    MinWidth = totalDelta.Lte(0) ? x.boundary : m_items[i].MinWidth,
+                    MaxWidth = totalDelta.Gte(0) ? x.boundary : m_items[i].MaxWidth,
+                })
+                .ToList();
+            return required;
+        }
+
+        private static double CalculateDeltas((double value, double boundary)[] constraints, double totalDelta, BitArray done)
+        {
             // How much available space we actually have as a fraction of the container width
             double normalizedAvailableSpace = constraints
                 .Select((x, i) => done[i] ? 0 : x.boundary - x.value)
                 .Sum();
 
             if (normalizedAvailableSpace.Eq(0))
-                return -normalizedDelta;
+                return -totalDelta;
 
             // How much we need to change the combined width of all elements
-            double deltaFactor = Math.Min(1, normalizedDelta / normalizedAvailableSpace);
+            double deltaFactor = Math.Min(1, totalDelta / normalizedAvailableSpace);
 
             for (int i = 0; i < constraints.Length; i++)
             {
@@ -338,18 +373,7 @@ namespace FancyWM.Layouts
                 constraints[i].value += deltaFactor * maxDelta;
             }
 
-            m_items = constraints
-                // Denormalize values
-                .Select(x => (value: x.value * ContainerWidth, boundary: x.boundary * ContainerWidth))
-                .Select((x, i) => new FlexConstraints
-                {
-                    Width = x.value,
-                    MinWidth = totalDelta.Lte(0) ? x.boundary : m_items[i].MinWidth,
-                    MaxWidth = totalDelta.Gte(0) ? x.boundary : m_items[i].MaxWidth,
-                })
-                .ToList();
-
-            return Math.Max(0, normalizedAvailableSpace - normalizedDelta);
+            return Math.Max(0, normalizedAvailableSpace - totalDelta);
         }
 
         private void InTransaction(Action func)

@@ -236,5 +236,76 @@ namespace FancyWM.Layouts.Tests
             Assert.AreEqual(25, f[0].Width, .1);
             Assert.AreEqual(75, f[1].Width, .1);
         }
+
+        [TestMethod]
+        public void TestAddThirdBalanced()
+        {
+            Flex f = new();
+            f.SetContainerWidth(100);
+            f.InsertItem(0, minWidth: 40, maxWidth: 100);
+            f.InsertItem(0, minWidth: 10, maxWidth: 100);
+            Assert.AreEqual(50, f[0].Width, .1);
+            Assert.AreEqual(50, f[1].Width, .1);
+
+            f.InsertItem(0, minWidth: 10, maxWidth: 100);
+            Assert.AreEqual(33.3, f[0].Width, .1);
+            Assert.AreEqual(23.3, f[1].Width, .1);
+            Assert.AreEqual(43.3, f[2].Width, .1);
+        }
+
+
+        [TestMethod]
+        public void TestAddThirdUnbalanced()
+        {
+            Flex f = new();
+            f.SetContainerWidth(100);
+            f.InsertItem(0, minWidth: 40, maxWidth: 100);
+            f.InsertItem(0, minWidth: 10, maxWidth: 100);
+            f.ResizeItem(1, 60);
+            Assert.AreEqual(40, f[0].Width, .1);
+            Assert.AreEqual(60, f[1].Width, .1);
+
+            f.InsertItem(0, minWidth: 10, maxWidth: 100);
+            Assert.AreEqual(33.3, f[0].Width, .1);
+            Assert.AreEqual(20, f[1].Width, .1);
+            Assert.AreEqual(46.6, f[2].Width, .1);
+        }
+
+        [TestMethod]
+        public void TestAddThirdUnbalanceSmaller()
+        {
+            Flex f = new();
+            f.SetContainerWidth(100);
+            f.InsertItem(0, minWidth: 40, maxWidth: 100);
+            f.InsertItem(0, minWidth: 10, maxWidth: 100);
+            f.ResizeItem(0, 60);
+            Assert.AreEqual(60, f[0].Width, .1);
+            Assert.AreEqual(40, f[1].Width, .1);
+
+            f.InsertItem(0, minWidth: 10, maxWidth: 100);
+            Assert.AreEqual(33.3, f[0].Width, .1);
+            Assert.AreEqual(26.6, f[1].Width, .1);
+            Assert.AreEqual(40, f[2].Width, .1);
+        }
+
+        [TestMethod]
+        public void TestAddRemoveParadox()
+        {
+            Flex f = new();
+            f.SetContainerWidth(100);
+            f.InsertItem(0, minWidth: 40, maxWidth: 100);
+            f.InsertItem(0, minWidth: 10, maxWidth: 100);
+            Assert.AreEqual(50, f[0].Width, 0.1);
+            Assert.AreEqual(50, f[1].Width, 0.1);
+
+            f.InsertItem(0, minWidth: 10, maxWidth: 100);
+            Assert.AreEqual(33.3, f[0].Width, 0.1);
+            Assert.AreEqual(23.3, f[1].Width, 0.1);
+            Assert.AreEqual(43.3, f[2].Width, 0.1);
+
+            f.RemoveItem(2);
+            Assert.AreEqual(53.4, f[0].Width, 0.1);
+            Assert.AreEqual(46.5, f[1].Width, 0.1);
+        }
     }
 }
