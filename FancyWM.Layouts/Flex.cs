@@ -283,10 +283,16 @@ namespace FancyWM.Layouts
 
         private void ResizeContainer(double newWidth)
         {
-            double scaleFactor = newWidth / ContainerWidth;
+            Func<FlexConstraints, double> computeWidth = ContainerWidth.Eq(0)
+                ? _ => newWidth / m_items.Count
+                : x => x.Width * (newWidth / ContainerWidth);
+
             m_items = m_items
-                .Select(x => new FlexConstraints(Math.Clamp(x.Width * scaleFactor, x.MinWidth, x.MaxWidth), x.MinWidth, x.MaxWidth))
-                .ToList();
+                .Select(x => new FlexConstraints(
+                    Math.Clamp(computeWidth(x), x.MinWidth, x.MaxWidth),
+                        x.MinWidth,
+                        x.MaxWidth))
+                    .ToList();
             ContainerWidth = newWidth;
         }
 
