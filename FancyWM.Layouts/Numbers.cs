@@ -6,7 +6,7 @@ namespace FancyWM.Layouts
     internal static class Numbers
     {
 
-        public const double Epsilon = 1E-5;
+        public const double Epsilon = 1E-7;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Eq(this double x, double y)
