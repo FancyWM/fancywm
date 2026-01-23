@@ -1059,18 +1059,6 @@ namespace FancyWM
             m_logger.Information("Window {Window} removed from workspace", e.Source.DebugString());
 
             UnbindEventHandlers(e.Source);
-            lock (m_windowSet)
-            {
-                m_windowSet.Remove(e.Source);
-            }
-            lock (m_newWindowSet)
-            {
-                m_newWindowSet.Remove(e.Source);
-            }
-            lock (m_floatingSet)
-            {
-                m_floatingSet.Remove(e.Source);
-            }
             lock (m_savedLocations)
             {
                 m_savedLocations.Remove(e.Source);
@@ -1079,7 +1067,6 @@ namespace FancyWM
             {
                 m_ignoreRepositionSet.Remove(e.Source);
             }
-
             lock (m_backend)
             {
                 if (m_backend.HasWindow(e.Source))
@@ -1088,6 +1075,18 @@ namespace FancyWM
                     m_backend.UnregisterWindow(e.Source);
                     InvalidateLayout();
                 }
+            }
+            lock (m_floatingSet)
+            {
+                m_floatingSet.Remove(e.Source);
+            }
+            lock (m_newWindowSet)
+            {
+                m_newWindowSet.Remove(e.Source);
+            }
+            lock (m_windowSet)
+            {
+                m_windowSet.Remove(e.Source);
             }
         }
 
