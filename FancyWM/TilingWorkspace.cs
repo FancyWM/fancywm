@@ -153,7 +153,7 @@ namespace FancyWM
             PanelNode parent;
             if (focusedNode is WindowNode focusedWindow)
             {
-                parent = focusedWindow.Parent!;
+                parent = focusedWindow.Parent ?? state.DesktopTree.Root!;
             }
             else
             {
@@ -712,6 +712,7 @@ namespace FancyWM
 
         public void SetFocus(TilingNode node)
         {
+            Debug.Assert(node.Parent != null);
             if (m_states.GetState(node.Desktop!) is not DesktopState state)
                 throw new ArgumentException("Desktop not registered with backend!");
 
