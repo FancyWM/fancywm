@@ -389,6 +389,7 @@ namespace FancyWM
 
         private void OnWorkspaceUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+            m_logger.Error((Exception)e.ExceptionObject, "Unhandled exception thrown from " + m_workspace);
             Dispatcher.RethrowOnDispatcher((Exception)e.ExceptionObject!);
         }
 
