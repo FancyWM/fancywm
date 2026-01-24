@@ -197,12 +197,17 @@ namespace FancyWM.Layouts
 
         public void SetContainerWidth(double newWidth)
         {
-            Debug.Assert(newWidth.Gte(0));
+            Debug.Assert(newWidth.Gte(1));
             Debug.Assert(double.IsFinite(newWidth));
+
+            if (newWidth.Lt(1))
+            {
+                throw new UnsatisfiableFlexConstraintsException($"New width ({newWidth}) < 1") { Container = this };
+            }
 
             if (newWidth.Lt(MinWidth))
             {
-                throw new UnsatisfiableFlexConstraintsException { Container = this };
+                throw new UnsatisfiableFlexConstraintsException($"New width ({newWidth}) < MinWidth ({MinWidth})") { Container = this };
             }
 
             ResizeContainer(newWidth);
