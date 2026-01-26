@@ -127,11 +127,12 @@ namespace FancyWM
             return new SplitPanelNode { Orientation = orientation };
         }
 
-        public void RegisterDesktop(IVirtualDesktop virtualDesktop, PanelOrientation orientation)
+        public void RegisterDesktop(IVirtualDesktop virtualDesktop, Rectangle workArea, PanelOrientation orientation)
         {
             var tree = new DesktopTree
             {
-                Root = CreateRoot(orientation)
+                Root = CreateRoot(orientation),
+                WorkArea = workArea,
             };
             m_states.AddState(virtualDesktop, new DesktopState
             {

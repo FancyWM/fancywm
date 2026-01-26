@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using FancyWM.Layouts.Tiling;
 using FancyWM.Tests.TestUtilities;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using WinMan;
 
 namespace FancyWM.Tests
 {
@@ -14,13 +15,14 @@ namespace FancyWM.Tests
     {
         private readonly VirtualDesktopMockFactory m_desktopFactory = new();
         private readonly WindowMockFactory m_windowFactory = new();
+        private readonly Rectangle m_workarea = new(0, 0, 1920, 1080);
 
         [TestMethod]
         public void TestAddRemoveDesktop()
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             workspace.UnregisterDesktop(desktop);
         }
 
@@ -29,10 +31,10 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             Assert.ThrowsException<ArgumentException>(() =>
             {
-                workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+                workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             });
         }
 
@@ -52,7 +54,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             workspace.RegisterWindow(m_windowFactory.CreateExplorerWindow());
         }
 
@@ -61,7 +63,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             Assert.ThrowsException<ArgumentException>(() =>
             {
                 workspace.UnregisterWindow(m_windowFactory.CreateExplorerWindow());
@@ -73,7 +75,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             var explorer = m_windowFactory.CreateExplorerWindow();
             workspace.RegisterWindow(explorer);
             Assert.ThrowsException<WindowAlreadyRegisteredException>(() =>
@@ -87,7 +89,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             var explorer = m_windowFactory.CreateExplorerWindow();
             workspace.RegisterWindow(explorer);
 
@@ -99,7 +101,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             var explorer = m_windowFactory.CreateExplorerWindow();
             // var node = workspace.RegisterWindow(explorer);
 
@@ -111,7 +113,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             Assert.IsNull(workspace.GetFocus(desktop));
         }
 
@@ -120,7 +122,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             var explorer = m_windowFactory.CreateExplorerWindow();
             var node = workspace.RegisterWindow(explorer);
 
@@ -133,7 +135,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             var explorer = m_windowFactory.CreateExplorerWindow();
             var node = workspace.RegisterWindow(explorer);
 
@@ -160,7 +162,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             var explorer = m_windowFactory.CreateExplorerWindow();
             var node = workspace.RegisterWindow(explorer);
 
@@ -189,7 +191,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             var explorer1 = m_windowFactory.CreateExplorerWindow();
             var node1 = workspace.RegisterWindow(explorer1);
@@ -225,7 +227,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             var explorer = m_windowFactory.CreateExplorerWindow();
             workspace.RegisterWindow(explorer);
@@ -238,7 +240,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             var explorer = m_windowFactory.CreateExplorerWindow();
             //var node = workspace.RegisterWindow(explorer);
@@ -254,7 +256,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             Assert.IsNotNull(workspace.GetTree(desktop));
         }
@@ -265,7 +267,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            // workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            // workspace.RegisterDesktop(desktop, m_rectangle, PanelOrientation.Horizontal);
 
             Assert.IsNull(workspace.GetTree(desktop));
         }
@@ -276,7 +278,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             var explorer = m_windowFactory.CreateExplorerWindow();
             workspace.RegisterWindow(explorer);
@@ -289,7 +291,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             var explorer = m_windowFactory.CreateExplorerWindow();
             //var node = workspace.RegisterWindow(explorer);
@@ -303,7 +305,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             var explorer1 = m_windowFactory.CreateExplorerWindow();
             var node1 = workspace.RegisterWindow(explorer1);
@@ -327,7 +329,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             var explorer1 = m_windowFactory.CreateExplorerWindow();
             var node1 = workspace.RegisterWindow(explorer1);
@@ -390,7 +392,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             var explorer1 = m_windowFactory.CreateExplorerWindow();
             var node1 = workspace.RegisterWindow(explorer1);
@@ -414,7 +416,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             var explorer1 = m_windowFactory.CreateExplorerWindow();
             var node1 = workspace.RegisterWindow(explorer1);
@@ -437,7 +439,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
 
             var explorer1 = m_windowFactory.CreateExplorerWindow();
             var node1 = workspace.RegisterWindow(explorer1);
@@ -460,7 +462,7 @@ namespace FancyWM.Tests
         {
             var workspace = new TilingWorkspace();
             var desktop = m_desktopFactory.CreateVirtualDesktop();
-            workspace.RegisterDesktop(desktop, PanelOrientation.Horizontal);
+            workspace.RegisterDesktop(desktop, m_workarea, PanelOrientation.Horizontal);
             var root = workspace.GetTree(desktop).Root;
 
             var explorer1 = m_windowFactory.CreateExplorerWindow();

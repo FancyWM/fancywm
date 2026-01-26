@@ -886,7 +886,7 @@ namespace FancyWM
             var orientation = m_display.Bounds.Width >= m_display.Bounds.Height ? PanelOrientation.Horizontal : PanelOrientation.Vertical;
             lock (m_backend)
             {
-                m_backend.RegisterDesktop(e.Source, orientation);
+                m_backend.RegisterDesktop(e.Source, m_display.WorkArea, orientation);
             }
         }
 
