@@ -547,6 +547,24 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activate windows on hover.
+        /// </summary>
+        public static string Interaction_MouseAutoFocus {
+            get {
+                return ResourceManager.GetString("Interaction.MouseAutoFocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change which window is focused without clicking. Enables the built-in Windows feature called &quot;Activate on hover&quot;..
+        /// </summary>
+        public static string Interaction_MouseAutoFocus_Description {
+            get {
+                return ResourceManager.GetString("Interaction.MouseAutoFocus.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tiling behavior.
         /// </summary>
         public static string Interaction_TilingBehavior {

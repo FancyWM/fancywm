@@ -41,6 +41,24 @@ namespace FancyWM.ViewModels
 
         public bool DelayReposition { get => m_delayReposition; set => SetField(ref m_delayReposition, value); }
         public bool AnimateWindowMovement { get => m_animateWindowMovement; set => SetField(ref m_animateWindowMovement, value); }
+        public bool MouseAutoFocus
+        {
+            get => SystemParameters.ActiveWindowTracking;
+            set
+            {
+                try
+                {
+                    SystemParameters.ActiveWindowTracking = value;
+                }
+                catch (Exception e)
+                {
+                    var valueStr = value ? "enable" : "disable";
+                    m_logger.Error(e, $"Failed to {valueStr} mouse tracking");
+                }
+                NotifyPropertyChanged(nameof(MouseAutoFocus));
+            }
+        }
+
         public bool ModifierMoveWindow { get => m_modifierMoveWindow; set => SetField(ref m_modifierMoveWindow, value); }
         public bool ModifierMoveWindowAutoFocus { get => m_modifierMoveWindowAutoFocus; set => SetField(ref m_modifierMoveWindowAutoFocus, value); }
         public bool ShowContextHints { get => m_showContextHints; set => SetField(ref m_showContextHints, value); }
@@ -186,6 +204,7 @@ namespace FancyWM.ViewModels
         private bool m_delayReposition;
         private bool m_customAccentColor;
         private bool m_animateWindowMovement;
+        private bool m_mouseAutoFocus;
         private bool m_modifierMoveWindow;
         private bool m_modifierMoveWindowAutoFocus;
         private Color m_accentColor;

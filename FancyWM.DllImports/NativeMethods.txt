@@ -44,6 +44,7 @@ FindWindowEx
 EnumWindows
 GetConsoleWindow
 FreeConsole
+SystemParametersInfo
 GetWINDOWS_EX_STYLE
 
 WINDOWS_EX_STYLE

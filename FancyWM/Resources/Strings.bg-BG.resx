@@ -962,4 +962,10 @@
   <data name="About.AlreadyRunning" xml:space="preserve">
     <value>Вече се изпълнява друга инстанция на FancyWM!</value>
   </data>
+  <data name="Interaction.MouseAutoFocus" xml:space="preserve">
+    <value>Активиране на прозорците при посочване</value>
+  </data>
+  <data name="Interaction.MouseAutoFocus.Description" xml:space="preserve">
+    <value>Променя кой прозорец е на фокус без кликване. Включва вградената функция на Windows, наречена „Активиране при посочване“.</value>
+  </data>
 </root>

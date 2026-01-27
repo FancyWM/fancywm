@@ -964,4 +964,10 @@ If you are running a supported non-Insider Windows build and you see this messag
   <data name="About.AlreadyRunning" xml:space="preserve">
     <value>Another instance of FancyWM is already running!</value>
   </data>
+  <data name="Interaction.MouseAutoFocus" xml:space="preserve">
+    <value>Activate windows on hover</value>
+  </data>
+  <data name="Interaction.MouseAutoFocus.Description" xml:space="preserve">
+    <value>Change which window is focused without clicking. Enables the built-in Windows feature called "Activate on hover".</value>
+  </data>
 </root>

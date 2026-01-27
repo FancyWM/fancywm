@@ -81,6 +81,18 @@
             </Border>
 
             <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=MouseAutoFocus, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="{x:Static res:Strings.Interaction_MouseAutoFocus}" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}">
+                        <Run Text="{x:Static res:Strings.Interaction_MouseAutoFocus_Description}" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
                 <DockPanel LastChildFill="True">
                     <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ModifierMoveWindow, Mode=TwoWay}" />
                     <TextBlock VerticalAlignment="Center" Margin="0,0,16,0">
