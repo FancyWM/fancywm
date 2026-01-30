@@ -1,5 +1,14 @@
 # FancyWM
 
+> "Sparked a Desktop Revolution" - [Seelen UI Blog](https://seelen.io/blog/the-seelen-ui-story) <!-- https://web.archive.org/web/20260113143128/https://seelen.io/blog/the-seelen-ui-story -->
+
+> "Offers a lot of functions in a tiny, compact package" - [Softpedia](https://www.softpedia.com/get/Desktop-Enhancements/Other-Desktop-Enhancements/FancyWM.shtml) <!-- https://web.archive.org/web/20260130081735/https://www.softpedia.com/get/Desktop-Enhancements/Other-Desktop-Enhancements/FancyWM.shtml -->
+
+> "After you try FancyWM, you may feel like a supreme power user" - [MakeUseOf](https://www.makeuseof.com/windows-fancywm-guide/) <!-- https://web.archive.org/web/20260130081744/https://www.makeuseof.com/windows-fancywm-guide/ -->
+
+> "Once you get the hang of it, you'll see how efficient these things can be" - [ZDNET](https://www.zdnet.com/article/how-i-use-a-tiling-manager-to-make-my-windows-experience-more-efficient/) <!-- https://web.archive.org/web/20260130081754/https://www.zdnet.com/article/how-i-use-a-tiling-manager-to-make-my-windows-experience-more-efficient/ -->
+
+> "Multi-tasking made easier" - [XDA Developers](https://www.xda-developers.com/tiling-window-managers-arent-just-linux-these-best-options-windows/) <!-- https://web.archive.org/web/20260130081806/https://www.xda-developers.com/tiling-window-managers-arent-just-linux-these-best-options-windows/ -->
 
 [![Gitter](https://badges.gitter.im/FancyWM/community.svg)](https://gitter.im/FancyWM/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
