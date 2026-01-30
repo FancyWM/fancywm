@@ -721,6 +721,93 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-dark);
         }
+
+    /* Testimonials Section */
+    .testimonials {
+        padding: 80px 0;
+    }
+
+    .testimonials .section-title {
+        margin-bottom: 60px;
+    }
+
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+    }
+
+    .testimonial-card {
+        background: white;
+        border-radius: 12px;
+        padding: 32px 28px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        border-left: 4px solid #3b82f6;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 200px;
+    }
+
+    .testimonial-card:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        transform: translateY(-4px);
+    }
+
+    .testimonial-text {
+        margin-bottom: 20px;
+        flex-grow: 1;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .testimonial-text p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #1a1a1a;
+        font-weight: 500;
+        margin: 0;
+        font-style: italic;
+    }
+
+    .testimonial-source {
+        padding-top: 16px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .testimonial-source a {
+        color: #3b82f6;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: color 0.2s ease;
+    }
+
+    .testimonial-source a:hover {
+        color: #2563eb;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .testimonials {
+            padding: 60px 0;
+        }
+
+        .testimonials-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .testimonial-card {
+            padding: 24px 20px;
+        }
+
+        .testimonial-text p {
+            font-size: 15px;
+        }
+    }
+
     </style>
 </head>
 
@@ -853,6 +940,64 @@
                     </div>
                     <h3>Lightweight</h3>
                     <p>Uses less than 1% CPU. Runs silently in the background without draining your battery.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Testimonials Section -->
+    <section class="testimonials section" id="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Loved by Users Worldwide</h2>
+                <p>See what developers and power users are saying</p>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"Sparked a Desktop Revolution"</p>
+                    </div>
+                    <div class="testimonial-source">
+                        <a href="https://seelen.io/blog/the-seelen-ui-story" target="_blank" rel="noopener noreferrer">Seelen UI Blog</a>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"Offers a lot of functions in a tiny, compact package"</p>
+                    </div>
+                    <div class="testimonial-source">
+                        <a href="https://www.softpedia.com/get/Desktop-Enhancements/Other-Desktop-Enhancements/FancyWM.shtml" target="_blank" rel="noopener noreferrer">Softpedia</a>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"After you try FancyWM, you may feel like a supreme power user"</p>
+                    </div>
+                    <div class="testimonial-source">
+                        <a href="https://www.makeuseof.com/windows-fancywm-guide/" target="_blank" rel="noopener noreferrer">MakeUseOf</a>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"Once you get the hang of it, you'll see how efficient these things can be"</p>
+                    </div>
+                    <div class="testimonial-source">
+                        <a href="https://www.zdnet.com/article/how-i-use-a-tiling-manager-to-make-my-windows-experience-more-efficient/" target="_blank" rel="noopener noreferrer">ZDNET</a>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"Multi-tasking made easier"</p>
+                    </div>
+                    <div class="testimonial-source">
+                        <a href="https://www.xda-developers.com/tiling-window-managers-arent-just-linux-these-best-options-windows/" target="_blank" rel="noopener noreferrer">XDA Developers</a>
+                    </div>
                 </div>
             </div>
         </div>
