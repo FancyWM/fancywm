@@ -43,12 +43,12 @@ namespace FancyWM.ViewModels
         public bool AnimateWindowMovement { get => m_animateWindowMovement; set => SetField(ref m_animateWindowMovement, value); }
         public bool MouseAutoFocus
         {
-            get => SystemParameters.ActiveWindowTracking;
+            get => SystemParameters.Instance.ActiveWindowTracking;
             set
             {
                 try
                 {
-                    SystemParameters.ActiveWindowTracking = value;
+                    SystemParameters.Instance.ActiveWindowTracking = value;
                 }
                 catch (Exception e)
                 {

@@ -35,6 +35,7 @@ using FancyWM.Resources;
 using Strings = FancyWM.Resources.Strings;
 using System.Data;
 using System.Windows.Threading;
+using SystemParameters = FancyWM.Utilities.SystemParameters;
 
 namespace FancyWM
 {
@@ -46,6 +47,7 @@ namespace FancyWM
         private readonly Win32Workspace m_workspace;
         private ITilingService m_tiling;
         private readonly CompositeDisposable m_subscriptions;
+        private readonly UnmanagedResourceGuard? m_unmanagedResourceGuard;
         private readonly ToastService m_toasts;
 
         private readonly TimeSpan ToastDurationCommandSequence = TimeSpan.FromMilliseconds(3000);
@@ -96,6 +98,8 @@ namespace FancyWM
             InitializeComponent();
 
             m_logger = App.Current.Logger;
+
+            m_unmanagedResourceGuard = ApplySystemParameters();
 
             BindingErrorListener.Listen(OnBindingError);
 
@@ -309,6 +313,24 @@ namespace FancyWM
             Show();
 
             ((HwndSource)PresentationSource.FromVisual(this)).AddHook(WndProc);
+        }
+
+        private UnmanagedResourceGuard? ApplySystemParameters()
+        {
+            bool windowArranging;
+            try
+            {
+                windowArranging = SystemParameters.Instance.WindowArranging;
+                SystemParameters.Instance.WindowArranging = false;
+            }
+            catch
+            {
+                return null;
+            }
+            return new(() =>
+            {
+                SystemParameters.Instance.WindowArranging = windowArranging;
+            });
         }
 
         private void OnDispatcherTimerTick(object? sender, EventArgs e)
@@ -1544,6 +1566,8 @@ namespace FancyWM
         public void Dispose()
 #pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
         {
+            m_unmanagedResourceGuard?.Dispose();
+
             m_workspace.VirtualDesktopManager.CurrentDesktopChanged -= OnVirtualDesktopChanged;
             m_workspace.VirtualDesktopManager.DesktopRemoved -= OnVirtualDesktopRemoved;
             m_workspace.FocusedWindowChanged -= OnFocusedWindowChanged;
