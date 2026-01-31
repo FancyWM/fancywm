@@ -111,17 +111,10 @@ namespace FancyWM.Windows
 
             private void UpdatePosition()
             {
-                var bounds = m_display.Bounds;
                 var workArea = m_display.WorkArea;
-                var tg = new TransformGroup();
-                tg.Children.Add(new ScaleTransform(
+                m_contentContainer.RenderTransform = new ScaleTransform(
                         1 / m_display.Scaling,
-                        1 / m_display.Scaling));
-                tg.Children.Add(new TranslateTransform(
-                    bounds.Left - workArea.Left,
-                    bounds.Top - workArea.Top));
-
-                m_contentContainer.RenderTransform = tg;
+                        1 / m_display.Scaling);
 
                 PInvoke.SetWindowPos(new(m_hwnd), new(), workArea.Left, workArea.Top, workArea.Width, workArea.Height,
                     SetWindowPos_uFlags.SWP_NOZORDER | SetWindowPos_uFlags.SWP_NOACTIVATE);
