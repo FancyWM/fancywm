@@ -903,6 +903,60 @@ namespace FancyWM
         {
             Refresh();
             InvalidateLayout();
+
+            // Restore focus to the previously focused window on this desktop
+            // Use dispatcher and delay to ensure Windows has completed the desktop transition
+            _ = m_dispatcher.BeginInvoke(async () =>
+            {
+                // Wait for Windows to complete the desktop transition
+                await Task.Delay(100);
+
+                try
+                {
+                    IntPtr? targetHandle = null;
+
+                    // First, try to get the tracked focused window for this desktop
+                    lock (m_backend)
+                    {
+                        var focusedNode = m_backend.GetFocus(e.NewDesktop);
+                        if (focusedNode is WindowNode windowNode)
+                        {
+                            var window = windowNode.WindowReference;
+                            if (window.IsAlive && (window.State == WindowState.Restored || window.State == WindowState.Maximized))
+                            {
+                                targetHandle = window.Handle;
+                            }
+                        }
+                    }
+
+                    // Fallback: if no tracked focus, find any visible window on this desktop
+                    if (targetHandle == null)
+                    {
+                        foreach (var window in m_workspace.GetCurrentDesktopSnapshot())
+                        {
+                            if (window.IsAlive && (window.State == WindowState.Restored || window.State == WindowState.Maximized))
+                            {
+                                targetHandle = window.Handle;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Attempt to restore focus
+                    if (targetHandle != null)
+                    {
+                        FocusHelper.ForceActivate(targetHandle.Value);
+                    }
+                }
+                catch (InvalidWindowReferenceException)
+                {
+                    // Window no longer exists, ignore
+                }
+                catch (Exception)
+                {
+                    // Focus restoration failed, ignore
+                }
+            });
         }
 
         private void OnWindowGotFocus(object? sender, WindowFocusChangedEventArgs e)
