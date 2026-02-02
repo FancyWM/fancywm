@@ -1045,6 +1045,28 @@ namespace FancyWM
                         }
 
                         InvalidateLayout();
+
+                        // Auto-focus the newly registered window
+                        // Use async pattern with delay to ensure Windows has fully initialized the window
+                        _ = m_dispatcher.BeginInvoke(async () =>
+                        {
+                            await Task.Delay(100);
+                            try
+                            {
+                                if (e.Source.IsAlive && (e.Source.State == WindowState.Restored || e.Source.State == WindowState.Maximized))
+                                {
+                                    FocusHelper.ForceActivate(e.Source.Handle);
+                                }
+                            }
+                            catch (InvalidWindowReferenceException)
+                            {
+                                // Window no longer exists, ignore
+                            }
+                            catch (Exception)
+                            {
+                                // Focus activation failed, ignore
+                            }
+                        }, System.Windows.Threading.DispatcherPriority.Background);
                     }, System.Windows.Threading.DispatcherPriority.DataBind);
                 }
             }
