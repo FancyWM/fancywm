@@ -31,6 +31,10 @@ namespace FancyWM.ViewModels
 
         public Visibility ActionsVisibility { get => m_actionsVisibility; set => SetField(ref m_actionsVisibility, value); }
 
+        public double ActionsHeight { get => m_actionsHeight; set => SetField(ref m_actionsHeight, value); }
+
+        public double RevealHighlightRadius { get => m_revealHighlightRadius; set => SetField(ref m_revealHighlightRadius, value); }
+
         public double RevealHighlightOpacity { get => m_revealHighlightOpacity; set => SetField(ref m_revealHighlightOpacity, value); }
 
         public bool IsActionActive { get => m_isActionActive; set => SetField(ref m_isActionActive, value); }
@@ -39,9 +43,10 @@ namespace FancyWM.ViewModels
         private IWorkspace? m_workspace;
         private string? m_title;
         private Visibility m_actionsVisibility = Visibility.Hidden;
+        private double m_actionsHeight = 22;
         private RevealState m_actionsRevealState = RevealState.Hidden;
         private double m_revealHighlightOpacity = 0;
-        private readonly double m_revealHighlightRadius = 64;
+        private double m_revealHighlightRadius = 64;
         private bool m_isMoving = false;
         private bool m_isPreviewVisible = false;
         private bool m_isActionActive = false;
@@ -186,7 +191,7 @@ namespace FancyWM.ViewModels
                 var isInBoundsX = 0 <= x && x <= windowPos.Width;
 
                 var dpi = node.WindowReference.Workspace.DisplayManager.Displays.FirstOrDefault(x => x.Bounds.Contains(windowPos.Center))?.Scaling ?? 1.0;
-                var revealHighlightRadius = m_revealHighlightRadius * dpi;
+                var revealHighlightRadius = RevealHighlightRadius * dpi;
 
                 if (isInBoundsX && -(revealHighlightRadius / 2) < y && y <= 0)
                 {

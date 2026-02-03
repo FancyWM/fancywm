@@ -9,6 +9,8 @@ using FancyWM.ViewModels;
 using FancyWM.Controls;
 using WinMan;
 using FancyWM.Windows;
+using System.Reactive.Linq;
+using System.Reactive.Disposables;
 
 namespace FancyWM
 {
@@ -91,8 +93,11 @@ namespace FancyWM
         private readonly DelegateCommand<TilingNodeViewModel> m_panelItemSecondaryActionCommand;
         private readonly DelegateCommand<TilingNodeViewModel> m_panelItemCloseActionCommand;
         private readonly IDisplay m_display;
+        private readonly CompositeDisposable m_disposables = new();
         private bool m_isOverlayInit = false;
         private readonly TilingOverlayViewModel m_viewModel = new();
+        private double m_panelHeight = 22.0;
+        private double m_windowPadding = 4.0;
 
         private IReadOnlyCollection<TilingNode> m_previousSnapshot = [];
         private readonly Dictionary<TilingNode, TilingNodeViewModel> m_nodeViewModels = [];
@@ -113,6 +118,12 @@ namespace FancyWM
             m_panelItemSecondaryActionCommand = new DelegateCommand<TilingNodeViewModel>(OnOverlayPanelItemSecondaryAction);
             m_panelItemCloseActionCommand = new DelegateCommand<TilingNodeViewModel>(OnOverlayPanelItemCloseAction);
             m_display = display;
+            m_disposables.Add(App.Current.AppState.Settings
+                .Subscribe(settings =>
+                {
+                    m_panelHeight = settings.PanelHeight;
+                    m_windowPadding = settings.WindowPadding;
+                }));
         }
 
         public void UpdateOverlay(IReadOnlyCollection<TilingNode> snapshot, IReadOnlyCollection<TilingNode> focusedPath)
@@ -342,6 +353,8 @@ namespace FancyWM
             vm.PrimaryActionCommand = m_panelItemPrimaryActionCommand;
             vm.SecondaryActionCommand = m_panelItemSecondaryActionCommand;
             vm.CloseCommand = m_panelItemCloseActionCommand;
+            vm.ActionsHeight = m_panelHeight + 4;
+            vm.RevealHighlightRadius = (16 + m_panelHeight + m_windowPadding) * 2;
         }
 
         private void UpdateViewModel(TilingPanelViewModel vm, PanelNode node, IEnumerable<TilingNode> focusedPath)
@@ -487,6 +500,7 @@ namespace FancyWM
             }
             m_overlay.Close();
             m_viewModel.Dispose();
+            m_disposables.Dispose();
             InvalidateView();
 
             TilingPanelMoveRequested = null;

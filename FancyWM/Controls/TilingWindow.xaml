@@ -36,7 +36,7 @@
             TextBlock.FontSize="15"
             TextBlock.Foreground="White"
             TextBlock.FontWeight="SemiBold"
-            Height="22"
+            Height="{Binding Path=ActionsHeight}"
             Margin="0,1,0,0"
             Opacity="0"
             d:Opacity="1"
@@ -104,6 +104,8 @@
                             <Setter Property="ui:ControlHelper.CornerRadius" Value="0" />
                             <Setter Property="TextBlock.TextAlignment" Value="Center" />
                             <Setter Property="VerticalContentAlignment" Value="Top" />
+                            <Setter Property="Height" Value="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=ui:SimpleStackPanel}}" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
                         </Style>
                         <Style x:Key="ActionButtonStyleWrapper" TargetType="Border">
                             <Style.Triggers>
