@@ -373,6 +373,11 @@ namespace FancyWM
                             anyChanges = true;
                         }
                     }
+                    catch (NoValidPlacementExistsException)
+                    {
+                        PlacementFailed?.Invoke(this, new TilingFailedEventArgs(
+                            TilingError.NoValidPlacementExists, window));
+                    }
                     catch (InvalidWindowReferenceException)
                     {
                         if (m_backend.HasWindow(window))
