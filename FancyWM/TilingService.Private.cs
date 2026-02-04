@@ -1291,9 +1291,22 @@ namespace FancyWM
 
                 void RegisterInTopLevelPanel()
                 {
-                    var window = m_backend.RegisterWindow(e.Source, maxTreeWidth: AutoSplitCount);
-                    window.Parent!.Padding = GetPanelPaddingRect();
-                    window.Parent!.Spacing = GetPanelSpacing();
+                    try
+                    {
+                        var window = m_backend.RegisterWindow(e.Source, maxTreeWidth: AutoSplitCount);
+                        window.Parent!.Padding = GetPanelPaddingRect();
+                        window.Parent!.Spacing = GetPanelSpacing();
+                    }
+                    catch (WindowAlreadyRegisteredException)
+                    {
+                        // Window might be already registered!
+                        var registered = m_backend.FindWindow(e.Source);
+                        if (registered == null)
+                        {
+                            throw;
+                        }
+                        // This is clearly a race condition with DetectChanges dirty checking.
+                    }
                 }
 
                 void RegisterInSavedPanel()
