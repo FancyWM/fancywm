@@ -821,18 +821,14 @@ namespace FancyWM
         {
             App.Current.AppState.Settings.SaveAsync(x =>
             {
-                var x2 = x.Clone();
-                x2.ProcessIgnoreList = [.. x2.ProcessIgnoreList, e.WindowReference.GetCachedProcessName()];
-                return x2;
+                return x with { ProcessIgnoreList = [.. x.ProcessIgnoreList, e.WindowReference.GetCachedProcessName()] };
             });
         }
         private void OnWindowIgnoreClassRequested(object? sender, WindowNode e)
         {
             App.Current.AppState.Settings.SaveAsync(x =>
             {
-                var x2 = x.Clone();
-                x2.ClassIgnoreList = [.. x2.ClassIgnoreList, ((WinMan.Windows.Win32Window)e.WindowReference).ClassName];
-                return x2;
+                return x with { ClassIgnoreList = [.. x.ClassIgnoreList, ((WinMan.Windows.Win32Window)e.WindowReference).ClassName] };
             });
         }
 

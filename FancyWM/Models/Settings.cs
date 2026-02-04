@@ -25,136 +25,71 @@ namespace FancyWM.Models
         public readonly KeyCode[] Keys = keys;
     }
 
-    public class Settings : IEquatable<Settings>, ICloneable, ITilingServiceSettings
+    public record class Settings : IEquatable<Settings>, ITilingServiceSettings
     {
-
         public Settings()
         {
 
         }
 
         [JsonConverter(typeof(Converters.ActivationHotkeyConverter))]
-        public ActivationHotkey ActivationHotkey { get; set; } = ActivationHotkey.Default;
+        public ActivationHotkey ActivationHotkey { get; init; } = ActivationHotkey.Default;
 
-        public bool ActivateOnCapsLock { get; set; } = false;
+        public bool ActivateOnCapsLock { get; init; } = false;
 
-        public bool ShowStartupWindow { get; set; } = true;
+        public bool ShowStartupWindow { get; init; } = true;
 
-        public bool NotifyVirtualDesktopServiceIncompatibility { get; set; } = true;
+        public bool NotifyVirtualDesktopServiceIncompatibility { get; init; } = true;
 
-        public bool AllocateNewPanelSpace { get; set; } = true;
+        public bool AllocateNewPanelSpace { get; init; } = true;
 
-        public bool AutoCollapsePanels { get; set; } = false;
+        public bool AutoCollapsePanels { get; init; } = false;
 
-        public int AutoSplitCount { get; set; } = 2;
+        public int AutoSplitCount { get; init; } = 2;
 
-        public bool DelayReposition { get; set; } = true;
+        public bool DelayReposition { get; init; } = true;
 
-        public bool AnimateWindowMovement { get; set; } = true;
+        public bool AnimateWindowMovement { get; init; } = true;
 
-        public bool ModifierMoveWindow { get; set; } = false;
+        public bool ModifierMoveWindow { get; init; } = false;
 
-        public bool ModifierMoveWindowAutoFocus { get; set; } = false;
+        public bool ModifierMoveWindowAutoFocus { get; init; } = false;
 
-        public int WindowPadding { get; set; } = 4;
+        public int WindowPadding { get; init; } = 4;
 
-        public int PanelHeight { get; set; } = 18;
+        public int PanelHeight { get; init; } = 18;
 
-        public int PanelFontSize { get; set; } = 12;
+        public int PanelFontSize { get; init; } = 12;
 
-        public bool ShowFocus { get; set; } = false;
+        public bool ShowFocus { get; init; } = false;
 
-        public bool ShowFocusDuringAction { get; set; } = true;
+        public bool ShowFocusDuringAction { get; init; } = true;
 
-        public bool OverrideAccentColor { get; set; } = false;
+        public bool OverrideAccentColor { get; init; } = false;
 
         [JsonConverter(typeof(Converters.ColorConverter))]
-        public Color CustomAccentColor { get; set; } = Color.FromRgb(0, 100, 255);
+        public Color CustomAccentColor { get; init; } = Color.FromRgb(0, 100, 255);
 
         [JsonConverter(typeof(Converters.KeybindingConverter))]
-        public KeybindingDictionary Keybindings { get; set; } = [];
+        public KeybindingDictionary Keybindings { get; init; } = [];
 
-        public List<string> ProcessIgnoreList { get; set; } =
+        public List<string> ProcessIgnoreList { get; init; } =
         [
             "Taskmgr"
         ];
 
-        public List<string> ClassIgnoreList { get; set; } =
+        public List<string> ClassIgnoreList { get; init; } =
         [
             "OperationStatusWindow",
             "RAIL_WINDOW",
         ];
 
-        public bool RemindToRateReview { get; set; } = true;
+        public bool RemindToRateReview { get; init; } = true;
 
-        public bool ShowContextHints { get; set; } = true;
+        public bool ShowContextHints { get; init; } = true;
 
-        public bool MultiMonitorSupport { get; set; } = true;
+        public bool MultiMonitorSupport { get; init; } = true;
 
-        public bool SoundOnFailure { get; set; } = true;
-
-        public override bool Equals(object? obj)
-        {
-            return obj is Settings settings &&
-                   ActivationHotkey == settings.ActivationHotkey &&
-                   ActivateOnCapsLock == settings.ActivateOnCapsLock &&
-                   ShowStartupWindow == settings.ShowStartupWindow &&
-                   NotifyVirtualDesktopServiceIncompatibility == settings.NotifyVirtualDesktopServiceIncompatibility &&
-                   AllocateNewPanelSpace == settings.AllocateNewPanelSpace &&
-                   RemindToRateReview == settings.RemindToRateReview &&
-                   ShowContextHints == settings.ShowContextHints &&
-                   ModifierMoveWindow == settings.ModifierMoveWindow &&
-                   AnimateWindowMovement == settings.AnimateWindowMovement &&
-                   OverrideAccentColor == settings.OverrideAccentColor &&
-                   CustomAccentColor.Equals(settings.CustomAccentColor) &&
-                   Equals(Keybindings, settings.Keybindings) &&
-                   Equals(ProcessIgnoreList, settings.ProcessIgnoreList) &&
-                   Equals(ClassIgnoreList, settings.ClassIgnoreList) &&
-                   WindowPadding == settings.WindowPadding &&
-                   PanelHeight == settings.PanelHeight &&
-                   PanelFontSize == settings.PanelFontSize &&
-                   ShowFocus == settings.ShowFocus &&
-                   ShowFocusDuringAction == settings.ShowFocusDuringAction;
-        }
-
-        public override int GetHashCode()
-        {
-            HashCode hash = new();
-            hash.Add(ActivationHotkey);
-            hash.Add(ActivateOnCapsLock);
-            hash.Add(ShowStartupWindow);
-            hash.Add(NotifyVirtualDesktopServiceIncompatibility);
-            hash.Add(AllocateNewPanelSpace);
-            hash.Add(RemindToRateReview);
-            hash.Add(ShowContextHints);
-            hash.Add(ModifierMoveWindow);
-            hash.Add(AnimateWindowMovement);
-            hash.Add(OverrideAccentColor);
-            hash.Add(CustomAccentColor);
-            hash.Add(Keybindings);
-            hash.Add(WindowPadding);
-            hash.Add(PanelHeight);
-            hash.Add(PanelFontSize);
-            hash.Add(ShowFocus);
-            hash.Add(ShowFocusDuringAction);
-            hash.Add(ProcessIgnoreList);
-            hash.Add(ClassIgnoreList);
-            return hash.ToHashCode();
-        }
-
-        public bool Equals(Settings? other)
-        {
-            return Equals((object?)other);
-        }
-
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
-
-        public Settings Clone()
-        {
-            return (Settings)MemberwiseClone();
-        }
+        public bool SoundOnFailure { get; init; } = true;
     }
 }

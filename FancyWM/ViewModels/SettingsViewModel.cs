@@ -360,33 +360,33 @@ namespace FancyWM.ViewModels
             {
                 m_logger.Debug($"{nameof(SettingsViewModel)} is overwriting existing Settings");
 
-                x = x.Clone();
-                x.ActivationHotkey = SelectedActivationHotkey!;
-                x.ActivateOnCapsLock = ActivateOnCapsLock;
-                x.ShowStartupWindow = ShowStartupWindow;
-                x.NotifyVirtualDesktopServiceIncompatibility = NotifyVirtualDesktopServiceIncompatibility;
-                x.AllocateNewPanelSpace = AllocateNewPanelSpace;
-                x.AutoCollapsePanels = AutoCollapsePanels;
-                x.AutoSplitCount = AutoSplitCount;
-                x.DelayReposition = DelayReposition;
-                x.AnimateWindowMovement = AnimateWindowMovement;
-                x.ModifierMoveWindow = ModifierMoveWindow;
-                x.ModifierMoveWindowAutoFocus = ModifierMoveWindowAutoFocus;
-                x.CustomAccentColor = CustomAccentColor;
-                x.OverrideAccentColor = OverrideAccentColor;
-                x.Keybindings = KeybindingViewModel.ToDictionary(m_keybindings!);
-                x.WindowPadding = WindowPadding;
-                x.PanelHeight = PanelHeight;
-                x.PanelFontSize = PanelFontSize;
-                x.ShowContextHints = ShowContextHints;
-                x.ProcessIgnoreList = [.. ProcessIgnoreList!];
-                x.ClassIgnoreList = [.. ClassIgnoreList!];
-                x.MultiMonitorSupport = MultiMonitorSupport;
-                x.SoundOnFailure = SoundOnFailure;
-                x.ShowFocus = ShowFocus;
-                x.ShowFocusDuringAction = ShowFocusDuringAction;
-
-                return x;
+                return x with
+                {
+                    ActivationHotkey = SelectedActivationHotkey!,
+                    ActivateOnCapsLock = ActivateOnCapsLock,
+                    ShowStartupWindow = ShowStartupWindow,
+                    NotifyVirtualDesktopServiceIncompatibility = NotifyVirtualDesktopServiceIncompatibility,
+                    AllocateNewPanelSpace = AllocateNewPanelSpace,
+                    AutoCollapsePanels = AutoCollapsePanels,
+                    AutoSplitCount = AutoSplitCount,
+                    DelayReposition = DelayReposition,
+                    AnimateWindowMovement = AnimateWindowMovement,
+                    ModifierMoveWindow = ModifierMoveWindow,
+                    ModifierMoveWindowAutoFocus = ModifierMoveWindowAutoFocus,
+                    CustomAccentColor = CustomAccentColor,
+                    OverrideAccentColor = OverrideAccentColor,
+                    Keybindings = KeybindingViewModel.ToDictionary(m_keybindings!),
+                    WindowPadding = WindowPadding,
+                    PanelHeight = PanelHeight,
+                    PanelFontSize = PanelFontSize,
+                    ShowContextHints = ShowContextHints,
+                    ProcessIgnoreList = [.. ProcessIgnoreList!],
+                    ClassIgnoreList = [.. ClassIgnoreList!],
+                    MultiMonitorSupport = MultiMonitorSupport,
+                    SoundOnFailure = SoundOnFailure,
+                    ShowFocus = ShowFocus,
+                    ShowFocusDuringAction = ShowFocusDuringAction
+                };
             });
         }
 

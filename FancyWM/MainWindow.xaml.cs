@@ -973,8 +973,7 @@ namespace FancyWM
                 new AboutWindow().Show();
                 await App.Current.AppState.Settings.SaveAsync(x =>
                 {
-                    x.RemindToRateReview = false;
-                    return x;
+                    return x with { RemindToRateReview = false };
                 });
             }
         }
