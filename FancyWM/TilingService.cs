@@ -51,48 +51,35 @@ namespace FancyWM
 
         public bool AutoRegisterWindows { get; internal set; }
 
-        public bool AllocateNewPanelSpace { get; set; }
+        private bool m_allocateNewPanelSpace;
 
-        public bool AnimateWindowMovement { get; set; }
+        private bool m_animateWindowMovement;
 
-        public int AutoSplitCount { get; set; } = 100;
+        private int m_autoSplitCount = 100;
 
-        public bool DelayReposition { get; set; } = false;
+        private bool m_delayReposition = false;
 
-        public bool AutoCollapse
+        private void SetAutoCollapse(bool value)
         {
-            get => m_backend.AutoCollapse;
-            set => m_backend.AutoCollapse = value;
+            m_backend.AutoCollapse = value;
         }
 
-        public int WindowPadding
+        private void SetWindowPadding(int value)
         {
-            get => m_windowPadding;
-            set
-            {
-                m_windowPadding = value;
-                PropagatePaddingChange();
-            }
+            m_windowPadding = value;
+            PropagatePaddingChange();
         }
 
-        public int PanelHeight
+        private void SetPanelHeight(int value)
         {
-            get => m_panelHeight;
-            set
-            {
-                m_panelHeight = value;
-                PropagatePanelHeightChange();
-            }
+            m_panelHeight = value;
+            PropagatePanelHeightChange();
         }
 
-        public bool ShowFocus
+        private void SetShowFocus(bool value)
         {
-            get => m_showFocus;
-            set
-            {
-                m_showFocus = value;
-                PropagateShowFocusChange();
-            }
+            m_showFocus = value;
+            PropagateShowFocusChange();
         }
 
         public bool ShowPreviewFocus
@@ -251,11 +238,14 @@ namespace FancyWM
         {
             _ = m_dispatcher.RunAsync(() =>
             {
-                AllocateNewPanelSpace = x.AllocateNewPanelSpace;
-                AnimateWindowMovement = x.AnimateWindowMovement;
-                WindowPadding = x.WindowPadding;
-                PanelHeight = x.PanelHeight;
-                AutoSplitCount = x.AutoSplitCount;
+                m_allocateNewPanelSpace = x.AllocateNewPanelSpace;
+                m_animateWindowMovement = x.AnimateWindowMovement;
+                m_autoSplitCount = x.AutoSplitCount;
+                m_delayReposition = x.DelayReposition;
+                SetWindowPadding(x.WindowPadding);
+                SetPanelHeight(x.PanelHeight);
+                SetShowFocus(x.ShowFocus);
+                SetAutoCollapse(x.AutoCollapsePanels);
             });
         }
 
@@ -366,7 +356,7 @@ namespace FancyWM
                         if (!m_backend.HasWindow(window) && window.State == WindowState.Restored && CanManage(window))
                         {
                             m_logger.Debug("Discovered window {Window}", window.DebugString());
-                            var newNode = m_backend.RegisterWindow(window, maxTreeWidth: AutoSplitCount);
+                            var newNode = m_backend.RegisterWindow(window, maxTreeWidth: m_autoSplitCount);
                             newNode.Parent!.Padding = GetPanelPaddingRect();
                             newNode.Parent!.Spacing = GetPanelSpacing();
                             InvalidateLayout();

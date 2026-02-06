@@ -17,6 +17,9 @@ namespace FancyWM.Models
         int WindowPadding { get; }
         int PanelHeight { get; }
         int AutoSplitCount { get; }
+        bool ShowFocus { get; }
+        bool AutoCollapsePanels { get; }
+        bool DelayReposition { get; }
     }
 
     [AttributeUsage(AttributeTargets.Field)]

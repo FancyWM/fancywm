@@ -139,7 +139,7 @@ namespace FancyWM
                         snapshotWindows = snapshot.OfType<WindowNode>().Where(x => !m_ignoreRepositionSet.Contains(x.WindowReference)).ToList();
                     }
 
-                    bool useSmoothing = AnimateWindowMovement && m_currentInteraction != UserInteraction.Resizing;
+                    bool useSmoothing = m_animateWindowMovement && m_currentInteraction != UserInteraction.Resizing;
                     await UpdateWindowPositionsAsync(snapshotWindows, useSmoothing);
                 }
                 finally
@@ -307,7 +307,7 @@ namespace FancyWM
 
         private Rectangle? GetPreviewRectangle()
         {
-            if (m_currentInteraction == UserInteraction.Moving && DelayReposition || m_movingPanelNode != null)
+            if (m_currentInteraction == UserInteraction.Moving && m_delayReposition || m_movingPanelNode != null)
             {
                 try
                 {
@@ -384,7 +384,7 @@ namespace FancyWM
                     node.Parent!.Padding = GetPanelPaddingRect();
                     node.Parent!.Spacing = GetPanelSpacing();
 
-                    if (AllocateNewPanelSpace)
+                    if (m_allocateNewPanelSpace)
                     {
                         node.Parent!.Attach(new PlaceholderNode());
                     }
@@ -1024,7 +1024,7 @@ namespace FancyWM
                             {
                                 lock (m_backend)
                                 {
-                                    var node = m_backend.RegisterWindow(e.Source, maxTreeWidth: AutoSplitCount);
+                                    var node = m_backend.RegisterWindow(e.Source, maxTreeWidth: m_autoSplitCount);
                                     node.Parent!.Padding = GetPanelPaddingRect();
                                     node.Parent!.Spacing = GetPanelSpacing();
                                 }
@@ -1106,7 +1106,7 @@ namespace FancyWM
             if (!m_active)
                 return;
 
-            if (DelayReposition && m_currentInteraction == UserInteraction.Moving)
+            if (m_delayReposition && m_currentInteraction == UserInteraction.Moving)
             {
                 try
                 {
@@ -1191,7 +1191,7 @@ namespace FancyWM
 
                 if (e.NewPosition.Width == e.OldPosition.Width && e.NewPosition.Height == e.OldPosition.Height)
                 {
-                    if (!DelayReposition)
+                    if (!m_delayReposition)
                     {
                         DoWindowMove(e.Source);
                     }
@@ -1293,7 +1293,7 @@ namespace FancyWM
                 {
                     try
                     {
-                        var window = m_backend.RegisterWindow(e.Source, maxTreeWidth: AutoSplitCount);
+                        var window = m_backend.RegisterWindow(e.Source, maxTreeWidth: m_autoSplitCount);
                         window.Parent!.Padding = GetPanelPaddingRect();
                         window.Parent!.Spacing = GetPanelSpacing();
                     }
@@ -1552,7 +1552,7 @@ namespace FancyWM
                                 if (!m_backend.HasWindow(window))
                                 {
                                     m_logger.Debug("Window {Window} can be managed, but is not registered with backend, registering now", window.DebugString());
-                                    var newNode = m_backend.RegisterWindow(window, maxTreeWidth: AutoSplitCount);
+                                    var newNode = m_backend.RegisterWindow(window, maxTreeWidth: m_autoSplitCount);
                                     newNode.Parent!.Padding = GetPanelPaddingRect();
                                     newNode.Parent!.Spacing = GetPanelSpacing();
                                     InvalidateLayout();

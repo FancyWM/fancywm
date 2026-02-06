@@ -23,19 +23,11 @@ namespace FancyWM
 
         IWorkspace Workspace { get; }
 
-        IReadOnlyCollection<IWindowMatcher> ExclusionMatchers { get; set; }
-
-        bool ShowFocus { get; set; }
+        ITilingServiceIntent? PendingIntent { get; set; }
 
         bool ShowPreviewFocus { get; set; }
 
-        bool AutoCollapse { get; set; }
-
-        int AutoSplitCount { get; set; }
-
-        bool DelayReposition { get; set; }
-
-        ITilingServiceIntent? PendingIntent { get; set; }
+        IReadOnlyCollection<IWindowMatcher> ExclusionMatchers { get; set; }
 
         bool CanSplit(bool vertical);
         void Split(bool vertical);

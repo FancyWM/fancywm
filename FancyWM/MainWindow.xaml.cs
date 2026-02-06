@@ -82,11 +82,7 @@ namespace FancyWM
         private readonly IMicaProvider m_micaProvider;
         private readonly ModifierWindowMover m_mvm;
         private long m_cmdSequenceId = 0;
-        private bool m_showFocus;
         private bool m_showFocusDuringAction;
-        private bool m_autoCollapse;
-        private int m_autoSplitCount;
-        private bool m_delayReposition;
         private bool m_notifyVirtualDesktopServiceIncompatibility;
         private LowLevelHotkey[] m_directHks = [];
         private DispatcherTimer m_dispatcherTimer;
@@ -125,11 +121,7 @@ namespace FancyWM
                 .Do(x => m_enableRateReviewRequests = x.RemindToRateReview)
                 .Do(x => m_showContextHints = x.ShowContextHints)
                 .Do(x => m_soundOnFailure = x.SoundOnFailure)
-                .Do(x => m_showFocus = x.ShowFocus)
                 .Do(x => m_showFocusDuringAction = x.ShowFocusDuringAction)
-                .Do(x => m_autoCollapse = x.AutoCollapsePanels)
-                .Do(x => m_autoSplitCount = x.AutoSplitCount)
-                .Do(x => m_delayReposition = x.DelayReposition)
                 .Do(x => m_notifyVirtualDesktopServiceIncompatibility = x.NotifyVirtualDesktopServiceIncompatibility)
                 .Do(x =>
                 {
@@ -194,10 +186,6 @@ namespace FancyWM
                         m_tiling = new TilingService(m_workspace, m_workspace.DisplayManager.PrimaryDisplay, m_animationThread, settings, true);
                     }
 
-                    m_tiling.AutoCollapse = m_autoCollapse;
-                    m_tiling.AutoSplitCount = m_autoSplitCount;
-                    m_tiling.ShowFocus = m_showFocus;
-                    m_tiling.DelayReposition = m_delayReposition;
                     m_tiling.PlacementFailed += OnTilingFailed;
                     m_tiling.Start();
                 }))
@@ -217,47 +205,6 @@ namespace FancyWM
                 }))
                 .Select(_ => Unit.Default);
 
-            var autoCollapseSettings = settings
-                .DistinctUntilChanged(x => x.AutoCollapsePanels)
-                .Do(async _ => await Dispatcher.InvokeAsync(() =>
-                {
-                    if (m_tiling != null)
-                    {
-                        m_tiling.AutoCollapse = m_autoCollapse;
-                    }
-                }));
-
-            var autoSplitSettings = settings
-                .DistinctUntilChanged(x => x.AutoSplitCount)
-                .Do(async _ => await Dispatcher.InvokeAsync(() =>
-                {
-                    if (m_tiling != null)
-                    {
-                        m_tiling.AutoSplitCount = m_autoSplitCount;
-                    }
-                }));
-
-
-            var showFocusSettings = settings
-                .DistinctUntilChanged(x => x.ShowFocus)
-                .Do(async _ => await Dispatcher.InvokeAsync(() =>
-                {
-                    if (m_tiling != null)
-                    {
-                        m_tiling.ShowFocus = m_showFocus;
-                    }
-                }));
-
-            var delayRepositionSettings = settings
-                .DistinctUntilChanged(x => x.DelayReposition)
-                .Do(async _ => await Dispatcher.InvokeAsync(() =>
-                {
-                    if (m_tiling != null)
-                    {
-                        m_tiling.DelayReposition = m_delayReposition;
-                    }
-                }));
-
             m_llkbdHook = App.Current.Services.GetRequiredService<LowLevelKeyboardHook>();
 
             m_subscriptions =
@@ -267,10 +214,6 @@ namespace FancyWM
                 activationHotkeySettings.Subscribe(new NotifyUnhandledObserver<ActivationHotkey>()),
                 activateOnCapsLockSetting.Subscribe(new NotifyUnhandledObserver<bool>()),
                 keybindingsSettings.Subscribe(new NotifyUnhandledObserver<KeybindingDictionary>()),
-                autoSplitSettings.Subscribe(new NotifyUnhandledObserver<Settings>()),
-                showFocusSettings.Subscribe(new NotifyUnhandledObserver<Settings>()),
-                autoCollapseSettings.Subscribe(new NotifyUnhandledObserver<Settings>()),
-                delayRepositionSettings.Subscribe(new NotifyUnhandledObserver<Settings>()),
                 multiMonitorObservable
                     .Concat(exclusionListSettings)
                     .Subscribe(new NotifyUnhandledObserver<Unit>()),

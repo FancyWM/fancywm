@@ -27,6 +27,12 @@ namespace FancyWM
 
         public bool Active => GetPrimaryTilingService().Active;
 
+        public ITilingServiceIntent? PendingIntent
+        {
+            get => GetActiveTilingService().PendingIntent;
+            set => GetActiveTilingService().PendingIntent = value;
+        }
+
         public IReadOnlyCollection<IWindowMatcher> ExclusionMatchers
         {
             get => m_exclusionMatchers;
@@ -37,18 +43,6 @@ namespace FancyWM
                     tiling.ExclusionMatchers = value;
                 }
                 m_exclusionMatchers = value;
-            }
-        }
-        public bool ShowFocus
-        {
-            get => m_showFocus;
-            set
-            {
-                foreach (var tiling in m_tilingServices.Values)
-                {
-                    tiling.ShowFocus = value;
-                }
-                m_showFocus = value;
             }
         }
 
@@ -63,51 +57,6 @@ namespace FancyWM
                 }
                 m_showPreviewFocus = value;
             }
-        }
-
-        public bool AutoCollapse
-        {
-            get => m_autoCollapse;
-            set
-            {
-                foreach (var tiling in m_tilingServices.Values)
-                {
-                    tiling.AutoCollapse = value;
-                }
-                m_autoCollapse = value;
-            }
-        }
-
-        public int AutoSplitCount
-        {
-            get => m_autoSplitCount;
-            set
-            {
-                foreach (var tiling in m_tilingServices.Values)
-                {
-                    tiling.AutoSplitCount = value;
-                }
-                m_autoSplitCount = value;
-            }
-        }
-
-        public bool DelayReposition
-        {
-            get => m_delayReposition;
-            set
-            {
-                foreach (var tiling in m_tilingServices.Values)
-                {
-                    tiling.DelayReposition = value;
-                }
-                m_delayReposition = value;
-            }
-        }
-
-        public ITilingServiceIntent? PendingIntent
-        {
-            get => GetActiveTilingService().PendingIntent;
-            set => GetActiveTilingService().PendingIntent = value;
         }
 
         private readonly Dictionary<IDisplay, TilingService> m_tilingServices = [];
