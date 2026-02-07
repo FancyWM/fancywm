@@ -1024,6 +1024,11 @@ namespace FancyWM
                             {
                                 lock (m_backend)
                                 {
+                                    if (m_backend.HasWindow(e.Source))
+                                    {
+                                        return;
+                                    }
+
                                     var node = m_backend.RegisterWindow(e.Source, maxTreeWidth: m_autoSplitCount);
                                     node.Parent!.Padding = GetPanelPaddingRect();
                                     node.Parent!.Spacing = GetPanelSpacing();

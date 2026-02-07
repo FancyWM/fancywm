@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows.Controls;
+using System.Xml.Linq;
 
+using FancyWM.Layouts;
 using FancyWM.Layouts.Tiling;
 using FancyWM.Utilities;
+
+using Windows.Devices.Enumeration;
+
 using WinMan;
-using FancyWM.Layouts;
-using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace FancyWM
 {
@@ -149,6 +153,11 @@ namespace FancyWM
         public WindowNode RegisterWindow(IWindow window, int maxTreeWidth = 100)
         {
             var state = m_states.FindByVdm(window) ?? throw new InvalidWindowReferenceException(window.Handle);
+            if (state.DesktopTree.FindNode(window) is WindowNode node)
+            {
+                throw new WindowAlreadyRegisteredException();
+            }
+
             var focusedNode = state.FocusedNode;
 
             PanelNode parent;
