@@ -1264,7 +1264,7 @@ namespace FancyWM
             if (!m_active)
                 return;
 
-            async void UnregisterAndSaveLocation()
+            async Task UnregisterAndSaveLocation()
             {
                 lock (m_backend)
                 {
@@ -1283,7 +1283,7 @@ namespace FancyWM
                 await DetectChangesAsync(e.Source);
             }
 
-            async void RegisterAndRestoreLocation()
+            async Task RegisterAndRestoreLocation()
             {
                 NodeLocation? savedLocation;
                 lock (m_savedLocations)
@@ -1405,7 +1405,7 @@ namespace FancyWM
                     if ((e.NewState == WindowState.Maximized || e.NewState == WindowState.Minimized)
                         && e.OldState == WindowState.Restored)
                     {
-                        UnregisterAndSaveLocation();
+                        await UnregisterAndSaveLocation();
                     }
                     // Window is now restored
                     else if (e.NewState == WindowState.Restored
@@ -1415,7 +1415,7 @@ namespace FancyWM
                         {
                             return;
                         }
-                        RegisterAndRestoreLocation();
+                        await RegisterAndRestoreLocation();
                     }
                     else
                     {
