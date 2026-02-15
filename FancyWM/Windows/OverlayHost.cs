@@ -77,7 +77,7 @@ namespace FancyWM.Windows
                 m_hwnd = new WindowInteropHelper(this).EnsureHandle();
                 m_contentContainer = new Border();
                 Content = m_contentContainer;
-                UpdatePosition();
+                UpdateRenderTransform();
 
                 m_display.WorkAreaChanged += OnDisplayWorkAreaChanged;
                 m_display.ScalingChanged += OnDisplayScalingChanged;
@@ -109,22 +109,47 @@ namespace FancyWM.Windows
                 m_contentContainer.Child = content;
             }
 
-            private void UpdatePosition()
+            private Rectangle? GetWindowRectangle()
             {
-                var workArea = m_display.WorkArea;
-                m_contentContainer.RenderTransform = new ScaleTransform(
-                        1 / m_display.Scaling,
-                        1 / m_display.Scaling);
+                if (PInvoke.GetWindowRect(new(m_hwnd), out RECT current))
+                {
+                    return new Rectangle(current.left, current.top, current.right, current.bottom);
+                }
+                return default;
+            }
 
-                PInvoke.SetWindowPos(new(m_hwnd), new(), workArea.Left, workArea.Top, workArea.Width, workArea.Height,
-                    SetWindowPos_uFlags.SWP_NOZORDER | SetWindowPos_uFlags.SWP_NOACTIVATE);
+            private void EnsureLocation()
+            {
+                var current = GetWindowRectangle();
+                var desired = m_display.WorkArea;
+                if (current != desired)
+                {
+                    PInvoke.SetWindowPos(new(m_hwnd), new(), desired.Left, desired.Top, desired.Width, desired.Height,
+                        SetWindowPos_uFlags.SWP_NOZORDER | SetWindowPos_uFlags.SWP_NOACTIVATE);
+                }
+            }
+
+            private void UpdateRenderTransform()
+            {
+                EnsureLocation();
+                var bounds = m_display.Bounds;
+                var workArea = m_display.WorkArea;
+
+                var tg = new TransformGroup();
+                tg.Children.Add(new TranslateTransform(
+                    bounds.Left - workArea.Left,
+                    bounds.Top - workArea.Top));
+                tg.Children.Add(new ScaleTransform(
+                        1 / m_display.Scaling,
+                        1 / m_display.Scaling));
+                m_contentContainer.RenderTransform = tg;
             }
 
             private void OnDisplayScalingChanged(object? sender, DisplayScalingChangedEventArgs e)
             {
-                Dispatcher.Invoke(() =>
+                Dispatcher.BeginInvoke(() =>
                 {
-                    UpdatePosition();
+                    UpdateRenderTransform();
                     Resources["DisplayScaling"] = m_display.Scaling;
                     Resources["OverlayFontSize"] = m_panelFontSize * m_display.Scaling;
                 });
@@ -132,10 +157,22 @@ namespace FancyWM.Windows
 
             private void OnDisplayWorkAreaChanged(object? sender, DisplayRectangleChangedEventArgs e)
             {
-                Dispatcher.Invoke(() =>
+                Dispatcher.BeginInvoke(() =>
                 {
-                    UpdatePosition();
+                    UpdateRenderTransform();
                 });
+            }
+
+            protected override void OnLocationChanged(EventArgs e)
+            {
+                base.OnLocationChanged(e);
+                EnsureLocation();
+            }
+
+            protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+            {
+                base.OnRenderSizeChanged(sizeInfo);
+                EnsureLocation();
             }
 
             protected override void OnClosed(EventArgs e)
