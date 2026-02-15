@@ -831,6 +831,13 @@ namespace FancyWM
                 return x with { ClassIgnoreList = [.. x.ClassIgnoreList, ((WinMan.Windows.Win32Window)e.WindowReference).ClassName] };
             });
         }
+        private void OnWindowIgnoreTitleRequested(object? sender, WindowNode e)
+        {
+            App.Current.AppState.Settings.SaveAsync(x =>
+            {
+                return x with { TitleIgnoreList = [.. x.TitleIgnoreList, e.WindowReference.Title] };
+            });
+        }
 
         private void OnTilingPanelMoving(object? sender, PanelNode panel)
         {

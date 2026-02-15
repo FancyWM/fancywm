@@ -2331,7 +2331,16 @@ namespace FancyWM.Resources {
                 return ResourceManager.GetString("Overlay.Window.AddRuleForProcess", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Add floating rule for window title.
+        /// </summary>
+        public static string Overlay_Window_AddRuleForTitle {
+            get {
+                return ResourceManager.GetString("Overlay.Window.AddRuleForTitle", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Drag over another window to group.
         /// </summary>
@@ -2439,7 +2448,25 @@ namespace FancyWM.Resources {
                 return ResourceManager.GetString("Rules.ProcessIgnoreList.Description", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Automatically float by window title.
+        /// </summary>
+        public static string Rules_TitleIgnoreList {
+            get {
+                return ResourceManager.GetString("Rules.TitleIgnoreList", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Floating mode will be automatically enabled for windows with a matching title. The matching is not case-sensitive and you may use regular expressions..
+        /// </summary>
+        public static string Rules_TitleIgnoreList_Description {
+            get {
+                return ResourceManager.GetString("Rules.TitleIgnoreList.Description", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
