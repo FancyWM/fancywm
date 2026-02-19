@@ -82,7 +82,7 @@ namespace FancyWM
                     {
                         m_floatingSet.Add(largestWindow.WindowReference);
                     }
-                    _ = DetectChangesAsync(largestWindow.WindowReference);
+                    DetectChanges(largestWindow.WindowReference);
                     PlacementFailed?.Invoke(this, new TilingFailedEventArgs(TilingError.NoValidPlacementExists, largestWindow.WindowReference));
                 }
             }
@@ -450,7 +450,7 @@ namespace FancyWM
             }
         }
 
-        private async void ToggleFloat(IWindow window)
+        private void ToggleFloat(IWindow window)
         {
             bool floated;
             lock (m_floatingSet)
@@ -466,7 +466,7 @@ namespace FancyWM
                     m_floatingSet.Add(window);
                 }
             }
-            await DetectChangesAsync(window);
+            DetectChanges(window);
             if (floated)
             {
                 OnWindowFloated(window);
@@ -637,7 +637,7 @@ namespace FancyWM
             }
         }
 
-        private async void HitTestCompletePendingIntent(Point cursorPosition)
+        private void HitTestCompletePendingIntent(Point cursorPosition)
         {
             if (m_pendingIntent is GroupWithIntent intent && m_display.Bounds.Contains(cursorPosition))
             {
@@ -714,7 +714,7 @@ namespace FancyWM
                 {
                     m_windowSet.Add(sourceNode.WindowReference);
                 }
-                if (await CanManageAsync(sourceNode.WindowReference))
+                if (CanManage(sourceNode.WindowReference))
                 {
                     //m_logger.Information("Window {Handle}={ProcessName} can be managed, registering with backend", e.Source.Handle, e.Source.GetCachedProcessName());
                     try
@@ -985,7 +985,7 @@ namespace FancyWM
             m_currentInteraction = UserInteraction.None;
         }
 
-        private async void OnWindowAdded(object? sender, WindowChangedEventArgs e)
+        private void OnWindowAdded(object? sender, WindowChangedEventArgs e)
         {
             m_logger.Debug("Window {Window} added to workspace", e.Source.DebugString());
             try
@@ -1013,10 +1013,10 @@ namespace FancyWM
                     return;
                 }
 
-                if (await CanManageAsync(e.Source) && e.Source.State == WindowState.Restored)
+                if (CanManage(e.Source) && e.Source.State == WindowState.Restored)
                 {
                     m_logger.Information("Window {Window} can be managed, registering with backend ({Display})", e.Source.DebugString(), m_display);
-                    _ = m_dispatcher.BeginInvoke(() =>
+                    m_dispatcher.BeginInvoke(() =>
                     {
                         try
                         {
@@ -1138,7 +1138,7 @@ namespace FancyWM
         private TimeSpan m_lastPlacementFailed = TimeSpan.Zero;
         private TimeSpan m_lastWindowPositionChanged = TimeSpan.Zero;
 
-        private async void OnWindowPositionChanged(object? sender, WindowPositionChangedEventArgs e)
+        private void OnWindowPositionChanged(object? sender, WindowPositionChangedEventArgs e)
         {
             if (!m_active)
                 return;
@@ -1160,7 +1160,7 @@ namespace FancyWM
                 {
                     // Some other event might have resulted in the movement of the window.
                     // Do not call DetectChanges under the lock, to avoid deadlock.
-                    m_dispatcher.InvokeAsync(() => DetectChangesAsync(e.Source));
+                    m_dispatcher.InvokeAsync(() => DetectChanges(e.Source));
                     return;
                 }
             }
@@ -1187,7 +1187,7 @@ namespace FancyWM
 
             try
             {
-                await DetectChangesAsync(e.Source);
+                DetectChanges(e.Source);
 
                 if (e.NewPosition == e.OldPosition)
                 {
@@ -1243,7 +1243,7 @@ namespace FancyWM
             }
         }
 
-        private async void OnWindowTopmostChanged(object? sender, WindowTopmostChangedEventArgs e)
+        private void OnWindowTopmostChanged(object? sender, WindowTopmostChangedEventArgs e)
         {
             if (!m_active)
                 return;
@@ -1251,7 +1251,7 @@ namespace FancyWM
             try
             {
                 m_logger.Verbose("Changed topmost of window {Window}", e.Source.DebugString());
-                await DetectChangesAsync(e.Source);
+                DetectChanges(e.Source);
             }
             catch (InvalidWindowReferenceException)
             {
@@ -1259,12 +1259,12 @@ namespace FancyWM
             }
         }
 
-        private async void OnWindowStateChanged(object? sender, WindowStateChangedEventArgs e)
+        private void OnWindowStateChanged(object? sender, WindowStateChangedEventArgs e)
         {
             if (!m_active)
                 return;
 
-            async Task UnregisterAndSaveLocation()
+            void UnregisterAndSaveLocation()
             {
                 lock (m_backend)
                 {
@@ -1280,10 +1280,10 @@ namespace FancyWM
                         m_backend.UnregisterWindow(e.Source);
                     }
                 }
-                await DetectChangesAsync(e.Source);
+                DetectChanges(e.Source);
             }
 
-            async Task RegisterAndRestoreLocation()
+            void RegisterAndRestoreLocation()
             {
                 NodeLocation? savedLocation;
                 lock (m_savedLocations)
@@ -1392,7 +1392,7 @@ namespace FancyWM
                     PlacementFailed?.Invoke(this, new TilingFailedEventArgs(
                         TilingError.NoValidPlacementExists, e.Source));
                 }
-                await DetectChangesAsync(e.Source);
+                DetectChanges(e.Source);
             }
 
             try
@@ -1405,7 +1405,7 @@ namespace FancyWM
                     if ((e.NewState == WindowState.Maximized || e.NewState == WindowState.Minimized)
                         && e.OldState == WindowState.Restored)
                     {
-                        await UnregisterAndSaveLocation();
+                        UnregisterAndSaveLocation();
                     }
                     // Window is now restored
                     else if (e.NewState == WindowState.Restored
@@ -1415,11 +1415,11 @@ namespace FancyWM
                         {
                             return;
                         }
-                        await RegisterAndRestoreLocation();
+                        RegisterAndRestoreLocation();
                     }
                     else
                     {
-                        await DetectChangesAsync(e.Source);
+                        DetectChanges(e.Source);
                     }
                 }
                 catch (InvalidWindowReferenceException)
@@ -1536,12 +1536,12 @@ namespace FancyWM
             }
         }
 
-        private async Task<bool> DetectChangesAsync(IWindow window)
+        private bool DetectChanges(IWindow window)
         {
             m_logger.Verbose("Dirty checking for changes with window {Window}", window.DebugString());
             try
             {
-                if (window.State == WindowState.Restored && await CanManageAsync(window))
+                if (window.State == WindowState.Restored && CanManage(window))
                 {
                     if (!AutoRegisterWindows)
                     {
@@ -1602,11 +1602,6 @@ namespace FancyWM
                 return false;
             }
             return false;
-        }
-
-        private Task<bool> CanManageAsync(IWindow x, bool ignoreFloating = false)
-        {
-            return Task.Run(() => CanManage(x, ignoreFloating));
         }
 
         private bool CanManage(IWindow x, bool ignoreFloating = false)

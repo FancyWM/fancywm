@@ -379,7 +379,7 @@ namespace FancyWM
             return anyChanges;
         }
 
-        public async void Refresh()
+        public void Refresh()
         {
             List<IWindow> windows;
             lock (m_windowSet)
@@ -390,7 +390,7 @@ namespace FancyWM
             bool anyChanges = false;
             foreach (var window in windows)
             {
-                if (await DetectChangesAsync(window))
+                if (DetectChanges(window))
                 {
                     anyChanges = true;
                 }
