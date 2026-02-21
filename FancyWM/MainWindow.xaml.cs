@@ -192,15 +192,17 @@ namespace FancyWM
                 .Select(_ => Unit.Default);
 
             var exclusionListSettings = settings
-                .DistinctUntilChanged(x => (x.ProcessIgnoreList, x.ClassIgnoreList))
+                .DistinctUntilChanged(x => (x.ProcessIgnoreList, x.ClassIgnoreList, x.TitleIgnoreList))
                 .Do(async x => await Dispatcher.InvokeAsync(() =>
                 {
                     var processMatchers = x.ProcessIgnoreList.Select(x => new ByProcessNameMatcher(x));
                     var classMatchers = x.ClassIgnoreList.Select(x => new ByClassNameMatcher(x));
+                    var titleMatchers = x.TitleIgnoreList.Select(x => new ByTitleMatcher(x));
                     m_tiling!.ExclusionMatchers = m_tiling.ExclusionMatchers
-                        .Where(m => m is not ByProcessNameMatcher && m is not ByClassNameMatcher)
+                        .Where(m => m is not ByProcessNameMatcher && m is not ByClassNameMatcher && m is not ByTitleMatcher)
                         .Concat(processMatchers)
                         .Concat(classMatchers)
+                        .Concat(titleMatchers)
                         .ToArray();
                 }))
                 .Select(_ => Unit.Default);

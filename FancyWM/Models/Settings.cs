@@ -87,6 +87,8 @@ namespace FancyWM.Models
             "RAIL_WINDOW",
         ];
 
+        public List<string> TitleIgnoreList { get; init; } = [];
+
         public bool RemindToRateReview { get; init; } = true;
 
         public bool ShowContextHints { get; init; } = true;

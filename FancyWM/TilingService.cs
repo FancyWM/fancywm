@@ -193,6 +193,7 @@ namespace FancyWM
             m_gui.StackRequested += OnWindowStackRequested;
             m_gui.IgnoreProcessRequested += OnWindowIgnoreProcessRequested;
             m_gui.IgnoreClassRequested += OnWindowIgnoreClassRequested;
+            m_gui.IgnoreTitleRequested += OnWindowIgnoreTitleRequested;
 
             AutoRegisterWindows = autoRegisterWindows;
 
