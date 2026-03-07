@@ -148,7 +148,7 @@ Head over to the [Wiki](https://github.com/FancyWM/fancywm/wiki).
 
 ## [Issues](https://github.com/FancyWM/fancywm/issues)
 Please, take the time to report any problems you experience by:
-- Opening an issue on https://github.com/veselink1/fancywm/issues (feature requests also welcome)
+- Opening an issue on https://github.com/fancywm/fancywm/issues (feature requests also welcome)
 In case of crashes, please also remember to save and attach the log file produced by the application.
 
 ## Building from source
