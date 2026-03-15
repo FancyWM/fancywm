@@ -31,6 +31,7 @@ namespace FancyWM
         public event EventHandler<WindowNode>? FloatRequested;
         public event EventHandler<WindowNode>? IgnoreProcessRequested;
         public event EventHandler<WindowNode>? IgnoreClassRequested;
+        public event EventHandler<WindowNode>? IgnoreTitleRequested;
         public event EventHandler<WindowNode>? BeginHorizontalWithRequested;
         public event EventHandler<WindowNode>? BeginVerticalWithRequested;
         public event EventHandler<WindowNode>? BeginStackWithRequested;
@@ -272,6 +273,7 @@ namespace FancyWM
                     windowViewModel.StackActionPressed += WindowViewModel_StackActionPressed;
                     windowViewModel.IgnoreClassPressed += WindowViewModel_IgnoreClassPressed;
                     windowViewModel.IgnoreProcessPressed += WindowViewModel_IgnoreProcessPressed;
+                    windowViewModel.IgnoreTitlePressed += WindowViewModel_IgnoreTitlePressed;
                     UpdateViewModel(windowViewModel, windowNode, focusedPath);
                     m_nodeViewModels.Add(node, windowViewModel);
                     return windowViewModel;
@@ -338,6 +340,11 @@ namespace FancyWM
         private void WindowViewModel_IgnoreClassPressed(object sender, RoutedEventArgs e)
         {
             IgnoreClassRequested?.Invoke(this, ((WindowNode)((TilingWindowViewModel)sender!).Node!));
+        }
+
+        private void WindowViewModel_IgnoreTitlePressed(object sender, RoutedEventArgs e)
+        {
+            IgnoreTitleRequested?.Invoke(this, ((WindowNode)((TilingWindowViewModel)sender!).Node!));
         }
 
         private void OnSetPreviewWindows(IReadOnlySet<IWindow> oldValue, IReadOnlySet<IWindow> newValue)
@@ -541,6 +548,7 @@ namespace FancyWM
             FloatRequested = null;
             IgnoreProcessRequested = null;
             IgnoreClassRequested = null;
+            IgnoreTitleRequested = null;
         }
     }
 }

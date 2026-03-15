@@ -59,6 +59,7 @@ namespace FancyWM.ViewModels
         public event RoutedEventHandler? FloatActionPressed;
         public event RoutedEventHandler? IgnoreProcessPressed;
         public event RoutedEventHandler? IgnoreClassPressed;
+        public event RoutedEventHandler? IgnoreTitlePressed;
 
         public ICommand BeginHorizontalSplitWithCommand { get; }
         public ICommand BeginVerticalSplitWithCommand { get; }
@@ -67,6 +68,7 @@ namespace FancyWM.ViewModels
         public ICommand FloatCommand { get; }
         public ICommand IgnoreProcessCommand { get; }
         public ICommand IgnoreClassCommand { get; }
+        public ICommand IgnoreTitleCommand { get; }
 
         public TilingWindowViewModel()
         {
@@ -77,6 +79,7 @@ namespace FancyWM.ViewModels
             FloatCommand = new DelegateCommand(_ => FloatActionPressed?.Invoke(this, new RoutedEventArgs()));
             IgnoreProcessCommand = new DelegateCommand(_ => IgnoreProcessPressed?.Invoke(this, new RoutedEventArgs()));
             IgnoreClassCommand = new DelegateCommand(_ => IgnoreClassPressed?.Invoke(this, new RoutedEventArgs()));
+            IgnoreTitleCommand = new DelegateCommand(_ => IgnoreTitlePressed?.Invoke(this, new RoutedEventArgs()));
         }
 
         public override void Dispose()
@@ -85,6 +88,7 @@ namespace FancyWM.ViewModels
             FloatActionPressed = null;
             IgnoreProcessPressed = null;
             IgnoreClassPressed = null;
+            IgnoreTitlePressed = null;
             Node = null;
         }
 

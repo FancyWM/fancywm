@@ -54,4 +54,14 @@ namespace FancyWM.Utilities
             return (window is WinMan.Windows.Win32Window w) && MatchHelpers.IsMatch(w.ClassName, ClassName);
         }
     }
+
+    internal class ByTitleMatcher(string titlePattern) : IWindowMatcher
+    {
+        public string TitlePattern { get; } = titlePattern;
+
+        public bool Matches(IWindow window)
+        {
+            return MatchHelpers.IsMatch(window.Title, TitlePattern);
+        }
+    }
 }

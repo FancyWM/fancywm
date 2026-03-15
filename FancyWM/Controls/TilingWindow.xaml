@@ -29,6 +29,14 @@
                     </StackPanel>
                 </MenuItem.Header>
             </MenuItem>
+            <MenuItem Command="{Binding IgnoreTitleCommand}">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE82E;" FontSize="15" Margin="0, 0, 10, 0" />
+                        <TextBlock Text="{x:Static res:Strings.Overlay_Window_AddRuleForTitle}" />
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
         </ContextMenu>
     </UserControl.ContextMenu>
     <Grid>
