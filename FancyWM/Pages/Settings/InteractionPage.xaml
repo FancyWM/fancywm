@@ -1,9 +1,10 @@
-﻿<UserControl x:Class="FancyWM.Pages.Settings.InteractionPage"
+<UserControl x:Class="FancyWM.Pages.Settings.InteractionPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:models="clr-namespace:FancyWM.Models"
     xmlns:viewmodels="clr-namespace:FancyWM.ViewModels"
     xmlns:res="clr-namespace:FancyWM.Resources"
     d:DataContext="{d:DesignInstance Type=viewmodels:SettingsViewModel}"
@@ -48,6 +49,82 @@
             </Border>
 
             <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=PreserveWindowPositionsOnExit, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="Preserve window positions on FancyWM exit" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow"
+                               Padding="0,16,0,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}"
+                               Text="When enabled, closing FancyWM leaves windows where they currently are instead of restoring their original pre-tiling positions." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=EnableDragDropAutoPanelCreation, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="Enable drag-drop automatic panel creation" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow"
+                               Padding="0,16,0,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}"
+                               Text="When enabled, dragging a window onto another window can automatically create split or stack panels based on cursor position." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <ComboBox DockPanel.Dock="Right"
+                                  Width="240"
+                                  SelectedValuePath="Tag"
+                                  SelectedValue="{Binding Path=SiblingDragMode, Mode=TwoWay}">
+                            <ComboBoxItem Content="Hybrid (center stacks, edges reorder)" Tag="{x:Static models:SiblingDragMode.Hybrid}" />
+                            <ComboBoxItem Content="Edges split, center stacks" Tag="{x:Static models:SiblingDragMode.EdgeSplit}" />
+                        </ComboBox>
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="Drag onto a sibling window" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow"
+                               Padding="0,16,0,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}"
+                               Text="What happens when you drag a window's title bar onto another window already in the same panel. Hybrid: drop on the center to stack/tab, drop near an edge to reorder. Edges split: every edge drop creates a nested split. Creating panels via the hover-menu handles is unaffected." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=HideWindowActionMenuOnHover, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="Hide window action menu on top-edge hover" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow"
+                               Padding="0,16,0,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}"
+                               Text="When disabled (default), moving the cursor near the top edge of a focused tiled window reveals action buttons and more options." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding Path=ShowTabCloseButton, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="Show close (X) button on panel tabs" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow"
+                               Padding="0,16,0,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}"
+                               Text="When disabled (default), panel tabs have no close button, preventing accidental window closes when clicking a tab. Middle-click still closes a tab." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
                         <Slider
@@ -68,6 +145,27 @@
                     </StackPanel>
 
                     <TextBlock TextWrapping="WrapWithOverflow" Padding="0,16,0,0" VerticalAlignment="Center" Text="{x:Static res:Strings.Interaction_AutoSplitCount_Description}" Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{DynamicResource SettingsItemStyle}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <ComboBox DockPanel.Dock="Right"
+                                  Width="180"
+                                  SelectedValuePath="Tag"
+                                  SelectedValue="{Binding Path=OverflowPlacementStrategy, Mode=TwoWay}">
+                            <ComboBoxItem Content="Stack panel" Tag="{x:Static models:OverflowPlacementStrategy.Stack}" />
+                            <ComboBoxItem Content="Vertical split" Tag="{x:Static models:OverflowPlacementStrategy.Vertical}" />
+                            <ComboBoxItem Content="Horizontal split" Tag="{x:Static models:OverflowPlacementStrategy.Horizontal}" />
+                        </ComboBox>
+                        <TextBlock VerticalAlignment="Center" Margin="0,0,16,0" Text="Overflow placement strategy" />
+                    </DockPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow"
+                               Padding="0,16,0,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource SystemControlPageTextBaseMediumBrush}"
+                               Text="Controls how FancyWM places a new tiled window when the current panel is full." />
                 </StackPanel>
             </Border>
 

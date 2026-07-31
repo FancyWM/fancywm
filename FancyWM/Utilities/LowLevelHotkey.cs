@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Threading;
@@ -20,6 +20,7 @@ namespace FancyWM.Utilities
 
         private readonly KeyCode[] m_modifiers;
         private readonly bool[] m_pressedModifiers;
+        private readonly HashSet<KeyCode> m_pressedModifierSet = [];
         private bool m_keyDirty = false;
 
         public LowLevelHotkey(LowLevelKeyboardHook keyboardHook, IReadOnlyCollection<KeyCode> modifierKeys, KeyCode key)
@@ -56,7 +57,9 @@ namespace FancyWM.Utilities
 
             bool Scan(ref LowLevelKeyboardHook.KeyStateChangedEventArgs e)
             {
-                if (m_pressedModifiers.All(x => x) && inputKeyCode == mainKeyCode)
+                if (m_pressedModifiers.All(x => x)
+                    && RequiredModifiersContainPressedSet()
+                    && inputKeyCode == mainKeyCode)
                 {
                     Dispatcher.BeginInvoke(() =>
                     {
@@ -78,24 +81,27 @@ namespace FancyWM.Utilities
                     e.Handled = true;
                 }
 
-                int modifierIndex = Array.IndexOf(m_modifiers, e.KeyCode);
+                int modifierIndex = GetModifierIndex(inputKeyCode);
                 if (modifierIndex != -1)
                 {
                     m_pressedModifiers[modifierIndex] = true;
+                    m_pressedModifierSet.Add(inputKeyCode);
                 }
                 else if (inputKeyCode != mainKeyCode && ClearModifiersOnMiss)
                 {
                     // A non-modifier, non-main key was pressed, in which case
                     // we reset the state, to allow other hotkeys to trigger.
                     Array.Fill(m_pressedModifiers, false);
+                    m_pressedModifierSet.Clear();
                 }
             }
             else
             {
-                int modifierIndex = Array.IndexOf(m_modifiers, e.KeyCode);
+                int modifierIndex = GetModifierIndex(inputKeyCode);
                 if (modifierIndex != -1)
                 {
                     m_pressedModifiers[modifierIndex] = false;
+                    m_pressedModifierSet.Remove(inputKeyCode);
                 }
 
                 // Handle the dirty key.
@@ -112,6 +118,37 @@ namespace FancyWM.Utilities
                     Scan(ref e);
                 }
             }
+        }
+
+        private int GetModifierIndex(KeyCode remappedKey)
+        {
+            for (int i = 0; i < m_modifiers.Length; i++)
+            {
+                if (RemapKeyCode(m_modifiers[i]) == remappedKey)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private bool RequiredModifiersContainPressedSet()
+        {
+            if (m_pressedModifierSet.Count != m_modifiers.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < m_modifiers.Length; i++)
+            {
+                if (!m_pressedModifierSet.Contains(RemapKeyCode(m_modifiers[i])))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void Dispose()

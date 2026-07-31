@@ -13,6 +13,7 @@
              d:DesignHeight="18" d:DesignWidth="64">
     <UserControl.Resources>
         <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
             <Style TargetType="{x:Type Button}" x:Key="TabButton">
                 <Style.Resources>
                     <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseMediumColor}" Opacity="0.2" />
@@ -105,7 +106,8 @@
                 <Image Grid.Column="1" Width="{Binding Path=Overlay.IconSize}" Height="{Binding Path=Overlay.IconSize}" Stretch="Fill" Margin="0,1,5,1" Source="{Binding Icon}" Visibility="{Binding IconVisibility}" />
                 <local:TilingNodeCaptionBlock Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" DataContext="{Binding}" />
 
-                <Button Grid.Column="3" ToolTip="{x:Static res:Strings.Close}" Background="Transparent" Padding="2" Margin="0,0,2,0" Width="{Binding Path=Overlay.IconSize}" Height="{Binding Path=Overlay.IconSize}">
+                <Button Grid.Column="3" ToolTip="{x:Static res:Strings.Close}" Background="Transparent" Padding="2" Margin="0,0,2,0" Width="{Binding Path=Overlay.IconSize}" Height="{Binding Path=Overlay.IconSize}"
+                        Visibility="{Binding Path=Overlay.ShowTabCloseButton, Converter={StaticResource BoolToVis}}">
                     <Button.InputBindings>
                         <MouseBinding
                             MouseAction="LeftClick"

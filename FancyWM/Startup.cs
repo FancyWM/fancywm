@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -34,6 +34,10 @@ namespace FancyWM
 
         private const string LogFile = "fancywm.log";
 
+        // Held for the whole process lifetime to enforce single-instance; released by the
+        // OS on process exit. Static so it is never garbage-collected while running.
+        private static Mutex? s_instanceMutex;
+
         private static bool IsPackaged
         {
             get
@@ -53,7 +57,7 @@ namespace FancyWM
         [STAThread]
         public static int Main(string[] args)
         {
-            if (args.Length == 0)
+            if (args.Length == 0 || args.Contains(ElevationTask.StartArgument))
             {
                 PInvoke.FreeConsole();
             }
@@ -69,6 +73,9 @@ USAGE: FancyWM.exe [OPTIONS] [ACTION]
 OPTIONS:
     -h, --help                Show this help
     -v, -vv, -vvv             Verbose logging (repeat for more)
+                              -v = Debug (tiling/drag details in fancywm.log)
+                              -vv = Verbose
+                              Log file: %AppData%\\FancyWM\\fancywm.log
     --version                 Show version info
     --action NAME             Execute specific action directly
 
@@ -109,8 +116,15 @@ Type 'FancyWM --help' from anywhere after installation.
             }
             Directory.SetCurrentDirectory(fullPath);
 
-            if (File.Exists("administrator-mode") && !IsAdministrator())
+            if (ElevationTask.IsEnabled && !IsAdministrator())
             {
+                // Prefer the scheduled task, which elevates without a UAC prompt. An
+                // instance the task itself launched must not re-trigger it (see
+                // ElevationTask.StartArgument) and falls through to the prompt.
+                if (!args.Contains(ElevationTask.StartArgument) && ElevationTask.TryStart())
+                {
+                    return 0;
+                }
                 try
                 {
                     Process.Start(new ProcessStartInfo
@@ -127,15 +141,23 @@ Type 'FancyWM --help' from anywhere after installation.
                 }
             }
 
-            // Check if other instances are running
-            var exists = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName)
-                .Where(x => x.MainWindowHandle != IntPtr.Zero)
-                .Any();
-            if (exists)
+            // Single-instance guard. The old Process/MainWindowHandle scan missed a
+            // backgrounded instance — a tray/WM process usually has no main window, so
+            // a second instance would start and the two would fight over every window's
+            // position (continuous re-tiling). A named mutex detects the running instance
+            // regardless of window state. Local\ scopes it per logon session, which is the
+            // right granularity for a per-user window manager. The mutex is freed by the OS
+            // when the owning process exits (including taskkill during self-restart), so the
+            // 1s gap in OnProgramExit's relaunch lets the new instance acquire it cleanly.
+            s_instanceMutex = new Mutex(initiallyOwned: true, @"Local\FancyWM.SingleInstance", out bool createdNew);
+            if (!createdNew)
             {
                 MessageBox.Show(Strings.About_AlreadyRunning, "FancyWM", MessageBoxButton.OK, MessageBoxImage.Error);
                 return 1;
             }
+
+            // Keeps the task's executable path current across app moves/updates.
+            ElevationTask.EnsureRegistered();
 
             // Parse command line
             var logLevel = args.Contains("-vv")

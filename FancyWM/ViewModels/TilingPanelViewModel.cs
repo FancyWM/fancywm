@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
+
+using FancyWM.Layouts.Tiling;
 
 using WinMan;
 
@@ -12,6 +14,8 @@ namespace FancyWM.ViewModels
         private bool m_isMoving;
         private bool m_childHasDirectFocus;
         private double m_tabWidth;
+        private TilingNodeType m_panelType;
+        private PanelOrientation m_panelOrientation;
 
         public double TabWidth { get => m_tabWidth; set => SetField(ref m_tabWidth, value); }
 
@@ -24,5 +28,9 @@ namespace FancyWM.ViewModels
         public bool IsMoving { get => m_isMoving; set => SetField(ref m_isMoving, value); }
 
         public bool ChildHasDirectFocus { get => m_childHasDirectFocus; set => SetField(ref m_childHasDirectFocus, value); }
+
+        public TilingNodeType PanelType { get => m_panelType; set => SetField(ref m_panelType, value); }
+
+        public PanelOrientation PanelOrientation { get => m_panelOrientation; set => SetField(ref m_panelOrientation, value); }
     }
 }

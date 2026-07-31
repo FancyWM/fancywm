@@ -156,6 +156,53 @@ namespace FancyWM
                         m_tilingServices.Add(e.Source, tiling);
                     }
                     UpdateActiveDisplay(reason: $"display {e.Source} was added");
+
+                    // After a display reconnect, existing services may have windows
+                    // that were auto-floated due to transient constraint failures.
+                    // Retry after a delay so display geometry / window metrics settle.
+                    ScheduleRetryForAllDisplays();
+                }
+            });
+        }
+
+        private bool m_retryScheduled;
+
+        private void ScheduleRetryForAllDisplays()
+        {
+            // Multiple display reconnects (and power-resume) can fire in quick succession.
+            // Collapse them into a single pending retry pass instead of stacking timers.
+            lock (m_syncRoot)
+            {
+                if (m_retryScheduled)
+                {
+                    return;
+                }
+                m_retryScheduled = true;
+            }
+
+            _ = Dispatcher.InvokeAsync(async () =>
+            {
+                try
+                {
+                    await System.Threading.Tasks.Task.Delay(2000);
+                    lock (m_syncRoot)
+                    {
+                        foreach (var tiling in m_tilingServices.Values)
+                        {
+                            tiling.RetryFailedPlacements();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    m_logger.Warning(ex, "Scheduled placement retry pass failed");
+                }
+                finally
+                {
+                    lock (m_syncRoot)
+                    {
+                        m_retryScheduled = false;
+                    }
                 }
             });
         }

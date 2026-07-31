@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -36,6 +36,25 @@ namespace FancyWM.ViewModels
         public double RevealHighlightRadius { get => m_revealHighlightRadius; set => SetField(ref m_revealHighlightRadius, value); }
 
         public double RevealHighlightOpacity { get => m_revealHighlightOpacity; set => SetField(ref m_revealHighlightOpacity, value); }
+        public bool EnableHoverActionMenu
+        {
+            get => m_enableHoverActionMenu;
+            set
+            {
+                if (m_enableHoverActionMenu == value)
+                {
+                    return;
+                }
+
+                SetField(ref m_enableHoverActionMenu, value);
+                if (!value)
+                {
+                    m_actionsRevealState = RevealState.Hidden;
+                    RevealHighlightOpacity = 0;
+                    ActionsVisibility = Visibility.Collapsed;
+                }
+            }
+        }
 
         public bool IsActionActive { get => m_isActionActive; set => SetField(ref m_isActionActive, value); }
         public bool IsPreviewVisible { get => m_isPreviewVisible; set => SetField(ref m_isPreviewVisible, value); }
@@ -47,6 +66,7 @@ namespace FancyWM.ViewModels
         private RevealState m_actionsRevealState = RevealState.Hidden;
         private double m_revealHighlightOpacity = 0;
         private double m_revealHighlightRadius = 64;
+        private bool m_enableHoverActionMenu = true;
         private bool m_isMoving = false;
         private bool m_isPreviewVisible = false;
         private bool m_isActionActive = false;
@@ -167,6 +187,14 @@ namespace FancyWM.ViewModels
         {
             if (Node is WindowNode node)
             {
+                if (!EnableHoverActionMenu)
+                {
+                    RevealHighlightOpacity = 0;
+                    ActionsVisibility = Visibility.Collapsed;
+                    m_actionsRevealState = RevealState.Hidden;
+                    return;
+                }
+
                 if (m_isActionActive)
                 {
                     RevealHighlightOpacity = 0;

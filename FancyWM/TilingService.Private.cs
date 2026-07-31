@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -61,9 +61,21 @@ namespace FancyWM
 
         private TimeSpan m_lastUpdateLayout = TimeSpan.Zero;
 
+        private void SyncPanelChromeMetrics(DesktopTree tree)
+        {
+            var pad = GetPanelPaddingRect();
+            var spacing = GetPanelSpacing();
+            foreach (var panel in tree.Root!.Nodes.OfType<PanelNode>())
+            {
+                panel.Padding = pad;
+                panel.Spacing = spacing;
+            }
+        }
+
         private void UpdateTree(DesktopTree tree)
         {
             tree.WorkArea = m_display.WorkArea;
+            SyncPanelChromeMetrics(tree);
 
             bool constraintsSatisfied = false;
             while (!constraintsSatisfied)
@@ -81,6 +93,12 @@ namespace FancyWM
                     using (m_floatingSetLock.EnterScope())
                     {
                         m_floatingSet.Add(largestWindow.WindowReference);
+                    }
+                    // Track for retry — flex constraints are often transient after
+                    // display reconnect / hibernation resume.
+                    using (m_placementFailedSetLock.EnterScope())
+                    {
+                        m_placementFailedSet.Add(largestWindow.WindowReference);
                     }
                     DetectChanges(largestWindow.WindowReference);
                     PlacementFailed?.Invoke(this, new TilingFailedEventArgs(TilingError.NoValidPlacementExists, largestWindow.WindowReference));
@@ -154,6 +172,7 @@ namespace FancyWM
 
             m_gui.UpdateOverlay(snapshot, focusedPath);
             m_gui.PreviewRectangle = GetPreviewRectangle();
+            m_gui.DropZonePreview = GetDropZonePreviewState();
 
             if (m_showPreviewFocus)
             {
@@ -307,51 +326,222 @@ namespace FancyWM
 
         private Rectangle? GetPreviewRectangle()
         {
-            if (m_currentInteraction == UserInteraction.Moving && m_delayReposition || m_movingPanelNode != null)
+            // WM_NCHITTEST classified this gesture as a border resize, not a move.
+            if (m_borderResizeGesture)
+                return null;
+
+            // Mouse drag already released: hide the cue immediately rather than waiting
+            // for a PositionChangeEnd that some windows never emit (keyboard moves keep theirs).
+            if (m_activeDragWindow != null && m_activeDragIsMouse && !m_leftButtonDown)
+                return null;
+
+            var windowDragPreview =
+                m_currentInteraction == UserInteraction.Moving
+                || (m_currentInteraction == UserInteraction.Starting && m_activeDragWindow != null)
+                || (m_currentInteraction == UserInteraction.None && m_activeDragWindow != null);
+            if (!windowDragPreview && m_movingPanelNode == null)
             {
-                try
+                return null;
+            }
+
+            try
+            {
+                var isSwapping = IsSwapModifierPressed();
+                var pt = m_workspace.CursorLocation;
+                // Keep these two controls independent:
+                // - allowNesting: enables/disables automatic panel creation
+                // - swapOnDrop: explicit swap gesture (Shift)
+                // This avoids accidental swap behavior when auto panel creation is disabled.
+
+                if (m_movingPanelNode == null)
                 {
-                    var isSwapping = IsSwapModifierPressed();
-                    var pt = m_workspace.CursorLocation;
-
-                    if (m_movingPanelNode == null)
+                    var window = m_activeDragWindow ?? m_workspace.FocusedWindow;
+                    if (window == null)
                     {
-                        var window = m_workspace.FocusedWindow;
-                        if (window == null)
-                        {
-                            return null;
-                        }
-
-                        using (m_backendLock.EnterScope())
-                        {
-                            if (m_backend.HasWindow(window))
-                            {
-                                return m_backend.MockMoveWindow(window, pt, allowNesting: !isSwapping).preArrange;
-                            }
-                        }
+                        return null;
                     }
-                    else
+
+                    using (m_backendLock.EnterScope())
                     {
-                        using (m_backendLock.EnterScope())
+                        if (m_backend.HasWindow(window))
                         {
-                            var rect = m_backend.MockMoveNode(m_movingPanelNode, pt, allowNesting: !isSwapping).preArrange;
-                            var padding = GetPanelPaddingRect();
-                            var spacing = GetPanelSpacing();
-                            return new Rectangle(
-                                rect.Left - padding.Left - spacing / 2,
-                                rect.Top - padding.Top - spacing / 2,
-                                rect.Right + padding.Right + spacing / 2,
-                                rect.Bottom + padding.Bottom + spacing / 2);
+                            return m_backend.MockMoveWindow(
+                                window,
+                                pt,
+                                allowNesting: m_enableDragDropAutoPanelCreation && !isSwapping,
+                                swapOnDrop: isSwapping).preArrange;
                         }
                     }
                 }
-                catch (TilingFailedException)
+                else
                 {
-                }
-                catch (InvalidWindowReferenceException)
-                {
+                    using (m_backendLock.EnterScope())
+                    {
+                        var rect = m_backend.MockMoveNode(
+                            m_movingPanelNode,
+                            pt,
+                            allowNesting: m_enableDragDropAutoPanelCreation && !isSwapping,
+                            swapOnDrop: isSwapping).preArrange;
+                        var padding = GetPanelPaddingRect();
+                        var spacing = GetPanelSpacing();
+                        return new Rectangle(
+                            rect.Left - padding.Left - spacing / 2,
+                            rect.Top - padding.Top - spacing / 2,
+                            rect.Right + padding.Right + spacing / 2,
+                            rect.Bottom + padding.Bottom + spacing / 2);
+                    }
                 }
             }
+            catch (TilingFailedException)
+            {
+            }
+            catch (InvalidWindowReferenceException)
+            {
+            }
+            catch (Exception ex)
+            {
+                m_logger.Warning(ex, "Failed to compute drag preview rectangle");
+            }
+
+            return null;
+        }
+
+        private HashSet<IWindow>? GetDragExcludeWindows()
+        {
+            var set = new HashSet<IWindow>();
+            if (m_activeDragWindow != null)
+            {
+                set.Add(m_activeDragWindow);
+            }
+
+            if (m_movingPanelNode != null)
+            {
+                foreach (var w in m_movingPanelNode.Windows)
+                {
+                    set.Add(w.WindowReference);
+                }
+            }
+
+            return set.Count > 0 ? set : null;
+        }
+
+        private DropZonePreviewState? GetDropZonePreviewState()
+        {
+            // Suppress cues when WM_NCHITTEST told us this is a border resize,
+            // or when the size-changed heuristic flagged it as Resizing.
+            if (m_borderResizeGesture || m_currentInteraction == UserInteraction.Resizing)
+            {
+                return null;
+            }
+
+            if (!m_enableDragDropAutoPanelCreation)
+            {
+                // Drop-zone preview communicates panel-creation outcomes; hide it when
+                // auto-creation is disabled to keep visual intent aligned with behavior.
+                return null;
+            }
+
+            // Mouse drag already released: hide cues immediately (see GetPreviewRectangle).
+            if (m_activeDragWindow != null && m_activeDragIsMouse && !m_leftButtonDown)
+            {
+                return null;
+            }
+
+            var windowDragPreview =
+                m_currentInteraction == UserInteraction.Moving
+                || (m_currentInteraction == UserInteraction.Starting && m_activeDragWindow != null)
+                || (m_currentInteraction == UserInteraction.None && m_activeDragWindow != null);
+            if (m_movingPanelNode == null && !windowDragPreview)
+            {
+                return null;
+            }
+
+            // Safety net: suppress cues if the drag source became floating mid-drag
+            // (e.g. via hotkey or exclusion-list update while dragging).
+            if (m_activeDragWindow != null)
+            {
+                using (m_floatingSetLock.EnterScope())
+                {
+                    if (m_floatingSet.Contains(m_activeDragWindow))
+                        return null;
+                }
+            }
+
+            try
+            {
+                if (IsSwapModifierPressed())
+                {
+                    return null;
+                }
+
+                var pt = m_workspace.CursorLocation;
+                using (m_backendLock.EnterScope())
+                {
+                    var exclude = GetDragExcludeWindows();
+                    var targetWindow = m_backend.WindowAtPointForDrag(
+                        m_workspace.VirtualDesktopManager.CurrentDesktop,
+                        pt,
+                        exclude,
+                        m_activeDragWindow);
+                    if (targetWindow == null)
+                    {
+                        return null;
+                    }
+
+                    if (m_activeDragWindow != null)
+                    {
+                        var sourceWindow = m_backend.FindWindow(m_activeDragWindow);
+                        // Suppress cues only for same-stack drags. Same split-parent drags can still
+                        // create left/right/top/bottom outcomes and should keep cues visible.
+                        if (sourceWindow != null
+                            && sourceWindow.Parent is StackPanelNode sourceStack
+                            && ReferenceEquals(sourceStack, targetWindow.Parent))
+                        {
+                            // Same stack drag does not create a new split/stack outcome.
+                            return null;
+                        }
+                    }
+
+                    var zone = targetWindow.Parent is StackPanelNode
+                        ? TilingWorkspace.DropZone.Center
+                        : TilingWorkspace.ClassifyDropZone(targetWindow.ComputedRectangle, pt);
+                    TilingWorkspace.GetDropZoneHighlightRects(
+                        targetWindow.ComputedRectangle,
+                        zone,
+                        out var center,
+                        out var left,
+                        out var top,
+                        out var right,
+                        out var bottom);
+                    var previewKind = zone switch
+                    {
+                        TilingWorkspace.DropZone.Center => DropZonePreviewKind.Center,
+                        TilingWorkspace.DropZone.Left => DropZonePreviewKind.Left,
+                        TilingWorkspace.DropZone.Right => DropZonePreviewKind.Right,
+                        TilingWorkspace.DropZone.Top => DropZonePreviewKind.Top,
+                        TilingWorkspace.DropZone.Bottom => DropZonePreviewKind.Bottom,
+                        TilingWorkspace.DropZone.Neutral => DropZonePreviewKind.Neutral,
+                        _ => DropZonePreviewKind.Neutral,
+                    };
+                    return new DropZonePreviewState(
+                        IsActive: true,
+                        ActiveZone: previewKind,
+                        Center: center,
+                        Left: left,
+                        Top: top,
+                        Right: right,
+                        Bottom: bottom,
+                        TargetOutline: targetWindow.ComputedRectangle);
+                }
+            }
+            catch (InvalidWindowReferenceException)
+            {
+            }
+            catch (Exception ex)
+            {
+                m_logger.Warning(ex, "Failed to compute drop-zone preview state");
+            }
+
             return null;
         }
 
@@ -421,7 +611,25 @@ namespace FancyWM
 
         private IntPtr GetOverlayAnchor()
         {
-            var desktop = m_workspace.VirtualDesktopManager.CurrentDesktop;
+            // COM VD class factory can fail after sleep/wake while Explorer
+            // re-registers (REGDB_E_CLASSNOTREG — GitHub #447). Return no
+            // anchor; the overlay loop will retry on the next tick.
+            IVirtualDesktop desktop;
+            try
+            {
+                desktop = m_workspace.VirtualDesktopManager.CurrentDesktop;
+            }
+            catch (System.Runtime.InteropServices.COMException ex)
+            {
+                // Throttle: GetOverlayAnchor runs on every overlay tick, so log at most
+                // once per 5s while the VD COM service is unregistered (sleep/wake).
+                if (m_sw.Elapsed - m_lastAnchorComWarning > TimeSpan.FromSeconds(5))
+                {
+                    m_lastAnchorComWarning = m_sw.Elapsed;
+                    m_logger.Warning(ex, "Virtual desktop COM unavailable while resolving overlay anchor; skipping anchor this tick");
+                }
+                return new IntPtr(0);
+            }
             using (m_backendLock.EnterScope())
             {
                 try
@@ -469,6 +677,12 @@ namespace FancyWM
                     m_floatingSet.Add(window);
                 }
             }
+            // User explicitly toggled float — remove from retry tracking so
+            // RetryFailedPlacements() won't override the user's intent.
+            using (m_placementFailedSetLock.EnterScope())
+            {
+                m_placementFailedSet.Remove(window);
+            }
             DetectChanges(window);
             if (floated)
             {
@@ -502,7 +716,55 @@ namespace FancyWM
                 {
                     m_floatingSet.Add(e.FailSource);
                 }
+                // Mark as auto-floated so RetryFailedPlacements() can re-attempt
+                // once transient constraints (e.g. post-hibernation) resolve.
+                using (m_placementFailedSetLock.EnterScope())
+                {
+                    m_placementFailedSet.Add(e.FailSource);
+                }
                 OnWindowFloated(e.FailSource);
+            }
+        }
+
+        /// Re-attempts tiling for windows that were auto-floated due to transient
+        /// constraint failures (e.g. stale min/max sizes right after hibernation
+        /// resume or display reconnect). Called on a delay to give Windows time to
+        /// stabilize display geometry and window metrics.
+        internal void RetryFailedPlacements()
+        {
+            List<IWindow> candidates;
+            using (m_placementFailedSetLock.EnterScope())
+            {
+                candidates = [.. m_placementFailedSet];
+            }
+
+            if (candidates.Count == 0)
+                return;
+
+            m_logger.Information("Retrying placement for {Count} auto-floated window(s)", candidates.Count);
+
+            foreach (var window in candidates)
+            {
+                try
+                {
+                    // Un-float so DetectChanges → CanManage → RegisterWindow path runs.
+                    using (m_floatingSetLock.EnterScope())
+                    {
+                        m_floatingSet.Remove(window);
+                    }
+                    using (m_placementFailedSetLock.EnterScope())
+                    {
+                        m_placementFailedSet.Remove(window);
+                    }
+
+                    // DetectChanges will re-register if constraints now permit it.
+                    // If it still fails, OnPlacementFailed re-adds to both sets.
+                    DetectChanges(window);
+                }
+                catch (InvalidWindowReferenceException)
+                {
+                    // Window was destroyed between scheduling the retry and now.
+                }
             }
         }
 
@@ -561,6 +823,16 @@ namespace FancyWM
 
         private void OnCursorLocationChanged(object? sender, CursorLocationChangedEventArgs e)
         {
+            // Keep drag previews responsive to cursor movement even when some windows
+            // don't emit position-changed events continuously during title-bar drag.
+            // Skip when border-resize gesture is active (WM_NCHITTEST classified it).
+            if (!m_borderResizeGesture
+                && m_currentInteraction != UserInteraction.Resizing
+                && (m_activeDragWindow != null || m_movingPanelNode != null))
+            {
+                InvalidateLayout();
+            }
+
             if (PendingIntent == null)
                 return;
 
@@ -859,7 +1131,11 @@ namespace FancyWM
                     {
                         return;
                     }
-                    m_backend.MoveNode(panel, pt, allowNesting: !isSwapping);
+                    m_backend.MoveNode(
+                        panel,
+                        pt,
+                        allowNesting: m_enableDragDropAutoPanelCreation && !isSwapping,
+                        swapOnDrop: isSwapping);
                 }
 
                 InvalidateLayout();
@@ -985,7 +1261,12 @@ namespace FancyWM
             //        }
             //    }
             //});
-            m_currentInteraction = UserInteraction.None;
+            // During move drags, focus can move to hover target windows. Keep drag interaction
+            // state alive while we still have an active drag source so drop cues don't disappear.
+            if (m_activeDragWindow == null)
+            {
+                m_currentInteraction = UserInteraction.None;
+            }
         }
 
         private void OnWindowAdded(object? sender, WindowChangedEventArgs e)
@@ -1040,7 +1321,7 @@ namespace FancyWM
                                         return;
                                     }
 
-                                    var node = m_backend.RegisterWindow(e.Source, maxTreeWidth: m_autoSplitCount);
+                                    var node = m_backend.RegisterWindow(e.Source, m_autoSplitCount, m_overflowPlacementStrategy);
                                     node.Parent!.Padding = GetPanelPaddingRect();
                                     node.Parent!.Spacing = GetPanelSpacing();
                                 }
@@ -1070,6 +1351,18 @@ namespace FancyWM
         {
             m_logger.Information("Window {Window} removed from workspace", e.Source.DebugString());
 
+            // The drag source vanished mid-gesture (e.g. it closed itself while being
+            // dragged). No PositionChangeEnd will arrive to clear the gesture state, so
+            // the drop-zone/preview cues would stay stuck on screen. Reset it here.
+            if (ReferenceEquals(m_activeDragWindow, e.Source))
+            {
+                m_activeDragWindow = null;
+                m_activeDragIsMouse = false;
+                m_borderResizeGesture = false;
+                m_currentInteraction = UserInteraction.None;
+                InvalidateLayout();
+            }
+
             UnbindEventHandlers(e.Source);
             using (m_savedLocationsLock.EnterScope())
             {
@@ -1092,6 +1385,10 @@ namespace FancyWM
             {
                 m_floatingSet.Remove(e.Source);
             }
+            using (m_placementFailedSetLock.EnterScope())
+            {
+                m_placementFailedSet.Remove(e.Source);
+            }
             using (m_newWindowSetLock.EnterScope())
             {
                 m_newWindowSet.Remove(e.Source);
@@ -1111,8 +1408,24 @@ namespace FancyWM
                 if (m_backend.HasWindow(window))
                 {
                     m_logger.Debug("Window {Window} size is unchanged, attempting to insert window at {Position}", window.DebugString(), pt);
-                    m_backend.MoveWindow(window, pt, allowNesting: !isSwapping);
-                    m_backend.SetFocus(window);
+                    try
+                    {
+                    m_backend.MoveWindow(
+                        window,
+                        pt,
+                        allowNesting: m_enableDragDropAutoPanelCreation && !isSwapping,
+                        swapOnDrop: isSwapping);
+                        m_backend.SetFocus(window);
+                    }
+                    catch (TilingFailedException ex)
+                    {
+                        m_logger.Warning(
+                            "MoveWindow tiling failed: {Reason} window={Window} cursor={Cursor}",
+                            ex.FailReason,
+                            window.DebugString(),
+                            pt);
+                        throw;
+                    }
                 }
             }
         }
@@ -1143,6 +1456,10 @@ namespace FancyWM
             {
                 m_ignoreRepositionSet.Remove(e.Source);
             }
+
+            m_activeDragWindow = null;
+            m_activeDragIsMouse = false;
+            m_borderResizeGesture = false;
             m_currentInteraction = UserInteraction.None;
         }
 
@@ -1309,7 +1626,7 @@ namespace FancyWM
                 {
                     try
                     {
-                        var window = m_backend.RegisterWindow(e.Source, maxTreeWidth: m_autoSplitCount);
+                        var window = m_backend.RegisterWindow(e.Source, m_autoSplitCount, m_overflowPlacementStrategy);
                         window.Parent!.Padding = GetPanelPaddingRect();
                         window.Parent!.Spacing = GetPanelSpacing();
                     }
@@ -1464,7 +1781,24 @@ namespace FancyWM
             {
                 m_ignoreRepositionSet.Add(e.Source);
             }
+
+            // Only windows actually tiled by THIS backend may trigger drag-drop cues. Anything
+            // not in the tree — floating, topmost, non-resizable, pinned, off-display, or managed
+            // by another display's service — can't participate in panel creation, so it must not
+            // set m_activeDragWindow (which would light up drop cues over tiled windows).
+            using (m_backendLock.EnterScope())
+            {
+                if (!m_backend.HasWindow(e.Source))
+                    return;
+            }
+
+            m_activeDragWindow = e.Source;
+            m_activeDragIsMouse = m_leftButtonDown;
+            // Classify gesture at start: WM_NCHITTEST tells us if the cursor is
+            // over a sizing border, so we can suppress drag-drop cues during resize.
+            m_borderResizeGesture = NcHitTest.IsBorderResize(e.Source.Handle);
             m_currentInteraction = UserInteraction.Starting;
+            InvalidateLayout();
         }
 
         private void OnTilingNodeFocusRequested(object? sender, TilingNode e)
@@ -1534,6 +1868,90 @@ namespace FancyWM
             window.TopmostChanged -= OnWindowTopmostChanged;
         }
 
+        private static readonly TimeSpan StuckDragRecoveryDelay = TimeSpan.FromMilliseconds(350);
+
+        private void SubscribeGlobalMouseHook()
+        {
+            if (App.Current.Services.GetService<LowLevelMouseHook>() is LowLevelMouseHook hook)
+            {
+                m_mouseHook = hook;
+                m_mouseHook.ButtonStateChanged += OnGlobalMouseButtonStateChanged;
+            }
+        }
+
+        private void UnsubscribeGlobalMouseHook()
+        {
+            if (m_mouseHook != null)
+            {
+                m_mouseHook.ButtonStateChanged -= OnGlobalMouseButtonStateChanged;
+                m_mouseHook = null;
+            }
+        }
+
+        private void OnGlobalMouseButtonStateChanged(object? sender, ref LowLevelMouseHook.ButtonStateChangedEventArgs e)
+        {
+            if (e.Button != LowLevelMouseHook.MouseButton.Left)
+                return;
+
+            if (e.IsPressed)
+            {
+                m_leftButtonDown = true;
+                return;
+            }
+
+            m_leftButtonDown = false;
+
+            // Button released => any mouse drag is over, so hide the drag cues DIRECTLY and
+            // unconditionally. Don't route this through the layout recompute / GetDropZonePreviewState
+            // gate — that path can be throttled or never run (e.g. when a window never emits
+            // PositionChangeEnd), which left the cue stuck on screen. Clearing the GUI cue does not
+            // touch gesture state, so a pending delayed placement still completes in PositionChangeEnd.
+            _ = m_dispatcher.InvokeAsync(() =>
+            {
+                m_gui.DropZonePreview = null;
+                m_gui.PreviewRectangle = null;
+            });
+
+            // Separately, recover stuck gesture state after a short grace period so PositionChangeEnd
+            // can win the race for the real placement first. No-ops when nothing needs recovery.
+            _ = m_dispatcher.InvokeAsync(async () =>
+            {
+                await Task.Delay(StuckDragRecoveryDelay);
+                ClearStuckDragStateIfIdle();
+            });
+        }
+
+        private void ClearStuckDragStateIfIdle()
+        {
+            // A fresh press started a new gesture — leave it alone.
+            if (m_leftButtonDown)
+                return;
+            // Panel moves are driven by WPF mouse capture and clear themselves reliably.
+            if (m_movingPanelNode != null)
+                return;
+            if (m_activeDragWindow == null && m_currentInteraction == UserInteraction.None && !m_borderResizeGesture)
+                return;
+
+            // In DelayReposition mode the actual placement runs in OnWindowPositionChangeEnd,
+            // gated on m_currentInteraction == Moving. EVENT_SYSTEM_MOVESIZEEND (which drives
+            // that handler) can arrive well after the physical button-up for slow/busy windows.
+            // Do NOT clear the interaction here — that would skip DoWindowMove and silently drop
+            // the placement. But DO refresh layout so the button-up gate hides the released cue
+            // (the cue must not stay stuck while we wait for the late PositionChangeEnd).
+            if (m_delayReposition && m_currentInteraction == UserInteraction.Moving && m_activeDragWindow != null)
+            {
+                InvalidateLayout();
+                return;
+            }
+
+            m_logger.Debug("Recovering stuck drag-gesture state after mouse release");
+            m_activeDragWindow = null;
+            m_activeDragIsMouse = false;
+            m_borderResizeGesture = false;
+            m_currentInteraction = UserInteraction.None;
+            InvalidateLayout();
+        }
+
         private bool IsSwapModifierPressed()
         {
             static bool GetState() => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
@@ -1568,7 +1986,7 @@ namespace FancyWM
                                 if (!m_backend.HasWindow(window))
                                 {
                                     m_logger.Debug("Window {Window} can be managed, but is not registered with backend, registering now", window.DebugString());
-                                    var newNode = m_backend.RegisterWindow(window, maxTreeWidth: m_autoSplitCount);
+                                    var newNode = m_backend.RegisterWindow(window, m_autoSplitCount, m_overflowPlacementStrategy);
                                     newNode.Parent!.Padding = GetPanelPaddingRect();
                                     newNode.Parent!.Spacing = GetPanelSpacing();
                                     InvalidateLayout();
@@ -1666,9 +2084,20 @@ namespace FancyWM
                 return false;
             }
 
-            // Virtual Desktop stuff is very expensive
-            if (m_workspace.VirtualDesktopManager.IsWindowPinned(x))
+            // Virtual Desktop stuff is very expensive.
+            // The COM VD service can throw transiently during input-sync calls,
+            // display changes, or hibernation resume (GitHub #450, #457).
+            // Safe default: don't manage the window when we can't determine pin state.
+            try
             {
+                if (m_workspace.VirtualDesktopManager.IsWindowPinned(x))
+                {
+                    return false;
+                }
+            }
+            catch (System.Runtime.InteropServices.COMException ex)
+            {
+                m_logger.Verbose(ex, "Virtual desktop pin-state query failed for {Window}; treating as unmanageable this pass", x.DebugString());
                 return false;
             }
 
@@ -1756,9 +2185,9 @@ namespace FancyWM
         {
             using (m_backendLock.EnterScope())
             {
-                foreach (var panel in m_backend.Trees.SelectMany(x => x.Root!.Nodes).OfType<PanelNode>())
+                foreach (var tree in m_backend.Trees)
                 {
-                    panel.Spacing = GetPanelSpacing();
+                    SyncPanelChromeMetrics(tree);
                 }
             }
             UpdateGuiNodeOptions();
@@ -1768,10 +2197,9 @@ namespace FancyWM
         {
             using (m_backendLock.EnterScope())
             {
-                foreach (var panel in m_backend.Trees.SelectMany(x => x.Root!.Nodes).OfType<PanelNode>())
+                foreach (var tree in m_backend.Trees)
                 {
-                    panel.Padding = GetPanelPaddingRect();
-                    panel.Spacing = GetPanelSpacing();
+                    SyncPanelChromeMetrics(tree);
                 }
             }
             UpdateGuiNodeOptions();

@@ -61,7 +61,10 @@ namespace FancyWM.Utilities
 
         private static async Task<bool> EnableLegacyAsync()
         {
-            File.WriteAllBytes(s_startupLinkPath, Resources.Files.FancyWM_lnk);
+            // Must point at the running executable. A prebuilt .lnk resource cannot: it would
+            // hardcode one install path, and the previous one launched the Store package via
+            // shell:appsFolder, which is wrong for every non-Store install.
+            ShellLink.Create(s_startupLinkPath, Environment.ProcessPath!, "FancyWM");
             return await IsEnabledLegacyAsync();
         }
 

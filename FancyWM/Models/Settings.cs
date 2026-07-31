@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
@@ -7,6 +7,28 @@ using FancyWM.Utilities;
 
 namespace FancyWM.Models
 {
+    public enum OverflowPlacementStrategy
+    {
+        Vertical,
+        Horizontal,
+        Stack,
+    }
+
+    /// <summary>
+    /// Outcome of dragging a window's title bar onto a window that is already its sibling
+    /// in the same panel. Only affects the same-parent case; cross-parent edge drops always
+    /// create splits and center always stacks where applicable. Explicit panel creation
+    /// (the hover-menu split/stack drag-handles) is unaffected.
+    /// </summary>
+    public enum SiblingDragMode
+    {
+        // Values are pinned so existing saved settings keep their meaning if the set changes.
+        /// <summary>Edge zones nest the two windows into a split; center stacks them. Default.</summary>
+        EdgeSplit = 1,
+        /// <summary>Center stacks; cross-panel edge drops split, same-panel edges reorder (i3/sway-like).</summary>
+        Hybrid = 2,
+    }
+
     public interface ITilingServiceSettings
     {
         bool AllocateNewPanelSpace { get; }
@@ -14,10 +36,15 @@ namespace FancyWM.Models
         int WindowPadding { get; }
         int PanelHeight { get; }
         int AutoSplitCount { get; }
+        OverflowPlacementStrategy OverflowPlacementStrategy { get; }
         bool ShowFocus { get; }
         bool AutoCollapsePanels { get; }
         bool DelayReposition { get; }
         bool AutoFloatNewWindows { get; }
+        bool PreserveWindowPositionsOnExit { get; }
+        bool EnableDragDropAutoPanelCreation { get; }
+        SiblingDragMode SiblingDragMode { get; }
+        bool HideWindowActionMenuOnHover { get; }
     }
 
     [AttributeUsage(AttributeTargets.Field)]
@@ -47,9 +74,27 @@ namespace FancyWM.Models
         public bool AutoCollapsePanels { get; init; } = false;
 
         public int AutoSplitCount { get; init; } = 2;
+        public OverflowPlacementStrategy OverflowPlacementStrategy { get; init; } = OverflowPlacementStrategy.Stack;
 
         public bool DelayReposition { get; init; } = true;
         public bool AutoFloatNewWindows { get; init; } = false;
+        // Keep current tiled positions when FancyWM is stopped/closed.
+        // If false, stop() restores pre-tiling window positions.
+        public bool PreserveWindowPositionsOnExit { get; init; } = true;
+
+        // Governs drag-drop split/stack auto-creation from drop zones.
+        // Default on to preserve the interactive tiling flow.
+        public bool EnableDragDropAutoPanelCreation { get; init; } = true;
+
+        // How a same-parent sibling title-bar drag resolves. Default EdgeSplit so drag-and-drop
+        // always creates panels (edge -> split, center -> stack); Hybrid reorders same-panel edges.
+        public SiblingDragMode SiblingDragMode { get; init; } = SiblingDragMode.EdgeSplit;
+
+        public bool HideWindowActionMenuOnHover { get; init; } = false;
+
+        // Show the close (X) button on panel tabs. Default hidden to avoid accidentally
+        // closing windows when clicking a tab.
+        public bool ShowTabCloseButton { get; init; } = false;
 
         public bool AnimateWindowMovement { get; init; } = true;
 

@@ -71,16 +71,6 @@ namespace FancyWM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] FancyWM_lnk {
-            get {
-                object obj = ResourceManager.GetObject("FancyWM_lnk", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon Icon {

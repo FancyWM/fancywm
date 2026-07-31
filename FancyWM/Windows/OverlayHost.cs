@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -111,6 +111,10 @@ namespace FancyWM.Windows
 
             DisableWindow(m_hwnd);
             DisableWindow(m_nonHitTestableHwnd);
+
+            // Do not use WDA_EXCLUDEFROMCAPTURE: it strips overlay pixels from screen
+            // capture, so focus rings and panel chrome would disappear from screenshots.
+
             UpdatePositions();
 
             display.Workspace.CursorLocationChanged += OnCursorLocationChanged;
@@ -228,21 +232,37 @@ namespace FancyWM.Windows
 
         private static void EnableWindow(IntPtr hwnd)
         {
-            var oldValue = PInvoke.GetWindowLong(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE);
-            var newValue = oldValue & ~(int)WINDOWS_STYLE.WS_DISABLED;
-            if (oldValue != newValue)
+            var oldStyle = PInvoke.GetWindowLong(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE);
+            var newStyle = oldStyle & ~(int)WINDOWS_STYLE.WS_DISABLED;
+            if (oldStyle != newStyle)
             {
-                _ = SetWindowLongPtr(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE, newValue);
+                _ = SetWindowLongPtr(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE, newStyle);
+            }
+            // Remove WS_EX_TRANSPARENT so the window can receive input and is
+            // visible to WindowFromPoint (needed for interactive overlay controls).
+            var oldEx = PInvoke.GetWindowLong(new(hwnd), GetWindowLongPtr_nIndex.GWL_EXSTYLE);
+            var newEx = oldEx & ~(int)WINDOWS_EX_STYLE.WS_EX_TRANSPARENT;
+            if (oldEx != newEx)
+            {
+                _ = SetWindowLongPtr(new(hwnd), GetWindowLongPtr_nIndex.GWL_EXSTYLE, newEx);
             }
         }
 
         private static void DisableWindow(IntPtr hwnd)
         {
-            var oldValue = PInvoke.GetWindowLong(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE);
-            var newValue = oldValue | (int)WINDOWS_STYLE.WS_DISABLED;
-            if (oldValue != newValue)
+            var oldStyle = PInvoke.GetWindowLong(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE);
+            var newStyle = oldStyle | (int)WINDOWS_STYLE.WS_DISABLED;
+            if (oldStyle != newStyle)
             {
-                _ = SetWindowLongPtr(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE, newValue);
+                _ = SetWindowLongPtr(new(hwnd), GetWindowLongPtr_nIndex.GWL_STYLE, newStyle);
+            }
+            // WS_EX_TRANSPARENT: hit-test APIs skip this hwnd when the cursor is not
+            // over interactive overlay visuals (see OnCursorLocationChanged).
+            var oldEx = PInvoke.GetWindowLong(new(hwnd), GetWindowLongPtr_nIndex.GWL_EXSTYLE);
+            var newEx = oldEx | (int)WINDOWS_EX_STYLE.WS_EX_TRANSPARENT;
+            if (oldEx != newEx)
+            {
+                _ = SetWindowLongPtr(new(hwnd), GetWindowLongPtr_nIndex.GWL_EXSTYLE, newEx);
             }
         }
 

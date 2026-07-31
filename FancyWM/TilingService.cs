@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Threading;
 
@@ -13,6 +13,7 @@ using Serilog;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Diagnostics;
+using Microsoft.Win32;
 
 #if DEBUG
 using Lock = FancyWM.Utilities.DebugLock;
@@ -62,9 +63,13 @@ namespace FancyWM
         private bool m_animateWindowMovement;
 
         private int m_autoSplitCount = 100;
+        private OverflowPlacementStrategy m_overflowPlacementStrategy = OverflowPlacementStrategy.Stack;
 
         private bool m_delayReposition = false;
         private bool m_autoFloatNewWindows = false;
+        // Runtime cache of user settings used by move/stop handlers.
+        private bool m_preserveWindowPositionsOnExit = true;
+        private bool m_enableDragDropAutoPanelCreation = true;
 
         private void SetAutoCollapse(bool value)
         {
@@ -164,6 +169,13 @@ namespace FancyWM
         private readonly HashSet<IWindow> m_floatingSet = [];
         private readonly Utilities.DebugLock m_floatingSetLock = new(LockThreshold);
 
+        /// Windows auto-floated due to transient placement failure (e.g. after
+        /// hibernation resume). Tracked separately so RetryFailedPlacements() can
+        /// attempt to re-tile them once constraints stabilize, without touching
+        /// user-intentionally-floated windows.
+        private readonly HashSet<IWindow> m_placementFailedSet = [];
+        private readonly Utilities.DebugLock m_placementFailedSetLock = new(LockThreshold);
+
         private readonly HashSet<IWindow> m_ignoreRepositionSet = [];
         private readonly Utilities.DebugLock m_ignoreRepositionSetLock = new(LockThreshold);
 
@@ -181,7 +193,21 @@ namespace FancyWM
         private bool m_dirty = true;
         private UserInteraction m_currentInteraction = UserInteraction.None;
         private PanelNode? m_movingPanelNode;
+        private IWindow? m_activeDragWindow;
+        /// <summary>
+        /// True when WM_NCHITTEST at gesture start returned a border/sizing hit-test
+        /// code, meaning the user is edge-resizing rather than title-bar-moving.
+        /// Suppresses drag-drop preview cues for the duration of the gesture.
+        /// </summary>
+        private bool m_borderResizeGesture;
         private ITilingServiceIntent? m_pendingIntent;
+        private LowLevelMouseHook? m_mouseHook;
+        private volatile bool m_leftButtonDown;
+        // True when the active window drag was initiated by a mouse press (vs. keyboard
+        // system-menu move). Lets us hide drag cues the instant the button is released
+        // without affecting keyboard-driven moves.
+        private bool m_activeDragIsMouse;
+        private TimeSpan m_lastAnchorComWarning = TimeSpan.FromSeconds(-60);
         private readonly Counter m_frozen = new();
         private readonly Stopwatch m_sw = new();
 
@@ -192,7 +218,7 @@ namespace FancyWM
             m_workspace = workspace;
             m_animationThread = animationThread;
             m_display = display;
-            m_backend = new TilingWorkspace();
+            m_backend = new TilingWorkspace(m_logger);
             m_gui = new TilingOverlayRenderer(display, GetOverlayAnchor)
             {
                 PanelSpacing = GetPanelSpacing(),
@@ -225,6 +251,7 @@ namespace FancyWM
             m_workspace.VirtualDesktopManager.DesktopRemoved += OnDesktopRemoved;
             m_workspace.VirtualDesktopManager.CurrentDesktopChanged += OnCurrentDesktopChanged;
             m_workspace.CursorLocationChanged += OnCursorLocationChanged;
+            SystemEvents.PowerModeChanged += OnPowerModeChanged;
 
             m_display.ScalingChanged += OnDisplayScalingChanged;
 
@@ -233,6 +260,8 @@ namespace FancyWM
 
             PlacementFailed += OnPlacementFailed;
             PendingIntentChanged += OnPendingIntentChanged;
+
+            SubscribeGlobalMouseHook();
 
             m_subscriptions.Add(m_gui);
             m_subscriptions.Add(settings.Subscribe(OnSettingsChanged));
@@ -261,8 +290,12 @@ namespace FancyWM
                 m_allocateNewPanelSpace = x.AllocateNewPanelSpace;
                 m_animateWindowMovement = x.AnimateWindowMovement;
                 m_autoSplitCount = x.AutoSplitCount;
+                m_overflowPlacementStrategy = x.OverflowPlacementStrategy;
                 m_delayReposition = x.DelayReposition;
                 m_autoFloatNewWindows = x.AutoFloatNewWindows;
+                m_preserveWindowPositionsOnExit = x.PreserveWindowPositionsOnExit;
+                m_enableDragDropAutoPanelCreation = x.EnableDragDropAutoPanelCreation;
+                m_backend.SiblingDrag = x.SiblingDragMode;
                 SetWindowPadding(x.WindowPadding);
                 SetPanelHeight(x.PanelHeight);
                 SetShowFocus(x.ShowFocus);
@@ -280,7 +313,10 @@ namespace FancyWM
         public void Stop()
         {
             m_active = false;
-            RestoreOriginalLayout();
+            if (!m_preserveWindowPositionsOnExit)
+            {
+                RestoreOriginalLayout();
+            }
             m_gui.Hide();
         }
 
@@ -377,7 +413,7 @@ namespace FancyWM
                         if (!m_backend.HasWindow(window) && window.State == WindowState.Restored && CanManage(window))
                         {
                             m_logger.Debug("Discovered window {Window}", window.DebugString());
-                            var newNode = m_backend.RegisterWindow(window, maxTreeWidth: m_autoSplitCount);
+                            var newNode = m_backend.RegisterWindow(window, m_autoSplitCount, m_overflowPlacementStrategy);
                             newNode.Parent!.Padding = GetPanelPaddingRect();
                             newNode.Parent!.Spacing = GetPanelSpacing();
                             InvalidateLayout();
@@ -581,6 +617,9 @@ namespace FancyWM
             m_workspace.VirtualDesktopManager.DesktopRemoved -= OnDesktopRemoved;
             m_workspace.VirtualDesktopManager.CurrentDesktopChanged -= OnCurrentDesktopChanged;
             m_workspace.CursorLocationChanged -= OnCursorLocationChanged;
+            SystemEvents.PowerModeChanged -= OnPowerModeChanged;
+
+            UnsubscribeGlobalMouseHook();
 
             m_workspace.WindowAdded -= OnWindowAdded;
             m_workspace.WindowRemoved -= OnWindowRemoved;
@@ -677,6 +716,34 @@ namespace FancyWM
         public Rectangle GetBounds()
         {
             return m_display.Bounds;
+        }
+
+        private void OnPowerModeChanged(object? sender, PowerModeChangedEventArgs e)
+        {
+            if (e.Mode != PowerModes.Resume)
+            {
+                return;
+            }
+
+            _ = m_dispatcher.RunAsync(async () =>
+            {
+                // Let Windows finish monitor/session restoration first; running
+                // refresh immediately can race with transient display/work-area changes.
+                await Task.Delay(750);
+                Refresh();
+                InvalidateLayout();
+
+                // Secondary pass: windows that failed placement above due to stale
+                // min/max constraints get another chance now that displays have
+                // had more time to settle. Three retries spaced 2s apart cover
+                // slow monitor wake-up scenarios.
+                for (int i = 0; i < 3; i++)
+                {
+                    await Task.Delay(2000);
+                    RetryFailedPlacements();
+                    InvalidateLayout();
+                }
+            });
         }
 
         public IWindow? FindClosest(Point center)

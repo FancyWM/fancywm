@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -59,7 +59,7 @@ namespace FancyWM.ViewModels
                     }
                     else
                     {
-                        m_dependedBy[dep] = [dep];
+                        m_dependedBy[dep] = [prop];
                     }
                 }
             }

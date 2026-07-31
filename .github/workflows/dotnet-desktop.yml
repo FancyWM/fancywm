@@ -2,42 +2,67 @@ name: .NET Desktop
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "ci/**" ]
     tags:
       - "v*"
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  # Manual runs get their own group: a queued dispatch would otherwise be evicted by a
+  # later push to the same ref before it ever starts. Tags and main are never cancelled.
+  group: ${{ github.workflow }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
+  cancel-in-progress: ${{ github.ref_type == 'branch' && github.ref != 'refs/heads/main' }}
+
+env:
+  TFM_DIR: net10.0-windows10.0.18362.0
 
 jobs:
 
   build:
 
     strategy:
+      fail-fast: false
       matrix:
         configuration: [Debug, Release]
 
     runs-on: windows-latest
+    timeout-minutes: 30
+
+    permissions:
+      contents: write # action-gh-release creates the release on tag pushes
 
     steps:
+    # Checkout first: nbgv, the NuGet cache key and every build step need the working tree.
+    - name: Checkout
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0 # nbgv needs the full history to compute a version
+        submodules: true
+
     # Install the .NET workload
     - name: Install .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 10.0.x
 
     - name: Setup Windows SDK
-      uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.11
+      uses: GuillaumeFalourd/setup-windows10-sdk-action@d4f23d08ae372a72e47dc2616c9ec8c951f853ec # v2.5
       with:
         sdk-version: 18362
 
-    - name: Checkout
-      uses: actions/checkout@v3
+    - name: Cache NuGet packages
+      uses: actions/cache@v6
       with:
-        fetch-depth: 0
-        submodules: true
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Build.props') }}
+        restore-keys: ${{ runner.os }}-nuget-
 
     - name: Use Nerdbank.GitVersioning to set version variables
-      uses: dotnet/nbgv@master
+      uses: dotnet/nbgv@705dad19ab067f12f4e9eeaa60812e01edef5d25 # v0.5.2
       id: nbgv
 
     # Restore the application
@@ -52,22 +77,122 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
 
-    # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: |
-        dotnet test FancyWM.Tests
-        dotnet test FancyWM.Layouts.Tests
+    # One test project per step. Chaining native commands in a single pwsh block would
+    # mask failures: $ErrorActionPreference does not apply to native exit codes, and only
+    # the last command's $LASTEXITCODE reaches the runner.
+    - name: Execute unit tests (FancyWM.Tests)
+      run: dotnet test FancyWM.Tests -c ${{ matrix.configuration }} --no-restore
 
+    - name: Execute unit tests (FancyWM.Layouts.Tests)
+      run: dotnet test FancyWM.Layouts.Tests -c ${{ matrix.configuration }} --no-restore
+
+    - name: Execute unit tests (FancyWM.ThemeEngine.Tests)
+      run: dotnet test FancyWM.ThemeEngine.Tests -c ${{ matrix.configuration }} --no-restore
+
+    # Portable build: needs the .NET Desktop Runtime installed. Glob is `*`, not `*.*`,
+    # which would drop every subdirectory (localization satellites, runtimes/).
+    # win-x64/ is excluded because a `-r win-x64` publish drops a full ~336MB
+    # self-contained copy in there; without this the portable zip depends on running
+    # before the publish steps below.
     - name: Generate archive
       run: |
-        Compress-Archive -Path FancyWM.GUI/bin/${{ matrix.configuration }}/net10.0-windows10.0.18362.0/*.* -DestinationPath FancyWM.${{ matrix.configuration }}.x64.zip
-        (Get-FileHash FancyWM.${{ matrix.configuration }}.x64.zip -Algorithm SHA256).Hash | Out-File FancyWM.${{ matrix.configuration }}.x64.zip.sha256sum
+        $out = "FancyWM.GUI/bin/${{ matrix.configuration }}/${{ env.TFM_DIR }}"
+        Set-Content -Path "$out/README.txt" -Value "FancyWM ${{ steps.nbgv.outputs.SemVer2 }} (portable, x64)`r`n`r`nRequires the .NET 10 Desktop Runtime (x64):`r`nhttps://dotnet.microsoft.com/download/dotnet/10.0/runtime`r`n`r`nRun FancyWM-GUI.exe. For a build with no prerequisites, use the installer or the standalone download."
+        $items = (Get-ChildItem -Path $out -Exclude 'win-x64').FullName
+        Compress-Archive -Path $items -DestinationPath "FancyWM.${{ matrix.configuration }}.x64.zip"
+        (Get-FileHash "FancyWM.${{ matrix.configuration }}.x64.zip" -Algorithm SHA256).Hash | Out-File "FancyWM.${{ matrix.configuration }}.x64.zip.sha256sum"
+
+    - name: Upload portable build
+      uses: actions/upload-artifact@v7
+      with:
+        name: FancyWM-portable-${{ matrix.configuration }}-x64
+        path: |
+          FancyWM.${{ matrix.configuration }}.x64.zip
+          FancyWM.${{ matrix.configuration }}.x64.zip.sha256sum
+        if-no-files-found: error
+        retention-days: 14
+
+    # Standalone build: single self-contained .exe, no .NET runtime required.
+    # This is the download to hand to someone who just wants to run FancyWM.
+    - name: Publish standalone executable
+      if: matrix.configuration == 'Release'
+      run: |
+        dotnet publish FancyWM.GUI -c Release -r win-x64 --self-contained true `
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true `
+          -p:WarningLevel=0 -o publish/standalone
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        Remove-Item publish/standalone/*.pdb -ErrorAction SilentlyContinue
+        Compress-Archive -Path "publish/standalone/*" -DestinationPath "FancyWM.Standalone.x64.zip"
+        (Get-FileHash "FancyWM.Standalone.x64.zip" -Algorithm SHA256).Hash | Out-File "FancyWM.Standalone.x64.zip.sha256sum"
+
+    - name: Upload standalone build
+      if: matrix.configuration == 'Release'
+      uses: actions/upload-artifact@v7
+      with:
+        name: FancyWM-standalone-x64
+        path: |
+          FancyWM.Standalone.x64.zip
+          FancyWM.Standalone.x64.zip.sha256sum
+        if-no-files-found: error
+        retention-days: 14
+
+    # Installer: self-contained, so it needs no .NET runtime, and per-user, so it needs
+    # no admin. Unsigned — SmartScreen warns once and the user can continue. Inno Setup
+    # is preinstalled on the runner image.
+    - name: Build installer
+      if: matrix.configuration == 'Release'
+      run: |
+        dotnet publish FancyWM.GUI -c Release -r win-x64 --self-contained true `
+          -p:WarningLevel=0 -o publish/installer
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        Remove-Item publish/installer/*.pdb -ErrorAction SilentlyContinue
+
+        # Inno Setup ships on the runner image, but windows-latest is a moving alias and
+        # has dropped tools before (NSIS, in the 2022 -> 2025 move). Install on miss.
+        $iscc = @(
+          "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+          "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+        ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+        if (-not $iscc) {
+          Write-Host "Inno Setup not preinstalled; installing via Chocolatey."
+          choco install innosetup -y --no-progress
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+        }
+        Write-Host "Using $iscc"
+
+        & $iscc `
+          "/DSourceDir=$pwd\publish\installer" `
+          "/DAppVersion=${{ steps.nbgv.outputs.SimpleVersion }}" `
+          "/DOutputDir=$pwd" `
+          installer\FancyWM.iss
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        (Get-FileHash "FancyWM-Setup-x64.exe" -Algorithm SHA256).Hash | Out-File "FancyWM-Setup-x64.exe.sha256sum"
+
+    - name: Upload installer
+      if: matrix.configuration == 'Release'
+      uses: actions/upload-artifact@v7
+      with:
+        name: FancyWM-installer-x64
+        path: |
+          FancyWM-Setup-x64.exe
+          FancyWM-Setup-x64.exe.sha256sum
+        if-no-files-found: error
+        retention-days: 14
 
     - name: Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v3
+      if: startsWith(github.ref, 'refs/tags/') && matrix.configuration == 'Release'
       with:
-        prerelease: ${{ steps.nbgv.outputs.PublicRelease }}
+        prerelease: ${{ contains(github.ref_name, '-') }}
+        body: |
+          **Installer** — `FancyWM-Setup-x64.exe`. Installs for the current user, no admin needed, no prerequisites. Unsigned, so SmartScreen warns once: *More info → Run anyway*.
+          **Standalone** — `FancyWM.Standalone.x64.zip`. A single portable .exe, no install, no prerequisites.
+          **Portable** — `FancyWM.Release.x64.zip`. Smallest, but needs the [.NET 10 Desktop Runtime (x64)](https://dotnet.microsoft.com/download/dotnet/10.0/runtime).
         files: |
+          FancyWM-Setup-x64.exe
+          FancyWM-Setup-x64.exe.sha256sum
+          FancyWM.Standalone.x64.zip
+          FancyWM.Standalone.x64.zip.sha256sum
           FancyWM.${{ matrix.configuration }}.x64.zip
           FancyWM.${{ matrix.configuration }}.x64.zip.sha256sum

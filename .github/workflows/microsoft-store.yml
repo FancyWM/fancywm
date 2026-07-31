@@ -1,11 +1,20 @@
 name: Microsoft Store Build
 
+# Requires the Base64_Encoded_Pfx and Pfx_Key secrets. Without them the signing step
+# cannot succeed, so this only runs where those secrets are available: tag pushes and
+# manual runs. It is deliberately not wired to pull_request — a fork PR never receives
+# secrets, so that leg could only ever fail.
 on:
   push:
     tags:
       - "v*"
-  pull_request:
-    branches: ["main"]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
 
 jobs:
   build:
@@ -23,6 +32,10 @@ jobs:
             MsixPackageDisplayName: FancyWM
 
     runs-on: windows-latest
+    timeout-minutes: 45
+
+    permissions:
+      contents: write # action-gh-release creates the release on tag pushes
 
     env:
       App_Packages_Bundle: FancyWM.${{ matrix.ChannelName }}.${{ matrix.targetplatform }}.msixbundle
@@ -33,37 +46,36 @@ jobs:
       Wpf_Project_Path: FancyWM\FancyWM.csproj
       Wap_Project_Directory: FancyWM.Package
       Wap_Project_Name: FancyWM.Package.wapproj
-      Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # nbgv needs the full history to compute a version
+          submodules: true
+
       # Install the .NET workload
       - name: Install .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
 
       - name: Setup Windows SDK 18362
-        uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.11
+        uses: GuillaumeFalourd/setup-windows10-sdk-action@d4f23d08ae372a72e47dc2616c9ec8c951f853ec # v2.5
         with:
           sdk-version: 18362
 
       - name: Setup Windows SDK 19041
-        uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.11
+        uses: GuillaumeFalourd/setup-windows10-sdk-action@d4f23d08ae372a72e47dc2616c9ec8c951f853ec # v2.5
         with:
           sdk-version: 19041
 
       # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
       - name: Setup MSBuild.exe
-        uses: microsoft/setup-msbuild@v1.1
-
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          submodules: true
+        uses: microsoft/setup-msbuild@v3
 
       - name: Use Nerdbank.GitVersioning to set version variables
-        uses: dotnet/nbgv@master
+        uses: dotnet/nbgv@705dad19ab067f12f4e9eeaa60812e01edef5d25 # v0.5.2
         id: nbgv
 
       # Update the appxmanifest before build by setting the per-channel values set in the matrix such as
@@ -78,10 +90,17 @@ jobs:
           $manifest.Package.Applications.Application.VisualElements.DisplayName = "${{ matrix.MsixPackageDisplayName }}"
           $manifest.save(".\$env:Wap_Project_Directory\Package.appxmanifest")
 
-      # Decode the Base64 encoded Pfx
+      # Decode the Base64 encoded Pfx. FromBase64String("") returns an empty array rather
+      # than throwing, so an absent secret would otherwise write a 0-byte .pfx and defer
+      # the failure to an opaque signing error much later.
       - name: Decode the Pfx
+        env:
+          Base64_Encoded_Pfx: ${{ secrets.Base64_Encoded_Pfx }}
         run: |
-          $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
+          if ([string]::IsNullOrWhiteSpace($env:Base64_Encoded_Pfx)) {
+            throw "Secret Base64_Encoded_Pfx is not set. This workflow cannot sign a package without it."
+          }
+          $pfx_cert_byte = [System.Convert]::FromBase64String($env:Base64_Encoded_Pfx)
           $currentDirectory = Get-Location
           $certificatePath = Join-Path -Path $currentDirectory -ChildPath $env:Wap_Project_Directory -AdditionalChildPath $env:SigningCertificate
           [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
@@ -93,13 +112,11 @@ jobs:
           Configuration: ${{ matrix.Configuration }}
           RuntimeIdentifier: win-${{ matrix.targetplatform }}
 
-      # Execute all unit tests in the solution
-      # - name: Execute unit tests
-      #   run: dotnet test
-
-      # Build the Windows Application Packaging project for StoreUpload
+      # Build the Windows Application Packaging project for StoreUpload.
+      # PackageCertificatePassword is passed via env, not /p: — command-line arguments are
+      # readable by any process on the runner and land in MSBuild logs.
       - name: Build the Windows Application Packaging Project (wapproj) for ${{ matrix.ChannelName }}
-        run: msbuild $env:Solution_Path /p:Platform=$env:TargetPlatform /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:BuildMode /p:AppxBundlePlatforms="${{ matrix.targetplatform }}" /p:AppxBundle=$env:AppxBundle /p:GenerateAppInstallerFile=$env:GenerateAppInstallerFile /p:AppxPackageSigningEnabled=$env:AppxPackageSigningEnabled /p:PackageCertificateKeyFile=$env:SigningCertificate /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
+        run: msbuild $env:Solution_Path /p:Platform=$env:TargetPlatform /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:BuildMode /p:AppxBundlePlatforms="${{ matrix.targetplatform }}" /p:AppxBundle=$env:AppxBundle /p:GenerateAppInstallerFile=$env:GenerateAppInstallerFile /p:AppxPackageSigningEnabled=$env:AppxPackageSigningEnabled /p:PackageCertificateKeyFile=$env:SigningCertificate
         env:
           AppxBundle: Always
           AppxPackageSigningEnabled: True
@@ -107,10 +124,12 @@ jobs:
           Configuration: ${{ matrix.Configuration }}
           GenerateAppInstallerFile: False
           TargetPlatform: ${{ matrix.targetplatform }}
+          PackageCertificatePassword: ${{ secrets.Pfx_Key }}
 
       # Remove the .pfx
       - name: Remove the .pfx
-        run: Remove-Item -path $env:Wap_Project_Directory\$env:SigningCertificate
+        if: always()
+        run: Remove-Item -path $env:Wap_Project_Directory\$env:SigningCertificate -ErrorAction SilentlyContinue
 
       # Archive the package
       - name: Create archive
@@ -122,11 +141,21 @@ jobs:
           echo "App_Packages_Bundle_Path=$BundlePath" >> $env:GITHUB_ENV
           echo "App_Packages_Cer_Path=$SelfSignedCerPath" >> $env:GITHUB_ENV
 
+      - name: Upload MSIX package
+        uses: actions/upload-artifact@v7
+        with:
+          name: FancyWM-msix-${{ matrix.targetplatform }}
+          path: |
+            ${{ env.App_Packages_Bundle_Path }}
+            ${{ env.App_Packages_Cer_Path }}
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          prerelease: ${{ steps.nbgv.outputs.PublicRelease }}
+          prerelease: ${{ contains(github.ref_name, '-') }}
           files: |
             ${{ env.App_Packages_Bundle_Path }}
             ${{ env.App_Packages_Cer_Path }}

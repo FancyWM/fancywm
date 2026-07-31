@@ -6,4 +6,4 @@
 	url = https://github.com/FancyWM/winman.git
 [submodule "winman-windows"]
 	path = winman-windows
-	url = https://github.com/FancyWM/winman-windows.git
+	url = https://github.com/purr/winman-windows.git

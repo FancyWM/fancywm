@@ -29,6 +29,7 @@ PeekMessage
 AllowSetForegroundWindow
 ZeroMemory
 SendInput
+SendMessage
 SendMessageTimeout
 CreateWindowEx
 GetMessage
@@ -55,6 +56,7 @@ WM_SYSKEYUP
 WM_QUIT
 WM_TIMER
 WM_COPYDATA
+WM_NCHITTEST
 WM_LBUTTONDOWN
 WM_LBUTTONUP
 WM_RBUTTONDOWN

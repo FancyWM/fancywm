@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -219,7 +219,9 @@ namespace FancyWM.Models
         private static async Task<byte[]> ReadAllAsync(Stream stream)
         {
             byte[] b = new byte[stream.Length - stream.Position];
-            await stream.ReadAsync(b);
+            // Stream.ReadAsync is not guaranteed to fill the buffer in one call.
+            // ReadExactlyAsync prevents truncated JSON bytes during merge.
+            await stream.ReadExactlyAsync(b, 0, b.Length);
             return b;
         }
 

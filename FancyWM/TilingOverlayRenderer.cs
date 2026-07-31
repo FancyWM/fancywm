@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -77,6 +77,19 @@ namespace FancyWM
             }
         }
 
+        public DropZonePreviewState? DropZonePreview
+        {
+            get => m_dropZonePreview;
+            set
+            {
+                if (!DropZonePreviewEquals(m_dropZonePreview, value))
+                {
+                    m_dropZonePreview = value;
+                    ApplyDropZonePreview(value);
+                }
+            }
+        }
+
         public IWindow? IntentSourceWindow
         {
             get => m_intentSourceWindow;
@@ -100,11 +113,14 @@ namespace FancyWM
         private double m_panelHeight = 22.0;
         private double m_windowPadding = 4.0;
         private int m_panelFontSize = 12;
+        private bool m_hideWindowActionMenuOnHover = false;
+        private bool m_showTabCloseButton = false;
         private IReadOnlyCollection<TilingNode> m_previousSnapshot = [];
         private readonly Dictionary<TilingNode, TilingNodeViewModel> m_nodeViewModels = [];
         private IReadOnlySet<IWindow> m_previewWindows = new HashSet<IWindow>();
         private Rectangle? m_focusRectangle;
         private Rectangle? m_previewRectangle;
+        private DropZonePreviewState? m_dropZonePreview;
         private IWindow? m_intentSourceWindow;
 
         public TilingOverlayRenderer(IDisplay display, Func<IntPtr> overlayAnchorSource)
@@ -126,6 +142,8 @@ namespace FancyWM
                     m_panelHeight = settings.PanelHeight;
                     m_windowPadding = settings.WindowPadding;
                     m_panelFontSize = settings.PanelFontSize;
+                    m_hideWindowActionMenuOnHover = settings.HideWindowActionMenuOnHover;
+                    m_showTabCloseButton = settings.ShowTabCloseButton;
                     UpdateResources();
                 }));
         }
@@ -172,6 +190,7 @@ namespace FancyWM
             m_viewModel.FontSize = m_display.Scaling * m_panelFontSize;
             m_viewModel.IconSize = m_display.Scaling * m_panelFontSize;
             m_viewModel.TabWidth = 175 * m_display.Scaling * m_panelFontSize / 12;
+            m_viewModel.ShowTabCloseButton = m_showTabCloseButton;
         }
 
         private Rectangle AdjustForDisplay(Rectangle rectangle)
@@ -366,6 +385,62 @@ namespace FancyWM
             m_viewModel.PreviewRectangle = newValue.HasValue ? AdjustForDisplay(newValue.Value) : new Rectangle();
         }
 
+        private static bool DropZonePreviewEquals(DropZonePreviewState? a, DropZonePreviewState? b)
+        {
+            if (ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            if (a is null || b is null)
+            {
+                return false;
+            }
+
+            return a.IsActive == b.IsActive
+                && a.ActiveZone == b.ActiveZone
+                && a.Center == b.Center
+                && a.Left == b.Left
+                && a.Top == b.Top
+                && a.Right == b.Right
+                && a.Bottom == b.Bottom
+                && a.TargetOutline == b.TargetOutline;
+        }
+
+        private void ApplyDropZonePreview(DropZonePreviewState? state)
+        {
+            if (state is not { IsActive: true })
+            {
+                m_viewModel.IsDropZonePreviewVisible = false;
+                m_viewModel.DropZoneActiveKind = "";
+                m_viewModel.DropZoneOutlineRect = default;
+                m_viewModel.DropZoneCenterRect = default;
+                m_viewModel.DropZoneLeftRect = default;
+                m_viewModel.DropZoneTopRect = default;
+                m_viewModel.DropZoneRightRect = default;
+                m_viewModel.DropZoneBottomRect = default;
+                return;
+            }
+
+            m_viewModel.IsDropZonePreviewVisible = true;
+            m_viewModel.DropZoneOutlineRect = AdjustForDisplay(state.TargetOutline);
+            m_viewModel.DropZoneCenterRect = AdjustForDisplay(state.Center);
+            m_viewModel.DropZoneLeftRect = AdjustForDisplay(state.Left);
+            m_viewModel.DropZoneTopRect = AdjustForDisplay(state.Top);
+            m_viewModel.DropZoneRightRect = AdjustForDisplay(state.Right);
+            m_viewModel.DropZoneBottomRect = AdjustForDisplay(state.Bottom);
+            m_viewModel.DropZoneActiveKind = state.ActiveZone switch
+            {
+                DropZonePreviewKind.Center => "Center",
+                DropZonePreviewKind.Left => "Left",
+                DropZonePreviewKind.Right => "Right",
+                DropZonePreviewKind.Top => "Top",
+                DropZonePreviewKind.Bottom => "Bottom",
+                DropZonePreviewKind.Neutral => "Neutral",
+                _ => "",
+            };
+        }
+
 
         private void UpdateViewModel(TilingWindowViewModel vm, WindowNode node, IEnumerable<TilingNode> focusedPath)
         {
@@ -379,12 +454,15 @@ namespace FancyWM
             vm.CloseCommand = m_panelItemCloseActionCommand;
             vm.ActionsHeight = m_panelHeight + 4;
             vm.RevealHighlightRadius = (16 + m_panelHeight + m_windowPadding) * 2;
+            vm.EnableHoverActionMenu = !m_hideWindowActionMenuOnHover;
         }
 
         private void UpdateViewModel(TilingPanelViewModel vm, PanelNode node, IEnumerable<TilingNode> focusedPath)
         {
             vm.Overlay = m_viewModel;
             vm.Node = node;
+            vm.PanelType = node.Type;
+            vm.PanelOrientation = node is SplitPanelNode split ? split.Orientation : PanelOrientation.Horizontal;
             vm.HasFocus = focusedPath.Contains(node);
             vm.ChildHasDirectFocus = vm.ChildNodes.Select(x => x.Node).Contains(focusedPath.FirstOrDefault());
             vm.ComputedBounds = AdjustForDisplay(node.ComputedRectangle);
@@ -518,6 +596,7 @@ namespace FancyWM
         public void Dispose()
 #pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
         {
+            DropZonePreview = null;
             if (m_overlay.Content != null)
             {
                 Draggable.RemoveDragStartedHandler(m_overlay.Content, OnDragStarted);
