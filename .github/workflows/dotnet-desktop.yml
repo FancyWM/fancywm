@@ -13,8 +13,15 @@ jobs:
   build:
 
     strategy:
+      fail-fast: false
       matrix:
         configuration: [Debug, Release]
+        rid: [win-x64, win-arm64]
+        include:
+          - rid: win-x64
+            arch: x64
+          - rid: win-arm64
+            arch: arm64
 
     runs-on: windows-latest
 
@@ -40,28 +47,32 @@ jobs:
       uses: dotnet/nbgv@master
       id: nbgv
 
-    # Restore the application
+    # Restore the application for the target RID
     - name: Restore the application
-      run: dotnet restore
+      run: dotnet restore -r ${{ matrix.rid }}
       env:
         Configuration: ${{ matrix.configuration }}
 
-    # Build the application
+    # Build the application for the target RID (x64 + arm64)
     - name: Build the application
-      run: dotnet build --no-restore --property WarningLevel=0 FancyWM.GUI
-      env:
-        Configuration: ${{ matrix.configuration }}
+      run: dotnet build --no-restore --property WarningLevel=0 -c ${{ matrix.configuration }} -r ${{ matrix.rid }} FancyWM.GUI
 
-    # Execute all unit tests in the solution
+    # Execute unit tests once per configuration on the runner-native RID
     - name: Execute unit tests
+      if: matrix.rid == 'win-x64'
       run: |
-        dotnet test FancyWM.Tests
-        dotnet test FancyWM.Layouts.Tests
+        dotnet test FancyWM.Tests -c ${{ matrix.configuration }} --property WarningLevel=0
+        dotnet test FancyWM.Layouts.Tests -c ${{ matrix.configuration }} --property WarningLevel=0
 
     - name: Generate archive
+      shell: pwsh
       run: |
-        Compress-Archive -Path FancyWM.GUI/bin/${{ matrix.configuration }}/net10.0-windows10.0.18362.0/*.* -DestinationPath FancyWM.${{ matrix.configuration }}.x64.zip
-        (Get-FileHash FancyWM.${{ matrix.configuration }}.x64.zip -Algorithm SHA256).Hash | Out-File FancyWM.${{ matrix.configuration }}.x64.zip.sha256sum
+        $outDir = "FancyWM.GUI/bin/${{ matrix.configuration }}/net10.0-windows10.0.18362.0/${{ matrix.rid }}"
+        if (-not (Test-Path $outDir)) { throw "Missing output directory: $outDir" }
+        $zip = "FancyWM.${{ matrix.configuration }}.${{ matrix.arch }}.zip"
+        if (Test-Path $zip) { Remove-Item $zip -Force }
+        Compress-Archive -Path (Join-Path $outDir '*') -DestinationPath $zip
+        (Get-FileHash $zip -Algorithm SHA256).Hash | Out-File "$zip.sha256sum"
 
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -69,5 +80,5 @@ jobs:
       with:
         prerelease: ${{ steps.nbgv.outputs.PublicRelease }}
         files: |
-          FancyWM.${{ matrix.configuration }}.x64.zip
-          FancyWM.${{ matrix.configuration }}.x64.zip.sha256sum
+          FancyWM.${{ matrix.configuration }}.${{ matrix.arch }}.zip
+          FancyWM.${{ matrix.configuration }}.${{ matrix.arch }}.zip.sha256sum
