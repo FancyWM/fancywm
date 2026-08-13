@@ -3,12 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0-windows10.0.18362.0</TargetFramework>
-    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Icon4.ico</ApplicationIcon>
     <Authors>Vesko Karaganev</Authors>
     <PackageIcon>Icon.png</PackageIcon>
-    <Platforms>AnyCPU;x64;x86</Platforms>
+    <Platforms>AnyCPU;x64;x86;ARM64</Platforms>
     <StartupObject>FancyWM.Startup</StartupObject>
     <Version>1.2.0</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -43,7 +43,12 @@
     <NoWarn>1701;1702;CA1416;CA2012;SYSLIB10;IDE0079</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1701;1702;CA1416;CA2012;SYSLIB10;IDE0079</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>1701;1702;CA1416;CA2012;SYSLIB10;IDE0079</NoWarn>
   </PropertyGroup>

@@ -3,12 +3,12 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows10.0.18362.0</TargetFramework>
-    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>..\FancyWM\Icon4.ico</ApplicationIcon>
     <Authors>Vesko Karaganev</Authors>
     <PackageIcon>Icon.png</PackageIcon>
-    <Platforms>AnyCPU;x64;x86</Platforms>
+    <Platforms>AnyCPU;x64;x86;ARM64</Platforms>
     <StartupObject>FancyWM.GUI.Program</StartupObject>
     <Version>1.2.0</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
