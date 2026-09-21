@@ -62,10 +62,10 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
                 <Style TargetType="ContentPresenter">
-                    <Setter Property="Canvas.Left" Value="{Binding Path=ComputedBounds.Left}" />
-                    <Setter Property="Canvas.Top" Value="{Binding Path=ComputedBounds.Top}" />
-                    <Setter Property="Width" Value="{Binding Path=ComputedBounds.Width}" />
-                    <Setter Property="Height" Value="{Binding Path=ComputedBounds.Height}" />
+                    <Setter Property="Canvas.Left" Value="{Binding Path=ActionsBounds.Left}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Path=ActionsBounds.Top}" />
+                    <Setter Property="Width" Value="{Binding Path=ActionsBounds.Width}" />
+                    <Setter Property="Height" Value="{Binding Path=ActionsBounds.Height}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>

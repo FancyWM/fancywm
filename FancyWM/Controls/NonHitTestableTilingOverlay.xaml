@@ -144,7 +144,7 @@
                     <Rectangle
                         IsHitTestVisible="False"
                         Opacity="{Binding RevealHighlightOpacity}"
-                        Width="{Binding ComputedBounds.Width}"
+                        Width="{Binding ActionsBounds.Width}"
                         Height="8"
                         Margin="0,0,0,0"
                         VerticalAlignment="Top"
@@ -162,8 +162,8 @@
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemContainerStyle>
                 <Style TargetType="ContentPresenter">
-                    <Setter Property="Canvas.Left" Value="{Binding Path=ComputedBounds.Left}" />
-                    <Setter Property="Canvas.Top" Value="{Binding Path=ComputedBounds.Top}" />
+                    <Setter Property="Canvas.Left" Value="{Binding Path=ActionsBounds.Left}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Path=ActionsBounds.Top}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemsPanel>
