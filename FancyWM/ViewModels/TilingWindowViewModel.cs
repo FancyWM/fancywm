@@ -38,6 +38,26 @@ namespace FancyWM.ViewModels
         public double RevealHighlightOpacity { get => m_revealHighlightOpacity; set => SetField(ref m_revealHighlightOpacity, value); }
 
         public bool IsActionActive { get => m_isActionActive; set => SetField(ref m_isActionActive, value); }
+        /// <summary>
+        /// Keeps the actions visible while their "more options" menu is open.
+        /// </summary>
+        public bool IsMenuOpen
+        {
+            get => m_isMenuOpen;
+            set
+            {
+                if (m_isMenuOpen == value)
+                {
+                    return;
+                }
+                SetField(ref m_isMenuOpen, value);
+                // The cursor may be resting far away by the time the menu closes.
+                if (!value && m_workspace != null)
+                {
+                    UpdateActionsReveal(m_workspace.CursorLocation);
+                }
+            }
+        }
         public bool IsPreviewVisible { get => m_isPreviewVisible; set => SetField(ref m_isPreviewVisible, value); }
 
         private IWorkspace? m_workspace;
@@ -50,6 +70,7 @@ namespace FancyWM.ViewModels
         private bool m_isMoving = false;
         private bool m_isPreviewVisible = false;
         private bool m_isActionActive = false;
+        private bool m_isMenuOpen = false;
         private WindowNode? m_currentNode;
 
         public event RoutedEventHandler? BeginHorizontalSplitWith;
@@ -165,9 +186,14 @@ namespace FancyWM.ViewModels
 
         private void OnCursorLocationChanged(object? sender, CursorLocationChangedEventArgs e)
         {
+            UpdateActionsReveal(e.NewLocation);
+        }
+
+        private void UpdateActionsReveal(WinMan.Point cursorLocation)
+        {
             if (Node is WindowNode node)
             {
-                if (m_isActionActive)
+                if (m_isActionActive || m_isMenuOpen)
                 {
                     RevealHighlightOpacity = 0;
                     ActionsVisibility = Visibility.Visible;
@@ -185,8 +211,8 @@ namespace FancyWM.ViewModels
 
                 var windowPos = node.WindowReference.Position;
 
-                var x = e.NewLocation.X - windowPos.Left;
-                var y = e.NewLocation.Y - windowPos.Top;
+                var x = cursorLocation.X - windowPos.Left;
+                var y = cursorLocation.Y - windowPos.Top;
 
                 var isInBoundsX = 0 <= x && x <= windowPos.Width;
 

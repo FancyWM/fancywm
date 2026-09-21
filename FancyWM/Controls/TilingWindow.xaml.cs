@@ -1,8 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Threading;
 
+using FancyWM.Layouts.Tiling;
 using FancyWM.ViewModels;
 
 namespace FancyWM.Controls
@@ -25,9 +27,23 @@ namespace FancyWM.Controls
             set => SetValue(ViewModelProperty, value);
         }
 
+        // The overlay window never activates, so the menu gets no deactivation
+        // to close itself on. Close it once the cursor has left it instead.
+        private const int MenuCloseAfterMissedTicks = 2;
+        private readonly DispatcherTimer m_menuWatchTimer = new() { Interval = TimeSpan.FromMilliseconds(150) };
+        private int m_menuMissedTicks;
+
         public TilingWindow()
         {
             InitializeComponent();
+            m_menuWatchTimer.Tick += OnMenuWatchTick;
+            MoreContextMenu.Opened += (_, _) => SetMenuOpen(ViewModel, true);
+            MoreContextMenu.Closed += (_, _) =>
+            {
+                m_menuWatchTimer.Stop();
+                SetMenuOpen(ViewModel, false);
+            };
+            Unloaded += (_, _) => MoreContextMenu.IsOpen = false;
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -37,6 +53,15 @@ namespace FancyWM.Controls
             {
                 DataContext = ViewModel;
                 MoreContextMenu.IsOpen = false;
+                SetMenuOpen(e.OldValue as TilingWindowViewModel, false);
+            }
+        }
+
+        private static void SetMenuOpen(TilingWindowViewModel? viewModel, bool isOpen)
+        {
+            if (viewModel != null)
+            {
+                viewModel.IsMenuOpen = isOpen;
             }
         }
 
@@ -44,24 +69,39 @@ namespace FancyWM.Controls
         {
             MoreContextMenu.IsOpen = true;
             MoreContextMenu.DataContext = ViewModel;
-            var child = (UIElement)VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(MoreContextMenu, 0), 0);
-            child.MouseEnter -= OnContextMenuMouseEnter;
-            child.MouseEnter += OnContextMenuMouseEnter;
+            m_menuMissedTicks = 0;
+            m_menuWatchTimer.Start();
         }
 
-        private void OnContextMenuMouseEnter(object sender, MouseEventArgs e)
+        private void OnMenuWatchTick(object? sender, EventArgs e)
         {
-            var child = (UIElement)sender;
-            child.MouseEnter -= OnContextMenuMouseEnter;
-            child.MouseLeave -= OnContextMenuMouseLeave;
-            child.MouseLeave += OnContextMenuMouseLeave;
+            if (IsCursorOver(MoreContextMenu) || IsCursorOver(MoreButton))
+            {
+                m_menuMissedTicks = 0;
+                return;
+            }
+
+            if (++m_menuMissedTicks >= MenuCloseAfterMissedTicks)
+            {
+                MoreContextMenu.IsOpen = false;
+            }
         }
 
-        private void OnContextMenuMouseLeave(object sender, MouseEventArgs e)
+        /// <summary>
+        /// IsMouseOver is useless here: the open menu captures the mouse,
+        /// and WPF reports the capturing element as the one under the cursor.
+        /// </summary>
+        private bool IsCursorOver(FrameworkElement element)
         {
-            var child = (UIElement)sender;
-            child.MouseLeave -= OnContextMenuMouseLeave;
-            MoreContextMenu.IsOpen = false;
+            if (ViewModel?.Node is not WindowNode node || PresentationSource.FromVisual(element) == null)
+            {
+                return false;
+            }
+
+            var cursor = node.WindowReference.Workspace.CursorLocation;
+            var local = element.PointFromScreen(new Point(cursor.X, cursor.Y));
+            return 0 <= local.X && local.X <= element.ActualWidth
+                && 0 <= local.Y && local.Y <= element.ActualHeight;
         }
 
         bool m_canTriggerHorizontalGroup = true;
