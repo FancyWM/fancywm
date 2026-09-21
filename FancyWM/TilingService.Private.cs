@@ -1719,8 +1719,8 @@ namespace FancyWM
             return new Rectangle(
                 container.Left + wdiff / 2,
                 container.Top + hdiff / 2,
-                container.Right - wdiff / 2,
-                container.Height - wdiff / 2
+                container.Left + wdiff / 2 + width,
+                container.Top + hdiff / 2 + height
             );
         }
 
