@@ -31,6 +31,11 @@ namespace FancyWM.ViewModels
 
         public Visibility ActionsVisibility { get => m_actionsVisibility; set => SetField(ref m_actionsVisibility, value); }
 
+        /// <summary>
+        /// Bounds of the visible window in overlay coordinates. Updated on cursor movement.
+        /// </summary>
+        public Rectangle ActionsBounds { get => m_actionsBounds; set => SetField(ref m_actionsBounds, value); }
+
         public double ActionsHeight { get => m_actionsHeight; set => SetField(ref m_actionsHeight, value); }
 
         public double RevealHighlightRadius { get => m_revealHighlightRadius; set => SetField(ref m_revealHighlightRadius, value); }
@@ -43,6 +48,7 @@ namespace FancyWM.ViewModels
         private IWorkspace? m_workspace;
         private string? m_title;
         private Visibility m_actionsVisibility = Visibility.Hidden;
+        private Rectangle m_actionsBounds;
         private double m_actionsHeight = 22;
         private RevealState m_actionsRevealState = RevealState.Hidden;
         private double m_revealHighlightOpacity = 0;
@@ -184,6 +190,17 @@ namespace FancyWM.ViewModels
                 }
 
                 var windowPos = node.WindowReference.Position;
+
+                // The window may be smaller than its cell (e.g. max size reached),
+                // so the actions must follow the visible window, not the cell.
+                var frame = node.WindowReference.FrameMargins;
+                var displayOffsetX = ComputedBounds.Left - node.ComputedRectangle.Left;
+                var displayOffsetY = ComputedBounds.Top - node.ComputedRectangle.Top;
+                ActionsBounds = new Rectangle(
+                    left: windowPos.Left + frame.Left + displayOffsetX,
+                    top: windowPos.Top + frame.Top + displayOffsetY,
+                    right: windowPos.Right - frame.Right + displayOffsetX,
+                    bottom: windowPos.Bottom - frame.Bottom + displayOffsetY);
 
                 var x = e.NewLocation.X - windowPos.Left;
                 var y = e.NewLocation.Y - windowPos.Top;
